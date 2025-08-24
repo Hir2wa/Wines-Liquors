@@ -1,0 +1,23 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+}
+.input-search {
+  border: none;
+}
+
+.fa-shopping-cart {
+  font-size: 24px;
+  color: crimson;
+  cursor: pointer;
+}
+
+.search-bar {
+  border: 2px solid black;
+  color: black;
+  width: 40%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}

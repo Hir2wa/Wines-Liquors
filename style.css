@@ -49,3 +49,11 @@
   padding-bottom: 5px;
   padding-right: 5px;
 }
+
+.dropdown-location {
+  size: 20px;
+  display: flex;
+  align-items: end;
+  padding-bottom: 5px;
+  padding-left: 8px;
+}

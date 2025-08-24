@@ -14,15 +14,15 @@
           <img src="images/image.png" alt="Total Wine & More Logo" />
         </a>
         <div class="search-bar">
-          <div>
+          <div class="input-search">
             <i class="fas fa-search"></i>
             <input
               type="text"
-              placeholder="What can we help you find today?"
+              placeholder="search here  "
               class="input-search"
             />
           </div>
-          <button>search</button>
+          <button class="searchButton">search</button>
         </div>
 
         <div class="location">
@@ -32,7 +32,9 @@
 
           <div class="location-store">
             <p>Pickup at</p>
-            <p>Sacramento (Arden), CA</p>
+            <p style="font-size: large; font-weight: bold">
+              Sacramento (Arden), CA
+            </p>
           </div>
           <div class="dropdown-location">
             <i class="fas fa-chevron-down"></i>
@@ -41,18 +43,40 @@
         <i class="fas fa-shopping-cart"></i>
       </div>
 
-      <div class="nav-links">
-        <a href="#">Wine</a>
-        <a href="#">Spirits</a>
-        <a href="#">Beer & Seltzers</a>
-        <a href="#">New</a>
-        <a href="#">Gifts</a>
-        <a href="#" class="deals">My Deals</a>
-      </div>
-      <div class="user-actions">
-        <a href="#">Sign In</a>
-        <a href="#">Create Account</a>
-      </div>
-    </nav>
+      <div class="nav-down">
+        <div class="nav-links">
+
+          <div>
+            <a href="#">Wine</a>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          
+          <div>
+            <a href="#">Spirits</a>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div>
+            <a href="#">Beer & Seltzers</a>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div>
+            <a href="#">New</a>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div>
+            <a href="#">Gifts</a>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div>
+            <i class="fas fa-tags"  style="background-color: red;  color: white;"></i> 
+            <a href="#" class="deals" style="color: red;">My Deals</a>
+          </div>
+        </div>
+        <div class="user-actions">
+          <button href="#"style="color: rgb(0,123,111); padding: 5px;">Sign In</button>
+          <button href="#" style="padding: 5px;"  >Create Account</button>
+        </div>
+      </nav>
+    </div>
   </body>
 </html>

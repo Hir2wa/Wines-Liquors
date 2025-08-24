@@ -2,6 +2,13 @@
   display: flex;
   justify-content: space-between;
   height: 50px;
+  margin-bottom: 20px;
+  justify-items: center;
+}
+
+.navAll {
+  display: block;
+  padding: 30px;
 }
 .input-search {
   border: none;
@@ -20,4 +27,25 @@
   padding: 10px;
   display: flex;
   justify-content: space-between;
+}
+
+.location-store {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0px;
+}
+
+.location-store p {
+  margin: 0px;
+}
+
+.location {
+  display: flex;
+}
+.location-image {
+  font-size: 24px;
+  display: flex;
+  align-items: end;
+  padding-bottom: 5px;
+  padding-right: 5px;
 }

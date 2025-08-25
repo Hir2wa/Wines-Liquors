@@ -1,9 +1,9 @@
 .nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 50px;
   margin-bottom: 20px;
-  justify-items: center;
 }
 
 .navAll {
@@ -18,6 +18,17 @@
 
 .input-search {
   border: none;
+  display: flex;
+  align-items: center;
+}
+
+.input-search-field {
+  padding: 7px;
+  border: none;
+  margin: 5px;
+  outline: none;
+  font-size: medium;
+  width: 100%;
 }
 
 .fa-shopping-cart {
@@ -33,6 +44,7 @@
   padding: 3px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .location-store {
@@ -47,20 +59,20 @@
 
 .location {
   display: flex;
+  align-items: center;
 }
+
 .location-image {
   font-size: 24px;
   display: flex;
-  align-items: end;
-  padding-bottom: 5px;
+  align-items: center;
   padding-right: 5px;
 }
 
 .dropdown-location {
-  size: 20px;
+  font-size: 20px;
   display: flex;
-  align-items: end;
-  padding-bottom: 5px;
+  align-items: center;
   padding-left: 8px;
 }
 
@@ -68,26 +80,43 @@
   background-color: rgb(0, 127, 115);
   border-color: transparent;
   color: white;
-}
-
-.input-search input {
-  padding: 7px;
-  border: none;
-  margin: 5px;
-  outline: none;
-  font-size: medium;
+  padding: 7px 14px;
+  cursor: pointer;
 }
 
 .nav-down {
   display: flex;
-  gap: 24px;
   justify-content: space-between;
+  align-items: center;
+  gap: 24px;
 }
 
-.nav-links {
+.nav-down > div:first-child {
   display: flex;
-  justify-content: space-between;
   gap: 24px;
+  align-items: center;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-actions button {
+  padding: 7px 14px;
+  border: 1px solid rgb(0, 123, 111);
+  background-color: transparent;
+  cursor: pointer;
+  font-size: medium;
+}
+
+.user-actions button:first-child {
+  color: rgb(0, 123, 111);
+}
+
+.user-actions button:last-child {
+  color: black;
 }
 
 a {
@@ -100,7 +129,6 @@ a {
   display: inline-block;
 }
 
-/* Only style the first child (the Wine + chevron div) */
 .dropdown > div:first-child {
   display: flex;
   align-items: center;
@@ -132,7 +160,6 @@ a {
   color: red;
 }
 
-/* Show dropdown on hover */
 .dropdown:hover .dropdown-content {
   display: block;
 }
@@ -142,7 +169,6 @@ a {
   font-size: 0.9em;
 }
 
-/* Sub dropdown */
 .sub-dropdown {
   position: relative;
 }
@@ -151,14 +177,14 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
 }
 
-/* Hide submenu by default */
 .sub-dropdown-content {
   display: none;
   position: absolute;
   top: 0;
-  left: 100%; /* opens to the right */
+  left: 100%;
   background: white;
   min-width: 160px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -166,7 +192,6 @@ a {
   z-index: 2;
 }
 
-/* Show submenu on hover */
 .sub-dropdown:hover .sub-dropdown-content {
   display: block;
 }
@@ -181,4 +206,44 @@ a {
 .sub-dropdown-content a:hover {
   background: #f2f2f2;
   color: red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navAll {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .nav-down {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-down > div:first-child {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .user-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .dropdown-content {
+    position: static;
+    box-shadow: none;
+    background: #f9f9f9;
+  }
+
+  .sub-dropdown-content {
+    position: static;
+    left: 0;
+    margin-left: 20px;
+    background: #f0f0f0;
+  }
 }

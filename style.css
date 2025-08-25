@@ -13,6 +13,7 @@
   margin-left: 50px;
   margin-right: 50px;
   margin-top: 20px;
+  border-bottom: 1px solid black;
 }
 
 .input-search {
@@ -92,4 +93,92 @@
 a {
   text-decoration: none;
   color: black;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Only style the first child (the Wine + chevron div) */
+.dropdown > div:first-child {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 6px;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-content a:hover {
+  background: #f2f2f2;
+  color: red;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown i {
+  margin-left: 5px;
+  font-size: 0.9em;
+}
+
+/* Sub dropdown */
+.sub-dropdown {
+  position: relative;
+}
+
+.sub-dropdown > a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Hide submenu by default */
+.sub-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%; /* opens to the right */
+  background: white;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* Show submenu on hover */
+.sub-dropdown:hover .sub-dropdown-content {
+  display: block;
+}
+
+.sub-dropdown-content a {
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  color: #333;
+}
+
+.sub-dropdown-content a:hover {
+  background: #f2f2f2;
+  color: red;
 }

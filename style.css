@@ -29,10 +29,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* .logo img {
-  height: 40px;
-} */
-
 .search-bar {
   border: 2px solid black;
   color: black;
@@ -151,34 +147,81 @@ body {
   font-size: 12px;
 }
 
+/* NEW NESTED MEGA MENU STYLES */
 .mega-menu-content {
   display: none;
   position: absolute;
   top: 100%;
   left: -50px;
   background: white;
-  min-width: 900px;
+  min-width: 800px;
   max-width: 900px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   border-radius: 8px;
   overflow: hidden;
-  padding: 30px;
   max-height: 500px;
-  overflow-y: auto;
 }
 
 .mega-menu:hover .mega-menu-content {
-  display: block;
+  display: flex;
 }
 
-.mega-menu-grid {
+.categories-sidebar {
+  width: 250px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #e9ecef;
+  padding: 0;
+}
+
+.category-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.category-item:hover {
+  background-color: #007f73;
+  color: white;
+}
+
+.category-item h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.category-item:hover h4 {
+  color: white;
+}
+
+.products-content {
+  flex: 1;
+  padding: 30px;
+  position: relative;
+}
+
+.products-grid {
+  display: none;
+}
+
+.products-grid.active {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  align-items: start;
 }
 
-.menu-column h4 {
+.product-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-column h5 {
   color: #d4002a;
   font-size: 14px;
   font-weight: bold;
@@ -187,17 +230,21 @@ body {
   letter-spacing: 0.5px;
   padding-bottom: 8px;
   border-bottom: 2px solid #d4002a;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
 }
 
-.menu-column ul {
+.product-column ul {
   list-style: none;
 }
 
-.menu-column ul li {
+.product-column ul li {
   margin-bottom: 8px;
 }
 
-.menu-column ul li a {
+.product-column ul li a {
   text-decoration: none;
   color: #333;
   font-size: 14px;
@@ -206,7 +253,7 @@ body {
   transition: color 0.2s;
 }
 
-.menu-column ul li a:hover {
+.product-column ul li a:hover {
   color: #d4002a;
   font-weight: 500;
 }
@@ -227,6 +274,7 @@ body {
   border-radius: 4px;
 }
 
+/* Special styling for whiskey brands */
 .whiskey-brands {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -292,13 +340,14 @@ body {
   .mega-menu-content {
     left: -20px;
     min-width: 90vw;
+    flex-direction: column;
   }
 
-  .mega-menu-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .categories-sidebar {
+    width: 100%;
   }
 
-  .whiskey-brands {
+  .products-grid.active {
     grid-template-columns: 1fr;
   }
 }

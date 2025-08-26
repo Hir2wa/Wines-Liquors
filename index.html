@@ -3,21 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopping Cart</title>
-    <link rel="stylesheet" href="css/all.min.css" />
+    <title>Total Wine Mega Menu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <nav class="navAll">
       <div class="nav">
-        <a href="">
-          <img src="images/image.png" alt="Total Wine & More Logo" />
-        </a>
+        <div class="logo">
+          <a href="">
+            <img src="images/image.png" alt="Total Wine & More Logo" />
+          </a>
+        </div>
 
         <div class="search-bar">
           <div class="input-search">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="search here" class="input-search" />
+            <input
+              type="text"
+              placeholder="search here"
+              class="input-search-field"
+            />
           </div>
           <button class="searchButton">Search</button>
         </div>
@@ -28,9 +37,7 @@
           </div>
           <div class="location-store">
             <p>Pickup at</p>
-            <p style="font-size: large; font-weight: bold">
-              Sacramento (Arden), CA
-            </p>
+            <p>Sacramento (Arden), CA</p>
           </div>
           <div class="dropdown-location">
             <i class="fas fa-chevron-down"></i>
@@ -40,274 +47,297 @@
         <i class="fas fa-shopping-cart"></i>
       </div>
 
-      <!-- naviagation section -->
-
       <div class="nav-down">
-        <div>
-          <div class="dropdown">
-            <div>
-              <a href="#">Wine</a>
+        <div class="nav-menu">
+          <!-- Wine Mega Menu -->
+          <div class="mega-menu">
+            <a href="#">
+              Wine
               <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="sub-dropdown">
-                <a href="#">Sparkling Wine</a>
-                <div class="sub-dropdown-content">
-                  <a href="#">Baron Sparkling</a>
-                  <a href="#">Massotina</a>
-                  <a href="#">Canitelli Prossecco</a>
-                  <a href="#">Signore Prossecco</a>
-                   <a href="#">Maison Castel</a>
-                  <a href="#">Freixnet Ice</a>
+            </a>
+            <div class="mega-menu-content">
+              <div class="mega-menu-grid">
+                <div class="menu-column">
+                  <h4>Wine Bottle</h4>
+                  <ul>
+                    <li><a href="#">Pinta Negra 75L</a></li>
+                    <li><a href="#">Nederburg</a></li>
+                    <li><a href="#">Grand Verdus</a></li>
+                    <li><a href="#">Grand Verdus Reserve</a></li>
+                    <li><a href="#">Grand Verdus Generation</a></li>
+                    <li><a href="#">Grand Verdus Boredoux Superier</a></li>
+                    <li><a href="#">Jacobs Double Barrel</a></li>
+                    <li><a href="#">Jacobs Reserve</a></li>
+                    <li><a href="#">Jacobs Shiraz,Merlot&Chardonay</a></li>
+                    <li><a href="#">Cellar Cask 75CL</a></li>
+                    <li><a href="#">Four Cousins 75CL</a></li>
+                    <li><a href="#">Grand Sud Merlot,Chardonay</a></li>
+                  </ul>
                 </div>
-              </div>
-              <div class="sub-dropdown">
-                <a href="#">Wine Box</a>
-                <div class="sub-dropdown-content">
-                  <a href="#">Drostdy 5L</a>
-                  <a href="#">Pinta Negra 5L</a>
-                  <a href="#">Baron 5L</a>
-                  <a href="#">FourCousins 5L</a>
-                  <a href="#">Cellar Cask 5L</a>
-                  <a href="#">Yulian 5L</a>
+                <div class="menu-column">
+                  <h4>Sparkling Wine</h4>
+                  <ul>
+                    <li><a href="#">Baron Sparkling</a></li>
+                    <li><a href="#">Massotina</a></li>
+                    <li><a href="#">Canitelli Prossecco</a></li>
+                    <li><a href="#">Signore Prossecco</a></li>
+                    <li><a href="#">Maison Castel</a></li>
+                    <li><a href="#">Freixnet Ice</a></li>
+                  </ul>
                 </div>
-              </div>
-              <div class="sub-dropdown">
-                <a href="#">Wine Bottle</a>
-                <div class="sub-dropdown-content">
-                  <a href="#">Pinta Negra 75L</a>
-                  <a href="#">Nederburg</a>
-                  <a href="#">Grand Verdus</a>
-                  <a href="#">Grand Verdus Reserve</a>
-                  <a href="#">Grand Verdus Generation</a>
-                  <a href="#">Grand Verdus Boredoux Superier</a>
-                  <a href="#">Jacobs Double Barrel</a>
-                  <a href="#">Jacobs Reserve</a>
-                  <a href="#">Jacobs Shiraz,Merlot&Chardonay</a>
-                  <a href="#">Cellar Cask 75CL</a>
-                  <a href="#">Four Cousins 75CL</a>
-                  <a href="#">Grand Sud Merlot,Chardonay</a>
+                <div class="menu-column">
+                  <h4>Wine Box</h4>
+                  <ul>
+                    <li><a href="#">Drostdy 5L</a></li>
+                    <li><a href="#">Pinta Negra 5L</a></li>
+                    <li><a href="#">Baron 5L</a></li>
+                    <li><a href="#">FourCousins 5L</a></li>
+                    <li><a href="#">Cellar Cask 5L</a></li>
+                    <li><a href="#">Yulian 5L</a></li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="dropdown">
-            <div>
-              <a href="#">Champagne&Cognac</a>
+          <!-- Champagne & Cognac Mega Menu -->
+          <div class="mega-menu">
+            <a href="#">
+              Champagne&Cognac
               <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="sub-dropdown">
-                <a href="#">Champagne</a>
-                <div class="sub-dropdown-content">
-                <a href="#">Veuve Cliqout Rose</a>
-                <a href="#">Veuve Cliqout Brut</a>
-                <a href="#">Moet Nectar Imperial</a>
-                <a href="#">Moet Rose Imperial</a>
-                <a href="#">Moet Nectar Brut</a>
-                <a href="#">Ruinart Blanc De Blancs</a>
+            </a>
+            <div class="mega-menu-content">
+              <div class="mega-menu-grid">
+                <div class="menu-column">
+                  <h4>Champagne</h4>
+                  <ul>
+                    <li><a href="#">Veuve Cliqout Rose</a></li>
+                    <li><a href="#">Veuve Cliqout Brut</a></li>
+                    <li><a href="#">Moet Nectar Imperial</a></li>
+                    <li><a href="#">Moet Rose Imperial</a></li>
+                    <li><a href="#">Moet Nectar Brut</a></li>
+                    <li><a href="#">Ruinart Blanc De Blancs</a></li>
+                  </ul>
                 </div>
-              </div>
-              <div class="sub-dropdown">
-                <a href="#">Cognac</a>
-                <div class="sub-dropdown-content">
-                   <a href="#">Hennessy Vsop</a>
-                <a href="#">Hennessy Vs</a>
-                <a href="#">Remy Martin Vsop</a>
-                <a href="#">Martell Vsop</a>
-                <a href="#">Martell Blue Swift</a>
-                <a href="#">Martell Vs</a>
-                <a href="#">Courvoisier Vsop</a>
-                <a href="#">Croisier Vs</a>
-                <a href="#">St Remy XO 1L</a>
-                <a href="#">St Remy Vsop</a>
-
+                <div class="menu-column">
+                  <h4>Cognac</h4>
+                  <ul>
+                    <li><a href="#">Hennessy Vsop</a></li>
+                    <li><a href="#">Hennessy Vs</a></li>
+                    <li><a href="#">Remy Martin Vsop</a></li>
+                    <li><a href="#">Martell Vsop</a></li>
+                    <li><a href="#">Martell Blue Swift</a></li>
+                    <li><a href="#">Martell Vs</a></li>
+                    <li><a href="#">Courvoisier Vsop</a></li>
+                    <li><a href="#">Croisier Vs</a></li>
+                    <li><a href="#">St Remy XO 1L</a></li>
+                    <li><a href="#">St Remy Vsop</a></li>
+                  </ul>
                 </div>
-
-              </div>
-            </div>
-            
-
-          </div>
-
-          <div class="dropdown">
-            <div>
-              <a href="#">Whiskey&Tequila</a>
-              <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="sub-dropdown">
-                <a href="#">Whiskey</a>
-                <div class="sub-dropdown-content">
-                <a href="#">Chivas 18Yrs</a>
-                <a href="#">Chivas 15Yrs</a>
-                <a href="#">Chivas 12Yrs</a>
-                <a href="#">Jack Daniels</a>
-                <a href="#">Jack Daniels Honey</a>
-                <a href="#">Jack Daniels Fire</a>
-                <a href="#">Double Black</a>
-                <a href="#">Black Label</a>
-                <a href="#">Red Label</a>
-                <a href="#">Jameson Black Barrel</a>
-                <a href="#">Jameson Irish</a>
-                <a href="#">Ballantine 17Yrs</a>
-                <a href="#">Ballantines</a>
-                <a href="#">William LowSons</a>
-                <a href="#">Passport</a>
-
-                 </div>
-              </div> 
-
-              <div class="sub-dropdown">
-                <a href="#">Tequila</a>
-                <div class="sub-dropdown-content">
-                  <a href="#">Jose Cuervo Gold</a>
-                <a href="#">Jose Cuevra Sliver</a>
-                <a href="#">Olmeca Gold</a>
-                <a href="#">Olmeca Silver</a>
-                <a href="#">Olmeca Chocolate</a>
-                <a href="#">Camino</a>
-                <a href="#">Bull Dog</a>
-                 <a href="#">Patro Sliver</a>
-                <a href="#">Patron Repasdo</a>
-
-                </div>
-
               </div>
             </div>
           </div>
 
-
-
-        <div class="dropdown">
-            <div>
-              <a href="#">Gin&Vodka</a>
+          <!-- Whiskey & Tequila Mega Menu -->
+          <div class="mega-menu">
+            <a href="#">
+              Whiskey&Tequila
               <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="sub-dropdown">
-                <a href="#">Gin</a>
-                 <div class="sub-dropdown-content">
-                <a href="#">Tanqueray 10</a>
-                <a href="#">Tanqueray Gin</a>
-                <a href="#">Hendrick</a>
-                <a href="#">Virunga Gin</a>
-                <a href="#">Beefeater</a>
-                <a href="#">Gordon</a>
-                <a href="#">Bull Dog</a>
-                <a href="#">Gibson</a>
-                </div>
-              </div>
-
-              <div class="sub-dropdown">
-              <a href="#">Vodka</a>
-              <div class="sub-dropdown-content">
-                <a href="#">Ciroc</a>
-                <a href="#">Belvedere Vodka</a>
-                <a href="#">Stoli Vodka</a>
-                <a href="#">Smirnoff Vodka</a>
-                <a href="#">Absolute Vodka</a>
-                <a href="#">Absolute Flavored</a>
-
-              </div>
-              </div>
-             
-            </div>
-          </div>
-
-          <div class="dropdown">
-            <div>
-              <a href="#">Cream&Rum</a>
-              <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="sub-dropdown">
-                <a href="#">Cream</a>
-                <div class="sub-dropdown-content">
-                <a href="#">Molly</a>
-                <a href="#">Amarula</a>
-                <a href="#">Bailyes</a>
+            </a>
+            <div class="mega-menu-content">
+              <div class="mega-menu-grid">
+                <div class="menu-column">
+                  <h4>Whiskey Brands</h4>
+                  <div class="whiskey-brands">
+                    <div class="brand-group">
+                      <h5>Chivas</h5>
+                      <ul>
+                        <li><a href="#">Chivas 18Yrs</a></li>
+                        <li><a href="#">Chivas 15Yrs</a></li>
+                        <li><a href="#">Chivas 12Yrs</a></li>
+                      </ul>
+                    </div>
+                    <div class="brand-group">
+                      <h5>Jack Daniels</h5>
+                      <ul>
+                        <li><a href="#">Jack Daniels</a></li>
+                        <li><a href="#">Jack Daniels Honey</a></li>
+                        <li><a href="#">Jack Daniels Fire</a></li>
+                      </ul>
+                    </div>
+                    <div class="brand-group">
+                      <h5>Johnnie Walker</h5>
+                      <ul>
+                        <li><a href="#">Double Black</a></li>
+                        <li><a href="#">Black Label</a></li>
+                        <li><a href="#">Red Label</a></li>
+                      </ul>
+                    </div>
+                    <div class="brand-group">
+                      <h5>Jameson</h5>
+                      <ul>
+                        <li><a href="#">Jameson Black Barrel</a></li>
+                        <li><a href="#">Jameson Irish</a></li>
+                      </ul>
+                    </div>
+                    <div class="brand-group">
+                      <h5>Ballantines</h5>
+                      <ul>
+                        <li><a href="#">Ballantine 17Yrs</a></li>
+                        <li><a href="#">Ballantines</a></li>
+                      </ul>
+                    </div>
+                    <div class="brand-group">
+                      <h5>Others</h5>
+                      <ul>
+                        <li><a href="#">William LowSons</a></li>
+                        <li><a href="#">Passport</a></li>
+                      </ul>
+                    </div>
                   </div>
-              </div>
-              <div class="sub-dropdown">
-                <a href="#">Rum</a>
-                <div class="sub-dropdown-content">
-                  <a href="#">Malibu</a>
-                <a href="#">Captain Morgan</a>
-                <a href="#">Havana Club 7Yrs</a>
-                <a href="#">Havana Club 3Yrs</a>
-                <a href="#">Havana Club Espesial</a>
-                <a href="#">Bacardi Blanca</a>
-                <a href="#">Bacardi Carta Negro</a>
-
                 </div>
-
-              </div>          
+                <div class="menu-column">
+                  <h4>Tequila</h4>
+                  <ul>
+                    <li><a href="#">Jose Cuervo Gold</a></li>
+                    <li><a href="#">Jose Cuevra Sliver</a></li>
+                    <li><a href="#">Olmeca Gold</a></li>
+                    <li><a href="#">Olmeca Silver</a></li>
+                    <li><a href="#">Olmeca Chocolate</a></li>
+                    <li><a href="#">Camino</a></li>
+                    <li><a href="#">Bull Dog</a></li>
+                    <li><a href="#">Patro Sliver</a></li>
+                    <li><a href="#">Patron Repasdo</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-           <div class="dropdown">
-            <div>
-              <a href="#">Aperitivo&Single Mart&Cans,Imported Beer and Cider</a>
+
+          <!-- Gin & Vodka Mega Menu -->
+          <div class="mega-menu">
+            <a href="#">
+              Gin&Vodka
               <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="sub-dropdown">
-                 <a href="#">Aperitivo</a>
-                 <div class="sub-dropdown-content">
-                <a href="#">Aperol</a>
-                <a href="#">Campari</a>
-                <a href="#">Martini</a>
+            </a>
+            <div class="mega-menu-content">
+              <div class="mega-menu-grid">
+                <div class="menu-column">
+                  <h4>Gin</h4>
+                  <ul>
+                    <li><a href="#">Tanqueray 10</a></li>
+                    <li><a href="#">Tanqueray Gin</a></li>
+                    <li><a href="#">Hendrick</a></li>
+                    <li><a href="#">Virunga Gin</a></li>
+                    <li><a href="#">Beefeater</a></li>
+                    <li><a href="#">Gordon</a></li>
+                    <li><a href="#">Bull Dog</a></li>
+                    <li><a href="#">Gibson</a></li>
+                  </ul>
+                </div>
+                <div class="menu-column">
+                  <h4>Vodka</h4>
+                  <ul>
+                    <li><a href="#">Ciroc</a></li>
+                    <li><a href="#">Belvedere Vodka</a></li>
+                    <li><a href="#">Stoli Vodka</a></li>
+                    <li><a href="#">Smirnoff Vodka</a></li>
+                    <li><a href="#">Absolute Vodka</a></li>
+                    <li><a href="#">Absolute Flavored</a></li>
+                  </ul>
                 </div>
               </div>
-              <div class="sub-dropdown">
-                <a href="#">Single Mart</a>
-                <div class="sub-dropdown-content">
-                 <a href="#">Glenlivet 18Yrs</a>
-                <a href="#">Glenlivet 15Yrs</a>
-                <a href="#">Glenlivet Founders Reserve</a>
-                <a href="#">Glenfiddich 18Yrs</a>
-                <a href="#">Glenfiddich 15Yrs</a>
-                <a href="#">Glenfiddich 12Yrs</a>
-                </div>
-              </div>
-              <div class="sub-dropdown">
-                <a href="#">Cans&Beer</a>
-                <div class="sub-dropdown-content">
-                  <a href="#">Guaranna</a>
-                <a href="#">Exo</a>
-                <a href="#">Leffe</a>
-                <a href="#">Brok</a>
-                <a href="#">Stella Artois</a>
-                <a href="#">Savanna</a>
-                <a href="#">Carlsberg</a>
-                <a href="#">Bavaria O Alch</a>
-
-                </div>
-
-              </div>
-             
             </div>
           </div>
-          
-          <div class="dropdown">
-            <div>
-              <i
-                class="fas fa-tags"
-                style="background-color: red; color: white"
-              ></i>
-              <a href="#" class="deals" style="color: red">My Deals</a>
+
+          <!-- Cream & Rum Mega Menu -->
+          <div class="mega-menu">
+            <a href="#">
+              Cream&Rum
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <div class="mega-menu-content">
+              <div class="mega-menu-grid">
+                <div class="menu-column">
+                  <h4>Cream</h4>
+                  <ul>
+                    <li><a href="#">Molly</a></li>
+                    <li><a href="#">Amarula</a></li>
+                    <li><a href="#">Bailyes</a></li>
+                  </ul>
+                </div>
+                <div class="menu-column">
+                  <h4>Rum</h4>
+                  <ul>
+                    <li><a href="#">Malibu</a></li>
+                    <li><a href="#">Captain Morgan</a></li>
+                    <li><a href="#">Havana Club 7Yrs</a></li>
+                    <li><a href="#">Havana Club 3Yrs</a></li>
+                    <li><a href="#">Havana Club Espesial</a></li>
+                    <li><a href="#">Bacardi Blanca</a></li>
+                    <li><a href="#">Bacardi Carta Negro</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Aperitivo & Beer Mega Menu -->
+          <div class="mega-menu">
+            <a href="#">
+              Aperitivo & Beer
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <div class="mega-menu-content">
+              <div class="mega-menu-grid">
+                <div class="menu-column">
+                  <h4>Aperitivo</h4>
+                  <ul>
+                    <li><a href="#">Aperol</a></li>
+                    <li><a href="#">Campari</a></li>
+                    <li><a href="#">Martini</a></li>
+                  </ul>
+                </div>
+                <div class="menu-column">
+                  <h4>Single Malt</h4>
+                  <ul>
+                    <li><a href="#">Glenlivet 18Yrs</a></li>
+                    <li><a href="#">Glenlivet 15Yrs</a></li>
+                    <li><a href="#">Glenlivet Founders Reserve</a></li>
+                    <li><a href="#">Glenfiddich 18Yrs</a></li>
+                    <li><a href="#">Glenfiddich 15Yrs</a></li>
+                    <li><a href="#">Glenfiddich 12Yrs</a></li>
+                  </ul>
+                </div>
+                <div class="menu-column">
+                  <h4>Cans & Beer</h4>
+                  <ul>
+                    <li><a href="#">Guaranna</a></li>
+                    <li><a href="#">Exo</a></li>
+                    <li><a href="#">Leffe</a></li>
+                    <li><a href="#">Brok</a></li>
+                    <li><a href="#">Stella Artois</a></li>
+                    <li><a href="#">Savanna</a></li>
+                    <li><a href="#">Carlsberg</a></li>
+                    <li><a href="#">Bavaria O Alch</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- My Deals -->
+          <a href="#" class="deals-link">
+            <i class="fas fa-tags deals-icon"></i>
+            My Deals
+          </a>
         </div>
 
         <div class="user-actions">
-          <button style="color: rgb(0, 123, 111); padding: 5px">Sign In</button>
-          <button style="padding: 5px">Create Account</button>
+          <button>Sign In</button>
+          <button>Create Account</button>
         </div>
       </div>
     </nav>
-
-    <div class="border-nav"></div>
   </body>
 </html>

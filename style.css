@@ -29,9 +29,9 @@ body {
   margin-bottom: 20px;
 }
 
-.logo img {
+/* .logo img {
   height: 40px;
-}
+} */
 
 .search-bar {
   border: 2px solid black;
@@ -131,7 +131,6 @@ body {
   color: black;
 }
 
-/* Mega Menu Styles */
 .mega-menu {
   position: relative;
   display: inline-block;
@@ -228,7 +227,6 @@ body {
   border-radius: 4px;
 }
 
-/* Whiskey Special Styling */
 .whiskey-brands {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -264,7 +262,6 @@ body {
   color: #d4002a;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .navAll {
     margin: 10px;

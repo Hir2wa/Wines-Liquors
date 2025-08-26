@@ -1,9 +1,13 @@
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  margin-bottom: 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  overflow-x: hidden;
 }
 
 .navAll {
@@ -14,27 +18,19 @@
   margin-right: 50px;
   margin-top: 20px;
   border-bottom: 1px solid black;
+  background: white;
 }
 
-.input-search {
-  border: none;
+.nav {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  height: 50px;
+  margin-bottom: 20px;
 }
 
-.input-search-field {
-  padding: 7px;
-  border: none;
-  margin: 5px;
-  outline: none;
-  font-size: medium;
-  width: 100%;
-}
-
-.fa-shopping-cart {
-  font-size: 24px;
-  color: crimson;
-  cursor: pointer;
+.logo img {
+  height: 40px;
 }
 
 .search-bar {
@@ -47,33 +43,20 @@
   align-items: center;
 }
 
-.location-store {
-  display: flex;
-  flex-direction: column;
-  gap: 10px 0px;
-}
-
-.location-store p {
-  margin: 0px;
-}
-
-.location {
+.input-search {
+  border: none;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
-.location-image {
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  padding-right: 5px;
-}
-
-.dropdown-location {
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
+.input-search-field {
+  padding: 7px;
+  border: none;
+  margin: 5px;
+  outline: none;
+  font-size: medium;
+  width: 100%;
 }
 
 .searchButton {
@@ -84,17 +67,46 @@
   cursor: pointer;
 }
 
+.location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.location-image {
+  font-size: 24px;
+}
+
+.location-store p {
+  margin: 0;
+}
+
+.location-store p:first-child {
+  font-size: 12px;
+}
+
+.location-store p:last-child {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.fa-shopping-cart {
+  font-size: 24px;
+  color: crimson;
+  cursor: pointer;
+}
+
 .nav-down {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  padding-bottom: 20px;
 }
 
-.nav-down > div:first-child {
+.nav-menu {
   display: flex;
-  gap: 24px;
   align-items: center;
+  gap: 30px;
 }
 
 .user-actions {
@@ -104,7 +116,7 @@
 }
 
 .user-actions button {
-  padding: 7px 14px;
+  padding: 8px 16px;
   border: 1px solid rgb(0, 123, 111);
   background-color: transparent;
   cursor: pointer;
@@ -119,100 +131,150 @@
   color: black;
 }
 
-a {
-  text-decoration: none;
-  color: black;
-}
-
-.dropdown {
+/* Mega Menu Styles */
+.mega-menu {
   position: relative;
   display: inline-block;
 }
 
-.dropdown > div:first-child {
+.mega-menu > a {
+  text-decoration: none;
+  color: black;
+  padding: 10px 0;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  padding: 10px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.dropdown-content {
+.mega-menu > a i {
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.mega-menu-content {
   display: none;
   position: absolute;
   top: 100%;
-  left: 0;
+  left: -50px;
   background: white;
-  min-width: 160px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  border-radius: 6px;
+  min-width: 900px;
+  max-width: 900px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 30px;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
-.dropdown-content a {
+.mega-menu:hover .mega-menu-content {
   display: block;
-  padding: 10px;
+}
+
+.mega-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.menu-column h4 {
+  color: #d4002a;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #d4002a;
+}
+
+.menu-column ul {
+  list-style: none;
+}
+
+.menu-column ul li {
+  margin-bottom: 8px;
+}
+
+.menu-column ul li a {
   text-decoration: none;
   color: #333;
-}
-
-.dropdown-content a:hover {
-  background: #f2f2f2;
-  color: red;
-}
-
-.dropdown:hover .dropdown-content {
+  font-size: 14px;
+  padding: 4px 0;
   display: block;
+  transition: color 0.2s;
 }
 
-.dropdown i {
-  margin-left: 5px;
-  font-size: 0.9em;
+.menu-column ul li a:hover {
+  color: #d4002a;
+  font-weight: 500;
 }
 
-.sub-dropdown {
-  position: relative;
-}
-
-.sub-dropdown > a {
+.deals-link {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px;
-}
-
-.sub-dropdown-content {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 100%;
-  background: white;
-  min-width: 160px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  z-index: 2;
-}
-
-.sub-dropdown:hover .sub-dropdown-content {
-  display: block;
-}
-
-.sub-dropdown-content a {
-  padding: 10px;
-  display: block;
+  gap: 8px;
   text-decoration: none;
-  color: #333;
+  color: #d4002a;
+  font-weight: bold;
 }
 
-.sub-dropdown-content a:hover {
-  background: #f2f2f2;
-  color: red;
+.deals-icon {
+  background: #d4002a;
+  color: white;
+  padding: 4px;
+  border-radius: 4px;
 }
 
-/* Responsive adjustments */
+/* Whiskey Special Styling */
+.whiskey-brands {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.brand-group h5 {
+  color: #666;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: capitalize;
+}
+
+.brand-group ul {
+  list-style: none;
+}
+
+.brand-group ul li {
+  margin-bottom: 6px;
+}
+
+.brand-group ul li a {
+  text-decoration: none;
+  color: #444;
+  font-size: 13px;
+  padding: 2px 0;
+  display: block;
+  transition: color 0.2s;
+}
+
+.brand-group ul li a:hover {
+  color: #d4002a;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .navAll {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 10px;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 15px;
+    height: auto;
+    padding: 15px 0;
   }
 
   .search-bar {
@@ -221,29 +283,25 @@ a {
 
   .nav-down {
     flex-direction: column;
-    align-items: flex-start;
+    gap: 15px;
+    align-items: stretch;
   }
 
-  .nav-down > div:first-child {
-    flex-direction: column;
-    gap: 10px;
+  .nav-menu {
+    flex-wrap: wrap;
+    gap: 15px;
   }
 
-  .user-actions {
-    justify-content: flex-start;
-    width: 100%;
+  .mega-menu-content {
+    left: -20px;
+    min-width: 90vw;
   }
 
-  .dropdown-content {
-    position: static;
-    box-shadow: none;
-    background: #f9f9f9;
+  .mega-menu-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .sub-dropdown-content {
-    position: static;
-    left: 0;
-    margin-left: 20px;
-    background: #f0f0f0;
+  .whiskey-brands {
+    grid-template-columns: 1fr;
   }
 }

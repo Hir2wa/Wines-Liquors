@@ -1,0 +1,27 @@
+.header {
+  background-image: url("images/home.2.jpg");
+  width: full;
+  height: 400px;
+  margin-left: 50px;
+  margin-right: 50px;
+  padding: 10px;
+  color: white;
+  padding: 10px;
+  font-weight: 10px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap; /* let items wrap into new rows */
+  gap: 20px; /* spacing between items */
+  width: 100%;
+  max-width: 1200px; /* container size */
+  margin: 0 auto; /* center container */
+}
+
+.container-item {
+  flex: 1 1 calc(25% - 20px); /* each item takes 25% of row (4 per row) */
+  box-sizing: border-box;
+}

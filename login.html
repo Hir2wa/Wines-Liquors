@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Sign in to view your latest personalized deals.</h2>
+    <form>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="name@domain.com" required>
+        </div>
+        
+        <div class="form-group password-wrapper">
+          <label for="password">Password</label>
+          <input type="password" id="password" required>
+          <!-- <button type="button" class="show-btn" onclick="togglePassword()">Show</button> -->
+        </div>
+      </div>
+
+      <div class="options">
+        <label><input type="checkbox"> Keep Me Signed In</label>
+        <a href="#">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="btn">Sign In</button>
+
+      <div class="create">
+        <a href="#">Create an Account</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passwordField = document.getElementById("password");
+      // const btn = document.querySelector(".show-btn");
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        btn.textContent = "Hide";
+      } else {
+        passwordField.type = "password";
+        // btn.textContent = "Show";
+      }
+    }
+  </script>
+</body>
+</html>
+
+

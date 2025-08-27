@@ -1,0 +1,130 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 520px;
+
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 10px;
+  margin-right: 15px;
+}
+
+.form-group {
+  flex: 1;
+}
+
+label {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+}
+
+.show-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #0073e6;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0 20px 0;
+}
+
+.options label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.options input {
+  margin-right: 6px;
+}
+
+.options a {
+  font-size: 14px;
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  width: 40%;
+  background-color: #111;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.btn:hover {
+  background-color: lightslategray;
+}
+
+.create {
+  text-align: center;
+
+}
+
+.create a {
+  color: #0073e6;
+  text-decoration: none;
+  font-size: 14px;
+
+}
+
+.create a:hover {
+  text-decoration: underline;
+}

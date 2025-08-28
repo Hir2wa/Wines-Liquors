@@ -3,12 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300&display=swap"
+      rel="stylesheet"
+    />
     <title>Total Wine Mega Menu</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="Header.css">
+    <link rel="stylesheet" href="Header.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -334,28 +344,59 @@
           <button>Create Account</button>
         </div>
       </div>
-
-      
     </nav>
-<div class="header">
-      <h2>Raise a glass to last day of the summer</h2>
-      <p style="font-size: small">
-        Last call to descover crisp, seasonal wines made for warm-weather
-        sipping
-      </p>
-      <button
-        style="
-          margin-top: 10px;
-          padding: 10px;
-          background-color: transparent;
-          border-color: white;
-          color: white;
-        "
-        ;
-      >
-        Shop Now
-      </button>
+    <div class="slide-show">
+      <div class="header">
+        <h2 style="font-weight: lighter">
+          Raise a Glass to the Last Days of Summer
+        </h2>
+        <p style="font-size: small; font-weight: lighter">
+          Last call to discover crisp, seasonal wines made for warm-weather
+          sipping.
+        </p>
+        <button
+          style="
+            margin-top: 10px;
+            padding: 10px;
+            background-color: transparent;
+            border-color: white;
+            color: white;
+            border-radius: 10px;
+          "
+          ;
+        >
+          Shop Now
+        </button>
+      </div>
+
+      <div class="header1">
+        <h2 style="font-weight: lighter">Introducing Yellowstone Cocktails.</h2>
+        <p style="font-size: small; font-weight: lighter">
+          Crafted with award-winning Yellowstone Bourbon and all-natural
+          ingredients,<br />
+          Yellowstone Cocktails feature premium Old Fashioned, Espresso, and
+          Gold Rush expressions.
+        </p>
+      </div>
+      <div class="header2">
+        <h2 style="font-weight: lighter">Compass Box Orchard House</h2>
+        <p style="font-size: small; font-weight: lighter">
+          This blended Scotch delivers a master class in lively, fruity flavors,
+          readily enjoyed neat or on the rocks.
+        </p>
+      </div>
     </div>
+    <h2
+      style="
+        margin: 2px 50px;
+        font-style: normal;
+        font-family: 'Cormorant', serif;
+        font-weight: 300;
+        font-size: 28px;
+      "
+    >
+      Discover New & Noteworthy
+    </h2>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -387,7 +428,26 @@
           }
         });
       });
-    </script>
 
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide-show > div");
+
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("active", i === index);
+        });
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+      }
+
+      // Show first slide initially
+      showSlide(currentSlide);
+
+      // Change every 5 seconds
+      setInterval(nextSlide, 5000);
+    </script>
   </body>
 </html>

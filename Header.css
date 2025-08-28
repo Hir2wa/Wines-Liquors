@@ -1,27 +1,54 @@
 .header {
-  background-image: url("images/home.2.jpg");
-  width: full;
+  background-image: url("images/change.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 400px;
-  margin-left: 50px;
-  margin-right: 50px;
   padding: 10px;
   color: white;
-  padding: 10px;
-  font-weight: 10px;
-  background-repeat: no-repeat;
+}
+
+.header1 {
+  background-image: url("images/Hero-Desktop-Slot-03.jpeg");
   background-size: cover;
-}
-
-.container {
+  background-repeat: no-repeat;
+  height: 400px;
+  padding: 10px;
+  color: white;
   display: flex;
-  flex-wrap: wrap; /* let items wrap into new rows */
-  gap: 20px; /* spacing between items */
-  width: 100%;
-  max-width: 1200px; /* container size */
-  margin: 0 auto; /* center container */
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
-.container-item {
-  flex: 1 1 calc(25% - 20px); /* each item takes 25% of row (4 per row) */
-  box-sizing: border-box;
+.header2 {
+  background-image: url("images/Hero-Desktop-Slot-01.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 400px;
+  padding: 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.slide-show {
+  position: relative;
+  width: calc(100% - 100px); /* Account for 50px margin on each side */
+  height: 400px;
+  margin: 0 50px; /* Add the same margin as your header classes */
+  overflow: hidden;
+}
+
+.slide-show > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide-show > div.active {
+  opacity: 1;
 }

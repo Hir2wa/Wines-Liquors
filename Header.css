@@ -162,3 +162,13 @@
   transform: scale(1.1); /* zoom in slightly */
   box-shadow: 0 8px 20px rgba(167, 24, 24, 0.3); /* nice shadow */
 }
+
+.spirts-cat {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.spirts-item img {
+  width: 400px;
+  height: 400px;
+}

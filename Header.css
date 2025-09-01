@@ -55,10 +55,10 @@
 
 .discover {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
-  gap: 20px; /* space between items */
-  margin: 0 50px; /* same margin as your slideshow */
-  padding: 10px 0; /* vertical spacing */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 0 50px;
+  padding: 10px 0;
 }
 
 .discover-item {
@@ -77,8 +77,8 @@
 
 .discover-item img {
   width: 100%;
-  height: 300px; /* fixed height for consistency */
-  object-fit: cover; /* ensures images fill space nicely */
+  height: 300px;
+  object-fit: cover;
   display: block;
 }
 
@@ -95,13 +95,13 @@
 /* Responsive Design */
 @media (max-width: 1200px) {
   .discover {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .discover {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+    grid-template-columns: repeat(2, 1fr);
     margin: 20px;
     gap: 15px;
   }
@@ -109,7 +109,7 @@
 
 @media (max-width: 480px) {
   .discover {
-    grid-template-columns: 1fr; /* 1 column on mobile */
+    grid-template-columns: 1fr;
     margin: 10px;
   }
 }
@@ -142,11 +142,11 @@
 
 .popular-items {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* always 5 items */
-  gap: 40px; /* space between circles */
-  padding: 10px 50px; /* equal left/right spacing */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 40px;
+  padding: 10px 50px;
   text-align: center;
-  justify-items: center; /* keeps each circle centered in its column */
+  justify-items: center;
 }
 .items-desctiption img {
   width: 200px;
@@ -155,20 +155,60 @@
   border-radius: 50%;
   display: block;
   margin: 0 auto 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* smooth animation */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .items-desctiption img:hover {
-  transform: scale(1.1); /* zoom in slightly */
-  box-shadow: 0 8px 20px rgba(167, 24, 24, 0.3); /* nice shadow */
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(167, 24, 24, 0.3);
 }
 
 .spirts-cat {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* 5 columns now */
+  gap: 40px;
+  padding: 10px 50px;
+  text-align: center;
+  justify-items: center;
+  border-radius: 10px;
+}
+
+/* 4th item spans 2 slots */
+.item-span {
+  grid-column: span 2;
 }
 
 .spirts-item img {
-  width: 400px;
-  height: 400px;
+  /* width: 100%;
+  height: 100%; */
+  object-fit: cover; /* fills the box, crops if needed */
+  display: block;
+}
+.spirts-item {
+  position: relative; /* so child absolute positioning works */
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* prevent text overflow */
+  text-align: start;
+}
+
+.spirts-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.spirts-item p {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 14px;
+  font-weight: 200;
+  text-align: start;
+  background: none;
+  padding: 4px 8px;
+  border-radius: 4px;
 }

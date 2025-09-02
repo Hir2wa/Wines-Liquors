@@ -47,3 +47,12 @@ showSlide(currentSlide);
 
 // Change every 5 seconds
 setInterval(nextSlide, 5000);
+
+document.querySelectorAll(".filter-title").forEach((button) => {
+  button.addEventListener("click", () => {
+    const content = button.nextElementSibling;
+    content.style.display =
+      content.style.display === "block" ? "none" : "block";
+  });
+});
+s;

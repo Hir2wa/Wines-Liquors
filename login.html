@@ -1,55 +1,556 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In</title>
-  <link rel="stylesheet" href="login.css">
-</head>
-<body>
-  <div class="container">
-    <h2>Sign in to view your latest personalized deals.</h2>
-    <form>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" placeholder="name@domain.com" required>
-        </div>
-        
-        <div class="form-group password-wrapper">
-          <label for="password">Password</label>
-          <input type="password" id="password" required>
-          <!-- <button type="button" class="show-btn" onclick="togglePassword()">Show</button> -->
-        </div>
-      </div>
-
-      <div class="options">
-        <label><input type="checkbox"> Keep Me Signed In</label>
-        <a href="#">Forgot Password?</a>
-      </div>
-
-      <button type="submit" class="btn">Sign In</button>
-
-      <div class="create">
-        <a href="#">Create an Account</a>
-      </div>
-    </form>
-  </div>
-
-  <script>
-    function togglePassword() {
-      const passwordField = document.getElementById("password");
-      // const btn = document.querySelector(".show-btn");
-      if (passwordField.type === "password") {
-        passwordField.type = "text";
-        btn.textContent = "Hide";
-      } else {
-        passwordField.type = "password";
-        // btn.textContent = "Show";
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log in - Customer Account</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-    }
-  </script>
-</body>
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #f6f6f7;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        background: white;
+        border-bottom: 1px solid #e1e3e5;
+        padding: 0 24px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .shopify-logo {
+        width: 32px;
+        height: 32px;
+        background: #95bf47;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .store-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #202223;
+      }
+
+      .help-link {
+        color: #005bd3;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .help-link:hover {
+        text-decoration: underline;
+      }
+
+      .main-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px;
+      }
+
+      .login-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        padding: 40px 32px;
+      }
+
+      .login-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #202223;
+        text-align: center;
+        margin-bottom: 8px;
+      }
+
+      .login-subtitle {
+        font-size: 14px;
+        color: #6d7175;
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #202223;
+        margin-bottom: 6px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 16px;
+        background: white;
+        transition: all 0.2s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #005bd3;
+        box-shadow: 0 0 0 3px rgba(0, 91, 211, 0.1);
+      }
+
+      .form-input.error {
+        border-color: #d72c0d;
+      }
+
+      .error-message {
+        color: #d72c0d;
+        font-size: 14px;
+        margin-top: 6px;
+        display: none;
+      }
+
+      .forgot-password {
+        text-align: right;
+        margin-bottom: 24px;
+      }
+
+      .forgot-link {
+        color: #005bd3;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+
+      .login-button {
+        width: 100%;
+        background: #005bd3;
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 20px;
+      }
+
+      .login-button:hover {
+        background: #004db3;
+      }
+
+      .login-button:disabled {
+        background: #b5bdc8;
+        cursor: not-allowed;
+      }
+
+      .login-button.loading {
+        position: relative;
+        color: transparent;
+      }
+
+      .login-button.loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        border: 2px solid transparent;
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e1e3e5;
+      }
+
+      .divider span {
+        padding: 0 16px;
+        color: #6d7175;
+        font-size: 14px;
+      }
+
+      .social-login {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .social-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: white;
+        color: #202223;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .social-button:hover {
+        border-color: #005bd3;
+        box-shadow: 0 0 0 1px rgba(0, 91, 211, 0.1);
+      }
+
+      .create-account {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #e1e3e5;
+      }
+
+      .create-account-text {
+        color: #6d7175;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .create-account-link {
+        color: #005bd3;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .create-account-link:hover {
+        text-decoration: underline;
+      }
+
+      .privacy-notice {
+        margin-top: 24px;
+        padding: 16px;
+        background: #f6f6f7;
+        border-radius: 6px;
+        font-size: 12px;
+        color: #6d7175;
+        line-height: 1.4;
+      }
+
+      .privacy-notice a {
+        color: #005bd3;
+        text-decoration: none;
+      }
+
+      .privacy-notice a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 32px 24px;
+          margin: 0 16px;
+        }
+
+        .main-content {
+          padding: 20px 0;
+        }
+      }
+
+      .success-message {
+        background: #e8f5e8;
+        border: 1px solid #4caf50;
+        color: #2e7d32;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <div class="shopify-logo">S</div>
+        <span class="store-name">Your Store</span>
+      </div>
+      <a href="#" class="help-link">Need help?</a>
+    </header>
+
+    <main class="main-content">
+      <div class="login-container">
+        <h1 class="login-title">Log in to your account</h1>
+        <p class="login-subtitle">
+          Enter your email and password to access your account
+        </p>
+
+        <div class="success-message" id="successMessage">
+          ✓ Login successful! Redirecting to your account...
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="Enter your email"
+              required
+            />
+            <div class="error-message" id="emailError">
+              Please enter a valid email address
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="Enter your password"
+              required
+            />
+            <div class="error-message" id="passwordError">
+              Password is required
+            </div>
+          </div>
+
+          <div class="forgot-password">
+            <a href="#" class="forgot-link" onclick="showForgotPassword()"
+              >Forgot password?</a
+            >
+          </div>
+
+          <button type="submit" class="login-button" id="loginButton">
+            Log in
+          </button>
+        </form>
+
+        <div class="divider">
+          <span>or</span>
+        </div>
+
+        <div class="social-login">
+          <a href="#" class="social-button" onclick="socialLogin('google')">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
+            </svg>
+            Continue with Google
+          </a>
+
+          <a href="#" class="social-button" onclick="socialLogin('apple')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+              />
+            </svg>
+            Continue with Apple
+          </a>
+
+          <a href="#" class="social-button" onclick="socialLogin('facebook')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+              <path
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+              />
+            </svg>
+            Continue with Facebook
+          </a>
+        </div>
+
+        <div class="create-account">
+          <p class="create-account-text">Don't have an account?</p>
+          <a href="#" class="create-account-link" onclick="showCreateAccount()"
+            >Create account</a
+          >
+        </div>
+
+        <div class="privacy-notice">
+          By continuing, you agree to our <a href="#">Terms of Service</a> and
+          <a href="#">Privacy Policy</a>. This site is protected by reCAPTCHA
+          and Google's Privacy Policy applies.
+        </div>
+      </div>
+    </main>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          handleLogin();
+        });
+
+      function handleLogin() {
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const loginButton = document.getElementById("loginButton");
+        const successMessage = document.getElementById("successMessage");
+
+        // Reset previous errors
+        clearErrors();
+
+        // Basic validation
+        let hasErrors = false;
+
+        if (!email.value || !isValidEmail(email.value)) {
+          showError("email", "emailError");
+          hasErrors = true;
+        }
+
+        if (!password.value) {
+          showError("password", "passwordError");
+          hasErrors = true;
+        }
+
+        if (hasErrors) {
+          return;
+        }
+
+        // Show loading state
+        loginButton.classList.add("loading");
+        loginButton.disabled = true;
+
+        // Simulate login process
+        setTimeout(() => {
+          loginButton.classList.remove("loading");
+          loginButton.disabled = false;
+
+          // Show success message
+          successMessage.style.display = "block";
+
+          // Simulate redirect
+          setTimeout(() => {
+            alert(
+              "Login successful! In a real implementation, this would redirect to your account dashboard."
+            );
+          }, 1500);
+        }, 2000);
+      }
+
+      function showError(inputId, errorId) {
+        document.getElementById(inputId).classList.add("error");
+        document.getElementById(errorId).style.display = "block";
+      }
+
+      function clearErrors() {
+        const inputs = document.querySelectorAll(".form-input");
+        const errors = document.querySelectorAll(".error-message");
+
+        inputs.forEach((input) => input.classList.remove("error"));
+        errors.forEach((error) => (error.style.display = "none"));
+      }
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function socialLogin(provider) {
+        alert(
+          `Social login with ${provider} clicked! In a real implementation, this would initiate OAuth flow.`
+        );
+      }
+
+      function showForgotPassword() {
+        const email = document.getElementById("email").value;
+        if (email) {
+          alert(`Password reset link would be sent to: ${email}`);
+        } else {
+          alert(
+            'Please enter your email address first, then click "Forgot password?"'
+          );
+        }
+      }
+
+      function showCreateAccount() {
+        alert(
+          "In a real implementation, this would redirect to the account creation page."
+        );
+      }
+
+      // Real-time email validation
+      document.getElementById("email").addEventListener("blur", function () {
+        if (this.value && !isValidEmail(this.value)) {
+          showError("email", "emailError");
+        } else {
+          this.classList.remove("error");
+          document.getElementById("emailError").style.display = "none";
+        }
+      });
+
+      // Clear errors on input
+      document.querySelectorAll(".form-input").forEach((input) => {
+        input.addEventListener("input", function () {
+          if (this.classList.contains("error")) {
+            this.classList.remove("error");
+            const errorId = this.id + "Error";
+            document.getElementById(errorId).style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
-
-

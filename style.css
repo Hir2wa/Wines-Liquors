@@ -401,7 +401,7 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  min-width: 140px;
+  min-width: 160px;
   flex-shrink: 0;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -412,8 +412,8 @@ body {
 }
 
 #popular-list img {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 12px;
@@ -425,7 +425,7 @@ body {
 }
 
 #popular-list .items-desctiption p {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: #333;
   margin: 0;
@@ -862,7 +862,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    min-width: 120px;
+    min-width: 140px;
     flex-shrink: 0;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -873,8 +873,8 @@ body {
   }
 
   #popular-list img {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 10px;
@@ -886,7 +886,7 @@ body {
   }
 
   #popular-list .items-desctiption p {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 500;
     color: #333;
     margin: 0;
@@ -1473,12 +1473,12 @@ body {
   }
 
   #popular-list .items-desctiption {
-    min-width: 110px;
+    min-width: 130px;
   }
 
   #popular-list img {
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 110px;
   }
 
   /* Spirits Section - Tablet */
@@ -1545,16 +1545,16 @@ body {
   }
 
   #popular-list .items-desctiption {
-    min-width: 150px;
+    min-width: 170px;
   }
 
   #popular-list img {
-    width: 130px;
-    height: 130px;
+    width: 150px;
+    height: 150px;
   }
 
   #popular-list .items-desctiption p {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   /* Spirits Section - Large Desktop */

@@ -33,9 +33,9 @@
 
 .slide-show {
   position: relative;
-  width: calc(100% - 100px); /* Account for 50px margin on each side */
+  width: calc(100% - 100px); /* desktop width with side gutters */
   height: 400px;
-  margin: 0 50px; /* Add the same margin as your header classes */
+  margin: 0 50px;
   overflow: hidden;
 }
 
@@ -51,6 +51,21 @@
 
 .slide-show > div.active {
   opacity: 1;
+}
+
+/* Mobile adjustments so images fit the container */
+@media (max-width: 768px) {
+  .slide-show {
+    width: 100%;
+    margin: 0 10px; /* small side gutters on mobile */
+    height: 260px;
+  }
+  .header,
+  .header1,
+  .header2 {
+    height: 260px;
+    background-position: center;
+  }
 }
 
 .discover {

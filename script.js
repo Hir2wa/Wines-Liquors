@@ -1,7 +1,157 @@
-// REPLACE your entire script.js with this corrected version
+// CORRECTED Mobile Navigation JavaScript
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Desktop mega menu functionality
+  console.log("Mobile sidebar script loading...");
+
+  // Get elements
+  const hamburgerBtn = document.querySelector(".mobile-menu-toggle");
+  const closeBtn = document.querySelector(".mobile-close-btn");
+  const mobileMenu = document.querySelector(".nav-down");
+  let overlay = document.querySelector(".mobile-menu-overlay");
+  const megaMenusAll = document.querySelectorAll(".mega-menu");
+
+  console.log("Elements found:", {
+    hamburger: !!hamburgerBtn,
+    closeBtn: !!closeBtn,
+    mobileMenu: !!mobileMenu,
+    overlay: !!overlay,
+    megaMenus: megaMenusAll.length,
+  });
+
+  // Create overlay if it doesn't exist
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.className = "mobile-menu-overlay";
+    document.body.appendChild(overlay);
+    console.log("Overlay created");
+  }
+
+  // Open mobile sidebar function
+  function openMobileMenu() {
+    console.log("Opening mobile sidebar");
+    if (mobileMenu) {
+      mobileMenu.classList.add("active");
+      overlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+  }
+
+  // Close mobile sidebar function
+  function closeMobileMenu() {
+    console.log("Closing mobile sidebar");
+    if (mobileMenu) {
+      mobileMenu.classList.remove("active");
+      overlay.classList.remove("active");
+      document.body.style.overflow = "";
+
+      // Close all open mega menus
+      megaMenusAll.forEach((menu) => {
+        menu.classList.remove("active");
+        const productsContent = menu.querySelectorAll(".products-content");
+        productsContent.forEach((content) =>
+          content.classList.remove("active")
+        );
+      });
+    }
+  }
+
+  // Hamburger button event listener
+  if (hamburgerBtn) {
+    hamburgerBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Hamburger clicked");
+      openMobileMenu();
+    });
+  }
+
+  // Close button event listener
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeMobileMenu();
+    });
+  }
+
+  // Overlay click event listener
+  if (overlay) {
+    overlay.addEventListener("click", closeMobileMenu);
+  }
+
+  // Handle mega menu clicks in mobile sidebar
+  megaMenusAll.forEach((megaMenu) => {
+    const mainLink = megaMenu.querySelector("a");
+    const categoryItems = megaMenu.querySelectorAll(".category-item");
+
+    if (mainLink) {
+      mainLink.addEventListener("click", function (e) {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          console.log("Mega menu clicked in mobile");
+
+          // Close other mega menus
+          megaMenusAll.forEach((otherMenu) => {
+            if (otherMenu !== megaMenu) {
+              otherMenu.classList.remove("active");
+              const otherProductsContent =
+                otherMenu.querySelectorAll(".products-content");
+              otherProductsContent.forEach((content) =>
+                content.classList.remove("active")
+              );
+            }
+          });
+
+          // Toggle current mega menu
+          megaMenu.classList.toggle("active");
+        }
+      });
+    }
+
+    // Handle category clicks in mobile sidebar
+    categoryItems.forEach((categoryItem) => {
+      categoryItem.addEventListener("click", function () {
+        if (window.innerWidth <= 768) {
+          const targetCategory = categoryItem.dataset.category;
+          const productsContent = megaMenu.querySelector(".products-content");
+          const targetGrid = megaMenu.querySelector(`#${targetCategory}`);
+
+          console.log("Category clicked:", targetCategory);
+
+          // Show products content
+          if (productsContent) {
+            productsContent.classList.add("active");
+          }
+
+          // Hide all product grids
+          const allGrids = megaMenu.querySelectorAll(".products-grid");
+          allGrids.forEach((grid) => grid.classList.remove("active"));
+
+          // Show target grid
+          if (targetGrid) {
+            targetGrid.classList.add("active");
+          }
+
+          // Update active category
+          categoryItems.forEach((item) => item.classList.remove("active"));
+          categoryItem.classList.add("active");
+        }
+      });
+    });
+  });
+
+  // Handle window resize - close sidebar on desktop
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 768) {
+      closeMobileMenu();
+    }
+  });
+
+  console.log("Mobile sidebar script loaded completely");
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Desktop mega menu functionality (unchanged)
   const categoryItems = document.querySelectorAll(".category-item");
 
   categoryItems.forEach((item) => {
@@ -52,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(nextSlide, 5000);
   }
 
-  // Filter functionality
+  // Filter functionality (unchanged)
   document.querySelectorAll(".filter-title").forEach((button) => {
     button.addEventListener("click", () => {
       const content = button.nextElementSibling;
@@ -63,8 +213,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // MOBILE MENU FUNCTIONALITY
-  console.log("Mobile menu script loading...");
+  // WORKING MOBILE SIDEBAR FUNCTIONALITY (from Test.html)
+  console.log("Mobile sidebar script loading...");
 
   // Get elements
   const hamburgerBtn = document.querySelector(".mobile-menu-toggle");
@@ -92,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Overlay created");
   }
 
-  // Discover New & Noteworthy horizontal scroll with chevrons (mobile)
+  // Horizontal scroll functionality (unchanged)
   const discoverList = document.getElementById("discover-list");
   const discoverPrev = document.querySelector(".discover-prev");
   const discoverNext = document.querySelector(".discover-next");
@@ -110,7 +260,6 @@ document.addEventListener("DOMContentLoaded", function () {
     discoverNext.addEventListener("click", () => scrollDiscover(1));
   }
 
-  // Popular categories, Wines, Spirits scrollers
   function bindScroller(listId, prevSelector, nextSelector, widthFactor = 0.8) {
     const list = document.getElementById(listId);
     const prev = document.querySelector(prevSelector);
@@ -131,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
   bindScroller("wines-list", ".wines-prev", ".wines-next", 0.8);
   bindScroller("spirits-list", ".spirits-prev", ".spirits-next", 0.8);
 
-  // Mobile search toggle
+  // Mobile search functionality
   function openSearch() {
     if (searchBar) {
       searchBar.classList.add("active");
@@ -158,7 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Open mobile menu function
   function openMobileMenu() {
-    console.log("Opening mobile menu");
+    console.log("Opening mobile sidebar");
     if (mobileMenu) {
       mobileMenu.classList.add("active");
       overlay.classList.add("active");
@@ -166,9 +315,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Close mobile menu function
+  // Close mobile sidebar function
   function closeMobileMenu() {
-    console.log("Closing mobile menu");
+    console.log("Closing mobile sidebar");
     if (mobileMenu) {
       mobileMenu.classList.remove("active");
       overlay.classList.remove("active");
@@ -185,14 +334,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Add event listeners
-  if (hamburgerBtn) {
-    hamburgerBtn.addEventListener("click", function (e) {
+  // Bind mobile menu events function
+  function bindMobileMenuEvents() {
+    console.log("Binding mobile menu events");
+
+    // Re-bind mega menu events
+    megaMenusAll.forEach((megaMenu) => {
+      const mainLink = megaMenu.querySelector("a");
+      if (mainLink) {
+        // Remove existing listeners to avoid duplicates
+        mainLink.removeEventListener("click", handleMainLinkClick);
+        mainLink.addEventListener("click", handleMainLinkClick);
+      }
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      console.log("Hamburger clicked");
-      openMobileMenu();
+      closeMobileMenu();
     });
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", closeMobileMenu);
   }
 
   if (mobileSearchToggle) {
@@ -256,7 +422,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Handle category clicks in mobile
+    // Handle category clicks in mobile sidebar
     categoryItems.forEach((categoryItem) => {
       categoryItem.addEventListener("click", function () {
         if (window.innerWidth <= 768) {
@@ -288,20 +454,69 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Handle window resize
+  // Handle window resize - close sidebar on desktop
   window.addEventListener("resize", function () {
     if (window.innerWidth > 768) {
       closeMobileMenu();
     }
   });
 
-  // Test hamburger menu on page load
-  console.log("Script loaded completely");
+  // Footer collapsible sections
+  const sectionHeaders = document.querySelectorAll(".section-header");
 
-  // Add a test click handler to verify JavaScript is working
-  if (hamburgerBtn) {
-    console.log("Hamburger button found and ready");
-  } else {
-    console.error("Hamburger button not found!");
-  }
+  sectionHeaders.forEach((header) => {
+    header.addEventListener("click", function () {
+      const section = this.getAttribute("data-section");
+      const content = document.getElementById(section + "-content");
+      const toggle = this.querySelector(".section-toggle");
+
+      // Close other sections
+      sectionHeaders.forEach((otherHeader) => {
+        if (otherHeader !== this) {
+          otherHeader.classList.remove("active");
+          const otherSection = otherHeader.getAttribute("data-section");
+          const otherContent = document.getElementById(
+            otherSection + "-content"
+          );
+          const otherToggle = otherHeader.querySelector(".section-toggle");
+
+          if (otherContent) {
+            otherContent.classList.remove("active");
+          }
+          if (otherToggle) {
+            otherToggle.style.transform = "rotate(0deg)";
+          }
+        }
+      });
+
+      this.classList.toggle("active");
+      if (content) {
+        content.classList.toggle("active");
+      }
+      if (toggle) {
+        toggle.style.transform = this.classList.contains("active")
+          ? "rotate(45deg)"
+          : "rotate(0deg)";
+      }
+    });
+  });
+
+  // Featured products interaction
+  const featuredItems = document.querySelectorAll(".featured-item");
+
+  featuredItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      this.style.transform = "scale(0.98)";
+      setTimeout(() => {
+        this.style.transform = "";
+      }, 150);
+
+      console.log(
+        "Featured item clicked:",
+        this.querySelector("h4").textContent
+      );
+    });
+  });
+
+  console.log("Mobile sidebar script loaded completely");
 });

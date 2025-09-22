@@ -72,6 +72,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const mobileMenu = document.querySelector(".nav-down");
   let overlay = document.querySelector(".mobile-menu-overlay");
   const megaMenusAll = document.querySelectorAll(".mega-menu");
+  const mobileSearchToggle = document.querySelector(".mobile-search-toggle");
+  const searchBar = document.querySelector(".search-bar");
+  const searchClose = document.querySelector(".search-close");
 
   console.log("Elements found:", {
     hamburger: !!hamburgerBtn,
@@ -87,6 +90,70 @@ document.addEventListener("DOMContentLoaded", function () {
     overlay.className = "mobile-menu-overlay";
     document.body.appendChild(overlay);
     console.log("Overlay created");
+  }
+
+  // Discover New & Noteworthy horizontal scroll with chevrons (mobile)
+  const discoverList = document.getElementById("discover-list");
+  const discoverPrev = document.querySelector(".discover-prev");
+  const discoverNext = document.querySelector(".discover-next");
+
+  function scrollDiscover(direction) {
+    if (!discoverList) return;
+    const amount = Math.min(discoverList.clientWidth * 0.8, 320);
+    discoverList.scrollBy({ left: direction * amount, behavior: "smooth" });
+  }
+
+  if (discoverPrev) {
+    discoverPrev.addEventListener("click", () => scrollDiscover(-1));
+  }
+  if (discoverNext) {
+    discoverNext.addEventListener("click", () => scrollDiscover(1));
+  }
+
+  // Popular categories, Wines, Spirits scrollers
+  function bindScroller(listId, prevSelector, nextSelector, widthFactor = 0.8) {
+    const list = document.getElementById(listId);
+    const prev = document.querySelector(prevSelector);
+    const next = document.querySelector(nextSelector);
+    if (!list) return;
+    const amount = () => Math.min(list.clientWidth * widthFactor, 320);
+    if (prev)
+      prev.addEventListener("click", () =>
+        list.scrollBy({ left: -amount(), behavior: "smooth" })
+      );
+    if (next)
+      next.addEventListener("click", () =>
+        list.scrollBy({ left: amount(), behavior: "smooth" })
+      );
+  }
+
+  bindScroller("popular-list", ".popular-prev", ".popular-next", 0.7);
+  bindScroller("wines-list", ".wines-prev", ".wines-next", 0.8);
+  bindScroller("spirits-list", ".spirits-prev", ".spirits-next", 0.8);
+
+  // Mobile search toggle
+  function openSearch() {
+    if (searchBar) {
+      searchBar.classList.add("active");
+      const input = searchBar.querySelector(".input-search-field");
+      if (input) {
+        setTimeout(() => input.focus(), 0);
+      }
+    }
+    const navAll = document.querySelector(".navAll");
+    if (navAll) {
+      navAll.classList.add("search-open");
+    }
+  }
+
+  function closeSearch() {
+    if (searchBar) {
+      searchBar.classList.remove("active");
+    }
+    const navAll = document.querySelector(".navAll");
+    if (navAll) {
+      navAll.classList.remove("search-open");
+    }
   }
 
   // Open mobile menu function
@@ -125,6 +192,26 @@ document.addEventListener("DOMContentLoaded", function () {
       e.stopPropagation();
       console.log("Hamburger clicked");
       openMobileMenu();
+    });
+  }
+
+  if (mobileSearchToggle) {
+    mobileSearchToggle.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (window.innerWidth <= 768) {
+        if (searchBar && !searchBar.classList.contains("active")) {
+          openSearch();
+        } else {
+          closeSearch();
+        }
+      }
+    });
+  }
+
+  if (searchClose) {
+    searchClose.addEventListener("click", function (e) {
+      e.preventDefault();
+      closeSearch();
     });
   }
 

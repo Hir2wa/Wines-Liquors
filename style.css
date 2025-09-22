@@ -381,6 +381,401 @@ body {
   color: #d4002a;
 }
 
+/* Popular Categories - Desktop Version with Horizontal Scrolling */
+#popular-list {
+  display: flex;
+  gap: 24px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+#popular-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+#popular-list .items-desctiption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 140px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#popular-list .items-desctiption:hover {
+  transform: translateY(-2px);
+}
+
+#popular-list img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease;
+}
+
+#popular-list .items-desctiption:hover img {
+  transform: scale(1.05);
+}
+
+#popular-list .items-desctiption p {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+  text-transform: capitalize;
+  font-family: "Cormorant", serif;
+}
+
+/* Spirits Section - Desktop Version */
+.spirits-container {
+  display: flex;
+  gap: 24px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.spirits-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.spirit-card {
+  min-width: 280px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.spirit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.spirit-image {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  overflow: hidden;
+}
+
+.spirit-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.spirit-card:hover .spirit-image img {
+  transform: scale(1.05);
+}
+
+.spirit-name {
+  padding: 15px 20px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  background: #ffffff;
+  border-top: 1px solid #f0f0f0;
+  font-family: "Cormorant", serif;
+}
+
+/* Wines Section - Desktop Version */
+.wines-container {
+  display: flex;
+  gap: 24px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.wines-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.wine-card {
+  min-width: 280px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.wine-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.wine-image {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  overflow: hidden;
+}
+
+.wine-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.wine-card:hover .wine-image img {
+  transform: scale(1.05);
+}
+
+.wine-name {
+  padding: 15px 20px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  background: #ffffff;
+  border-top: 1px solid #f0f0f0;
+  font-family: "Cormorant", serif;
+}
+
+/* Footer - Clean Mobile Design */
+.site-footer {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 40px 20px 20px;
+  margin-top: 60px;
+}
+
+/* Featured Products Section */
+.featured-products {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.featured-products h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #d4af37;
+  margin-bottom: 30px;
+  font-family: "Cormorant", serif;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.featured-item {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 25px 20px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.featured-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+.featured-badge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: #d4af37;
+  color: #000;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.featured-item h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-family: "Cormorant", serif;
+}
+
+.featured-item p {
+  font-size: 14px;
+  color: #cccccc;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Collapsible Sections */
+.footer-sections {
+  margin-bottom: 30px;
+}
+
+.footer-section {
+  border-bottom: 1px solid #333;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.section-header:hover {
+  color: #d4af37;
+}
+
+.section-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.section-toggle {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+  color: #d4af37;
+}
+
+.section-header.active .section-toggle {
+  transform: rotate(45deg);
+}
+
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.section-content.active {
+  max-height: 500px;
+}
+
+.section-content ul {
+  list-style: none;
+  padding: 0 0 20px 0;
+  margin: 0;
+}
+
+.section-content ul li {
+  margin-bottom: 12px;
+}
+
+.section-content ul li a {
+  color: #cccccc;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.section-content ul li a:hover {
+  color: #d4af37;
+}
+
+/* Social Media Icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background-color: #333333;
+  color: #ffffff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+.social-icons a:hover {
+  background-color: #d4af37;
+  color: #000;
+}
+
+/* Brand Logo */
+.footer-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.footer-logo h2 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #d4af37;
+  margin: 0;
+  font-family: "Cormorant", serif;
+  letter-spacing: 2px;
+}
+
+/* Copyright */
+.copyright {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.copyright p {
+  font-size: 12px;
+  color: #999999;
+  margin: 0;
+}
+
+/* Legal Disclaimer */
+.legal-disclaimer {
+  text-align: center;
+}
+
+.legal-disclaimer p {
+  font-size: 10px;
+  color: #666666;
+  line-height: 1.4;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .navAll {
     margin: 10px;
@@ -447,61 +842,234 @@ body {
     object-fit: cover;
     border-radius: 4px;
   }
-  /* Popular categories horizontal scroll */
+  /* Popular categories mobile - Horizontal scrolling like the image */
   #popular-list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
+    display: flex;
+    gap: 20px;
+    padding: 0 15px;
     overflow-x: auto;
-    gap: 12px;
-    padding: 0 10px 4px 10px;
-    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
   }
+
+  #popular-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
   #popular-list .items-desctiption {
-    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 120px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
   }
+
+  #popular-list .items-desctiption:active {
+    transform: scale(0.98);
+  }
+
   #popular-list img {
-    width: 88px;
-    height: 88px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #eee;
+    margin-bottom: 10px;
+    transition: transform 0.2s ease;
   }
+
+  #popular-list .items-desctiption:active img {
+    transform: scale(0.95);
+  }
+
   #popular-list .items-desctiption p {
-    text-align: center;
-    font-size: 12px;
-    margin-top: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+    text-transform: capitalize;
+    font-family: "Cormorant", serif;
   }
-  /* Wines and Spirits carousels */
-  #wines-list,
-  #spirits-list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 70%;
+
+  /* Footer mobile adjustments */
+  .site-footer {
+    padding: 30px 15px 15px;
+  }
+
+  /* Featured Products - Mobile */
+  .featured-products h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .featured-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 100%;
+  }
+
+  .featured-item {
+    padding: 20px 15px;
+  }
+
+  .featured-item h4 {
+    font-size: 16px;
+  }
+
+  .featured-item p {
+    font-size: 13px;
+  }
+
+  .section-header {
+    padding: 15px 0;
+  }
+
+  .section-header h3 {
+    font-size: 14px;
+  }
+
+  .social-icons a {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .footer-logo h2 {
+    font-size: 28px;
+  }
+
+  .copyright p {
+    font-size: 11px;
+  }
+
+  .legal-disclaimer p {
+    font-size: 9px;
+  }
+  /* Spirits Section - Mobile Version */
+  .spirits-container {
+    display: flex;
+    gap: 16px;
+    padding: 0 15px;
     overflow-x: auto;
-    gap: 12px;
-    padding: 0 10px 4px 10px;
-    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
   }
-  #wines-list .spirts-item,
-  #spirits-list .spirts-item {
-    scroll-snap-align: start;
+
+  .spirits-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
-  .spirts-item {
-    border-radius: 10px;
+
+  .spirit-card {
+    min-width: 240px;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .spirit-card:active {
+    transform: scale(0.98);
+  }
+
+  .spirit-image {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     overflow: hidden;
   }
-  .spirts-item img {
-    height: 220px;
-    border-radius: 10px;
+
+  .spirit-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.2s ease;
   }
-  .spirts-item p {
-    left: 10px;
-    bottom: 10px;
-    transform: none;
-    background: rgba(0, 0, 0, 0.55);
-    padding: 6px 10px;
-    border-radius: 6px;
+
+  .spirit-card:active .spirit-image img {
+    transform: scale(0.95);
+  }
+
+  .spirit-name {
+    padding: 12px 15px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    background: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    font-family: "Cormorant", serif;
+  }
+
+  /* Wines Section - Mobile Version */
+  .wines-container {
+    display: flex;
+    gap: 16px;
+    padding: 0 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .wines-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .wine-card {
+    min-width: 240px;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .wine-card:active {
+    transform: scale(0.98);
+  }
+
+  .wine-image {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    overflow: hidden;
+  }
+
+  .wine-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.2s ease;
+  }
+
+  .wine-card:active .wine-image img {
+    transform: scale(0.95);
+  }
+
+  .wine-name {
+    padding: 12px 15px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    background: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    font-family: "Cormorant", serif;
   }
 }
 
@@ -896,5 +1464,158 @@ body {
   .mega-menu-content {
     min-width: 700px;
     max-width: 750px;
+  }
+
+  /* Popular Categories - Tablet */
+  #popular-list {
+    gap: 22px;
+    padding: 0 30px;
+  }
+
+  #popular-list .items-desctiption {
+    min-width: 110px;
+  }
+
+  #popular-list img {
+    width: 90px;
+    height: 90px;
+  }
+
+  /* Spirits Section - Tablet */
+  .spirits-container {
+    gap: 20px;
+    padding: 0 30px;
+  }
+
+  .spirit-card {
+    min-width: 260px;
+  }
+
+  .spirit-image {
+    height: 180px;
+    padding: 18px;
+  }
+
+  .spirit-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Wines Section - Tablet */
+  .wines-container {
+    gap: 20px;
+    padding: 0 30px;
+  }
+
+  .wine-card {
+    min-width: 260px;
+  }
+
+  .wine-image {
+    height: 180px;
+    padding: 18px;
+  }
+
+  .wine-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Footer - Tablet */
+  .footer-container {
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 35px;
+    padding: 0 30px;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+/* Large Desktop styles */
+@media screen and (min-width: 1200px) {
+  /* Popular Categories - Large Desktop */
+  #popular-list {
+    gap: 30px;
+    padding: 0 40px;
+  }
+
+  #popular-list .items-desctiption {
+    min-width: 150px;
+  }
+
+  #popular-list img {
+    width: 130px;
+    height: 130px;
+  }
+
+  #popular-list .items-desctiption p {
+    font-size: 18px;
+  }
+
+  /* Spirits Section - Large Desktop */
+  .spirits-container {
+    gap: 30px;
+    padding: 0 40px;
+  }
+
+  .spirit-card {
+    min-width: 300px;
+  }
+
+  .spirit-image {
+    height: 220px;
+    padding: 25px;
+  }
+
+  .spirit-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spirit-name {
+    padding: 18px 25px;
+    font-size: 15px;
+  }
+
+  /* Wines Section - Large Desktop */
+  .wines-container {
+    gap: 30px;
+    padding: 0 40px;
+  }
+
+  .wine-card {
+    min-width: 300px;
+  }
+
+  .wine-image {
+    height: 220px;
+    padding: 25px;
+  }
+
+  .wine-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .wine-name {
+    padding: 18px 25px;
+    font-size: 15px;
+  }
+
+  /* Footer - Large Desktop */
+  .footer-container {
+    gap: 50px;
+    padding: 0 40px;
+  }
+
+  .footer-links {
+    gap: 50px;
   }
 }

@@ -1071,36 +1071,6 @@ body {
     border-top: 1px solid #f0f0f0;
     font-family: "Cormorant", serif;
   }
-
-  /* Wines carousel - keeping the old structure */
-  #wines-list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 70%;
-    overflow-x: auto;
-    gap: 12px;
-    padding: 0 10px 4px 10px;
-    scroll-snap-type: x mandatory;
-  }
-  #wines-list .spirts-item {
-    scroll-snap-align: start;
-  }
-  .spirts-item {
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .spirts-item img {
-    height: 220px;
-    border-radius: 10px;
-  }
-  .spirts-item p {
-    left: 10px;
-    bottom: 10px;
-    transform: none;
-    background: rgba(0, 0, 0, 0.55);
-    padding: 6px 10px;
-    border-radius: 6px;
-  }
 }
 
 /* Mobile Responsive CSS - Add this to your existing CSS */

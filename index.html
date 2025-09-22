@@ -44,6 +44,9 @@
             />
           </div>
           <button class="searchButton">Search</button>
+          <button class="search-close" aria-label="Close search">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
 
         <div class="location">
@@ -58,7 +61,9 @@
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
-
+        <button class="mobile-search-toggle" aria-label="Open search">
+          <i class="fas fa-search"></i>
+        </button>
         <i class="fas fa-shopping-cart"></i>
       </div>
 
@@ -395,23 +400,27 @@
         </p>
       </div>
     </div>
-    <h2
-      class="header-underline1"
-      style="
-        display: block;
-        margin-top: 50px;
-        margin-left: 50px;
-        margin-right: 50px;
-        font-style: normal;
-        font-family: 'Cormorant', serif;
-        font-weight: 300;
-        font-size: 28px;
-      "
-    >
-      Discover New & Noteworthy
-    </h2>
+    <div class="discover-new-noteworthy">
+      <h2
+        class="header-underline1"
+        style="
+          display: block;
 
-    <div class="discover">
+          font-style: normal;
+          font-family: 'Cormorant', serif;
+          font-weight: 300;
+          font-size: 28px;
+        "
+      >
+        Discover New & Noteworthy
+      </h2>
+      <div class="discover-controls">
+        <i class="fas fa-chevron-left discover-prev" aria-label="Previous"></i>
+        <i class="fas fa-chevron-right discover-next" aria-label="Next"></i>
+      </div>
+    </div>
+
+    <div class="discover" id="discover-list">
       <div class="discover-item">
         <img src="images/donjulio70.jpeg" alt="" />
         <p>don julio 70 cristalino tequila</p>
@@ -430,22 +439,28 @@
       </div>
     </div>
     <div>
-      <h2
-        class="header-underline2"
-        style="
-          display: block;
-          margin-top: 50px;
-          margin-left: 50px;
-          margin-right: 50px;
-          font-style: normal;
-          font-family: 'Cormorant', serif;
-          font-weight: 300;
-          font-size: 28px;
-        "
-      >
-        Popular Categories
-      </h2>
-      <div class="popular-items">
+      <div class="discover-new-noteworthy">
+        <h2
+          class="header-underline2"
+          style="
+            display: block;
+            margin-top: 50px;
+            margin-left: 50px;
+            margin-right: 50px;
+            font-style: normal;
+            font-family: 'Cormorant', serif;
+            font-weight: 300;
+            font-size: 28px;
+          "
+        >
+          Popular Categories
+        </h2>
+        <div class="section-controls">
+          <i class="fas fa-chevron-left popular-prev" aria-label="Previous"></i>
+          <i class="fas fa-chevron-right popular-next" aria-label="Next"></i>
+        </div>
+      </div>
+      <div class="popular-items" id="popular-list">
         <div class="items-desctiption">
           <img src="images/SCOTCH.jpg" alt="" />
           <p>Scotch</p>
@@ -470,22 +485,28 @@
     </div>
 
     <div>
-      <p
-        class="header-underline1"
-        style="
-          display: block;
-          margin-top: 50px;
-          margin-left: 50px;
-          margin-right: 50px;
-          font-style: normal;
-          font-family: 'Cormorant', serif;
-          font-weight: 300;
-          font-size: 28px;
-        "
-      >
-        wine
-      </p>
-      <div class="spirts-cat">
+      <div class="discover-new-noteworthy">
+        <p
+          class="header-underline1"
+          style="
+            display: block;
+            margin-top: 50px;
+            margin-left: 50px;
+            margin-right: 50px;
+            font-style: normal;
+            font-family: 'Cormorant', serif;
+            font-weight: 300;
+            font-size: 28px;
+          "
+        >
+          wine
+        </p>
+        <div class="section-controls">
+          <i class="fas fa-chevron-left wines-prev" aria-label="Previous"></i>
+          <i class="fas fa-chevron-right wines-next" aria-label="Next"></i>
+        </div>
+      </div>
+      <div class="spirts-cat" id="wines-list">
         <div class="spirts-item">
           <img src="images/WINE2.webp" alt="" />
           <p>Lallier Champagne</p>
@@ -506,22 +527,28 @@
     </div>
 
     <div>
-      <p
-        class="header-underline1"
-        style="
-          display: block;
-          margin-top: 50px;
-          margin-left: 50px;
-          margin-right: 50px;
-          font-style: normal;
-          font-family: 'Cormorant', serif;
-          font-weight: 300;
-          font-size: 28px;
-        "
-      >
-        Spirits
-      </p>
-      <div class="spirts-cat">
+      <div class="discover-new-noteworthy">
+        <p
+          class="header-underline1"
+          style="
+            display: block;
+            margin-top: 50px;
+            margin-left: 50px;
+            margin-right: 50px;
+            font-style: normal;
+            font-family: 'Cormorant', serif;
+            font-weight: 300;
+            font-size: 28px;
+          "
+        >
+          Spirits
+        </p>
+        <div class="section-controls">
+          <i class="fas fa-chevron-left spirits-prev" aria-label="Previous"></i>
+          <i class="fas fa-chevron-right spirits-next" aria-label="Next"></i>
+        </div>
+      </div>
+      <div class="spirts-cat" id="spirits-list">
         <div class="spirts-item">
           <img src="images/Spirits-2.webp" alt="" />
           <p>21SEEDS</p>

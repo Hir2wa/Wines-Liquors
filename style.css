@@ -10,6 +10,50 @@ body {
   overflow-x: hidden;
 }
 
+.discover-new-noteworthy {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: #000000;
+  margin: 20px 50px;
+}
+.section-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.section-controls i {
+  cursor: pointer;
+}
+.discover-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.discover-controls i {
+  cursor: pointer;
+}
+
+.discover {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 0 50px;
+}
+
+.discover-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.discover-new-noteworthy .text {
+  color: inherit;
+}
+
+.discover-new-noteworthy .button {
+  margin-left: auto;
+  color: inherit;
+}
 .navAll {
   display: flex;
   flex-direction: column;
@@ -19,6 +63,13 @@ body {
   margin-top: 20px;
   border-bottom: 1px solid black;
   background: white;
+  position: relative;
+  z-index: 100;
+}
+
+/* When mobile search is open, make sure following content is pushed down */
+.navAll.search-open + .slide-show {
+  margin-top: 16px;
 }
 
 .nav {
@@ -60,6 +111,25 @@ body {
   border-color: transparent;
   color: white;
   padding: 7px 14px;
+  cursor: pointer;
+}
+
+.mobile-search-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+.search-close {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #333;
+  margin-left: 8px;
   cursor: pointer;
 }
 
@@ -351,6 +421,88 @@ body {
   .products-grid.active {
     grid-template-columns: 1fr;
   }
+  /* Discover section mobile layout */
+  .discover-new-noteworthy {
+    margin: 12px 10px;
+    align-items: center;
+  }
+  .slide-show {
+    margin: 0 10px;
+  }
+  .discover {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    overflow-x: auto;
+    gap: 12px;
+    margin: 0 10px 8px 10px;
+    padding-bottom: 4px;
+    scroll-snap-type: x mandatory;
+  }
+  .discover-item {
+    scroll-snap-align: start;
+  }
+  .discover-item img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  /* Popular categories horizontal scroll */
+  #popular-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 0 10px 4px 10px;
+    scroll-snap-type: x mandatory;
+  }
+  #popular-list .items-desctiption {
+    scroll-snap-align: start;
+  }
+  #popular-list img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #eee;
+  }
+  #popular-list .items-desctiption p {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  /* Wines and Spirits carousels */
+  #wines-list,
+  #spirits-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 70%;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 0 10px 4px 10px;
+    scroll-snap-type: x mandatory;
+  }
+  #wines-list .spirts-item,
+  #spirits-list .spirts-item {
+    scroll-snap-align: start;
+  }
+  .spirts-item {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .spirts-item img {
+    height: 220px;
+    border-radius: 10px;
+  }
+  .spirts-item p {
+    left: 10px;
+    bottom: 10px;
+    transform: none;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
 }
 
 /* Mobile Responsive CSS - Add this to your existing CSS */
@@ -359,7 +511,7 @@ body {
 
 /* Mobile Hamburger Menu */
 .mobile-menu-toggle {
-  display: flex;
+  display: none;
   justify-content: flex-start;
 
   background: none;
@@ -407,14 +559,32 @@ body {
   }
 
   .nav {
-    height: auto;
-    padding: 10px 0;
-    flex-wrap: wrap;
-    gap: 15px;
+    height: 56px;
+    padding: 8px 0;
+    display: grid;
+    grid-template-columns: 32px 1fr 32px 32px; /* menu, logo, search, cart */
+    align-items: center;
+    column-gap: 12px;
   }
 
   .logo {
-    order: 2;
+    order: 0;
+    justify-self: center;
+  }
+
+  /* Force items to specific columns in the first row */
+  .nav .mobile-menu-toggle {
+    grid-column: 1;
+  }
+  .nav .logo {
+    grid-column: 2;
+  }
+  .nav .mobile-search-toggle {
+    grid-column: 3;
+  }
+  .nav .fa-shopping-cart {
+    grid-column: 4;
+    justify-self: end;
   }
 
   .logo img {
@@ -422,16 +592,35 @@ body {
     width: auto;
   }
 
+  .mobile-search-toggle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Hide the small search icon when search bar is open */
+  .navAll.search-open .mobile-search-toggle {
+    display: none;
+  }
+
   .search-bar {
-    order: 4;
+    grid-column: 1 / -1;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 8px;
+    display: none;
+  }
+
+  .search-bar.active {
+    display: flex;
+  }
+
+  /* Show close button only when expanded */
+  .search-bar.active .search-close {
+    display: inline-flex;
   }
 
   .location {
-    order: 3;
-    flex: 1;
-    min-width: 120px;
+    display: none;
   }
 
   .location-store p:first-child {
@@ -444,13 +633,32 @@ body {
 
   .fa-shopping-cart {
     font-size: 20px;
-    order: 5;
+    justify-self: end;
+  }
+
+  /* Inline, single-row search layout when open */
+  .navAll.search-open .nav {
+    height: auto;
+    grid-auto-rows: minmax(40px, auto);
+  }
+  .navAll.search-open .logo,
+  .navAll.search-open .mobile-search-toggle {
+    display: none;
+  }
+  .navAll.search-open .search-bar {
+    display: flex;
+    grid-column: 1 / 4; /* menu + search occupy first three columns */
+    margin-top: 0;
+  }
+  .navAll.search-open .fa-shopping-cart {
+    grid-column: 4;
+    justify-self: end;
   }
 
   /* Show hamburger menu */
   .mobile-menu-toggle {
     display: block;
-    order: 1;
+    order: 0;
   }
 
   /* Show close button in mobile menu */

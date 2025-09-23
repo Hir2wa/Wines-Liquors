@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout - Murukali</title>
+    <title>Checkout - Total Wine & More</title>
+    <link rel="stylesheet" href="css/all.min.css" />
     <style>
       * {
         margin: 0;
@@ -14,24 +15,107 @@
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, sans-serif;
-        /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
         background: white;
         min-height: 100vh;
-        padding: 20px;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Navigation Bar Styles */
+      .header {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .back-to-home {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #dc3545;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #dc3545;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .back-to-home:hover {
+        background: #dc3545;
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      .back-to-home i {
+        font-size: 16px;
+      }
+
+      .logo img {
+        height: 40px;
+        width: auto;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .help-link {
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .help-link:hover {
+        color: #dc3545;
+      }
+
+      /* Responsive Navigation */
+      @media (max-width: 768px) {
+        .header {
+          padding: 12px 15px;
+        }
+
+        .back-to-home span {
+          display: none;
+        }
+
+        .back-to-home {
+          padding: 8px 12px;
+        }
+
+        .logo img {
+          height: 35px;
+        }
       }
 
       .checkout-container {
         max-width: 1200px;
-        margin: 0 auto;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
+        margin: 20px auto;
+        background: white;
         border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         overflow: hidden;
       }
 
-      .header {
-        background: red;
+      .checkout-header {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
         color: white;
         padding: 30px;
         text-align: center;
@@ -39,7 +123,7 @@
         overflow: hidden;
       }
 
-      .header::before {
+      .checkout-header::before {
         content: "";
         position: absolute;
         top: -50%;
@@ -65,7 +149,7 @@
         }
       }
 
-      .header h1 {
+      .checkout-header h1 {
         font-size: 2.5rem;
         font-weight: 300;
         margin-bottom: 10px;
@@ -73,11 +157,117 @@
         z-index: 1;
       }
 
-      .header p {
+      .checkout-header p {
         font-size: 1.1rem;
         opacity: 0.9;
         position: relative;
         z-index: 1;
+      }
+
+      /* Guest Checkout Section */
+      .guest-checkout-section {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 30px;
+      }
+
+      .guest-checkout-content {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .guest-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex: 1;
+      }
+
+      .guest-info i {
+        font-size: 3rem;
+        color: #6c757d;
+      }
+
+      .guest-text h3 {
+        margin: 0 0 8px 0;
+        color: #2c3e50;
+        font-size: 1.3rem;
+      }
+
+      .guest-text p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      .guest-actions {
+        display: flex;
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: #dc3545;
+        border: 2px solid #dc3545;
+      }
+
+      .btn-outline:hover {
+        background: #dc3545;
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      /* Responsive Guest Checkout */
+      @media (max-width: 768px) {
+        .guest-checkout-content {
+          flex-direction: column;
+          text-align: center;
+          gap: 20px;
+        }
+
+        .guest-info {
+          flex-direction: column;
+          text-align: center;
+          gap: 15px;
+        }
+
+        .guest-actions {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .btn {
+          justify-content: center;
+        }
       }
 
       .checkout-content {
@@ -339,10 +529,54 @@
     </style>
   </head>
   <body>
+    <!-- Navigation Bar -->
+    <header class="header">
+      <div class="nav-left">
+        <a href="index.html" class="back-to-home">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <div class="logo">
+          <img src="images/logo.png" alt="Total Wine & More Logo" />
+        </div>
+      </div>
+      <div class="nav-right">
+        <a href="#" class="help-link">Need help?</a>
+      </div>
+    </header>
+
     <div class="checkout-container">
-      <div class="header">
+      <div class="checkout-header">
         <h1>Secure Checkout</h1>
         <p>Complete your order safely and securely</p>
+      </div>
+
+      <!-- Guest Checkout Option -->
+      <div
+        id="guest-checkout-section"
+        class="guest-checkout-section"
+        style="display: none"
+      >
+        <div class="guest-checkout-content">
+          <div class="guest-info">
+            <i class="fas fa-user-circle"></i>
+            <div class="guest-text">
+              <h3>Continue as Guest</h3>
+              <p>
+                You can complete your order without creating an account. We'll
+                still need your contact information for order updates.
+              </p>
+            </div>
+          </div>
+          <div class="guest-actions">
+            <button class="btn btn-outline" onclick="continueAsGuest()">
+              <i class="fas fa-shopping-cart"></i> Continue as Guest
+            </button>
+            <button class="btn btn-primary" onclick="showLoginOptions()">
+              <i class="fas fa-sign-in-alt"></i> Sign In / Register
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="checkout-content">
@@ -464,44 +698,54 @@
         <div class="order-summary">
           <h3 class="summary-title">Order Summary</h3>
 
-          <div class="order-item">
-            <div class="item-details">
-              <div class="item-name">Premium Product</div>
-              <div class="item-description">
-                High-quality item with premium features
-              </div>
+          <div id="cart-items">
+            <!-- Cart items will be loaded here dynamically -->
+          </div>
+
+          <div
+            id="empty-cart"
+            style="
+              display: none;
+              text-align: center;
+              padding: 40px;
+              color: #6c757d;
+            "
+          >
+            <i
+              class="fas fa-shopping-cart"
+              style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3"
+            ></i>
+            <h4>Your cart is empty</h4>
+            <p>Add some items to your cart to proceed with checkout.</p>
+            <a
+              href="index.html"
+              class="btn btn-primary"
+              style="margin-top: 20px; display: inline-block"
+            >
+              <i class="fas fa-arrow-left"></i> Continue Shopping
+            </a>
+          </div>
+
+          <div id="order-totals" style="display: none">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal">0frw</span>
             </div>
-            <div class="item-price">$99.99</div>
-          </div>
 
-          <div class="order-item">
-            <div class="item-details">
-              <div class="item-name">Digital Service</div>
-              <div class="item-description">
-                One-time setup and configuration
-              </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="shipping">5,000frw</span>
             </div>
-            <div class="item-price">$49.99</div>
-          </div>
 
-          <div class="summary-row">
-            <span>Subtotal</span>
-            <span>$149.98</span>
-          </div>
+            <div class="summary-row">
+              <span>Tax</span>
+              <span id="tax">0frw</span>
+            </div>
 
-          <div class="summary-row">
-            <span>Shipping</span>
-            <span>$9.99</span>
-          </div>
-
-          <div class="summary-row">
-            <span>Tax</span>
-            <span>$15.00</span>
-          </div>
-
-          <div class="summary-row total-row">
-            <span>Total</span>
-            <span>$174.97</span>
+            <div class="summary-row total-row">
+              <span>Total</span>
+              <span id="total">0frw</span>
+            </div>
           </div>
 
           <button class="checkout-btn" onclick="processOrder()">
@@ -528,7 +772,147 @@
 
     <script>
       let selectedPaymentMethod = null;
+      let cartItems = [];
 
+      // Load cart items from localStorage
+      function loadCartItems() {
+        const cartData = localStorage.getItem("cartItems");
+        if (cartData) {
+          cartItems = JSON.parse(cartData);
+        }
+
+        displayCartItems();
+        checkUserStatus();
+      }
+
+      // Check if user is logged in and show appropriate options
+      function checkUserStatus() {
+        const userData = localStorage.getItem("userData");
+        const guestSection = document.getElementById("guest-checkout-section");
+        const checkoutContent = document.querySelector(".checkout-content");
+
+        if (!userData) {
+          // User not logged in - show guest checkout options
+          guestSection.style.display = "block";
+          checkoutContent.style.display = "none";
+        } else {
+          // User is logged in - show checkout form and auto-fill data
+          guestSection.style.display = "none";
+          checkoutContent.style.display = "grid";
+          autoFillUserData();
+        }
+      }
+
+      // Continue as guest
+      function continueAsGuest() {
+        const guestSection = document.getElementById("guest-checkout-section");
+        const checkoutContent = document.querySelector(".checkout-content");
+
+        guestSection.style.display = "none";
+        checkoutContent.style.display = "grid";
+
+        showFlashMessage(
+          "You're checking out as a guest. Please fill in your contact information.",
+          "success"
+        );
+      }
+
+      // Show login options
+      function showLoginOptions() {
+        if (
+          confirm(
+            "Would you like to sign in to your account for faster checkout? You can also continue as a guest."
+          )
+        ) {
+          window.location.href = "login.html";
+        }
+      }
+
+      // Display cart items in the order summary
+      function displayCartItems() {
+        const cartItemsContainer = document.getElementById("cart-items");
+        const emptyCartDiv = document.getElementById("empty-cart");
+        const orderTotalsDiv = document.getElementById("order-totals");
+        const checkoutBtn = document.querySelector(".checkout-btn");
+
+        if (cartItems.length === 0) {
+          cartItemsContainer.innerHTML = "";
+          emptyCartDiv.style.display = "block";
+          orderTotalsDiv.style.display = "none";
+          checkoutBtn.style.display = "none";
+          return;
+        }
+
+        emptyCartDiv.style.display = "none";
+        orderTotalsDiv.style.display = "block";
+        checkoutBtn.style.display = "block";
+
+        cartItemsContainer.innerHTML = "";
+        let subtotal = 0;
+
+        cartItems.forEach((item, index) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "order-item";
+
+          // Extract price number for calculation
+          const priceNum = parseInt(item.price.replace(/[^\d]/g, ""));
+          subtotal += priceNum;
+
+          itemDiv.innerHTML = `
+            <div class="item-details">
+              <div class="item-name">${item.name}</div>
+              <div class="item-description">Premium quality product</div>
+            </div>
+            <div class="item-price">${item.price}</div>
+          `;
+
+          cartItemsContainer.appendChild(itemDiv);
+        });
+
+        // Update totals
+        const shipping = 5000;
+        const tax = 0; // No tax for now
+        const total = subtotal + shipping + tax;
+
+        document.getElementById(
+          "subtotal"
+        ).textContent = `${subtotal.toLocaleString()}frw`;
+        document.getElementById(
+          "shipping"
+        ).textContent = `${shipping.toLocaleString()}frw`;
+        document.getElementById(
+          "tax"
+        ).textContent = `${tax.toLocaleString()}frw`;
+        document.getElementById(
+          "total"
+        ).textContent = `${total.toLocaleString()}frw`;
+      }
+
+      // Auto-fill user data if logged in
+      function autoFillUserData() {
+        const userData = localStorage.getItem("userData");
+        if (userData) {
+          const user = JSON.parse(userData);
+
+          // Fill contact information
+          if (user.email) document.getElementById("email").value = user.email;
+          if (user.phone) document.getElementById("phone").value = user.phone;
+
+          // Fill shipping information
+          if (user.firstName)
+            document.getElementById("firstName").value = user.firstName;
+          if (user.lastName)
+            document.getElementById("lastName").value = user.lastName;
+          if (user.address)
+            document.getElementById("address").value = user.address;
+          if (user.city) document.getElementById("city").value = user.city;
+          if (user.state) document.getElementById("state").value = user.state;
+          if (user.zipCode)
+            document.getElementById("zipCode").value = user.zipCode;
+        }
+      }
+
+      // Payment method selection
       function selectPayment(method) {
         // Remove previous selection
         document.querySelectorAll(".payment-method").forEach((el) => {
@@ -551,88 +935,174 @@
         }
       }
 
+      // Flash message function
+      function showFlashMessage(message, type = "success") {
+        const flashDiv = document.createElement("div");
+        flashDiv.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${type === "success" ? "#28a745" : "#dc3545"};
+          color: white;
+          padding: 16px 24px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          z-index: 10000;
+          font-weight: 500;
+          font-size: 14px;
+          max-width: 350px;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        `;
+
+        const icon = document.createElement("i");
+        icon.className =
+          type === "success"
+            ? "fas fa-check-circle"
+            : "fas fa-exclamation-circle";
+        icon.style.fontSize = "18px";
+
+        const messageText = document.createElement("span");
+        messageText.textContent = message;
+
+        flashDiv.appendChild(icon);
+        flashDiv.appendChild(messageText);
+        document.body.appendChild(flashDiv);
+
+        setTimeout(() => {
+          flashDiv.style.transform = "translateX(0)";
+        }, 100);
+
+        setTimeout(() => {
+          flashDiv.style.transform = "translateX(100%)";
+          setTimeout(() => {
+            if (flashDiv.parentNode) {
+              flashDiv.parentNode.removeChild(flashDiv);
+            }
+          }, 300);
+        }, 3000);
+      }
+
+      // Process order
       function processOrder() {
         const btn = document.querySelector(".checkout-btn");
-        const form = document.querySelector(".form-section");
+        const requiredFields = document.querySelectorAll("input[required]");
 
-        // Add loading state
-        btn.innerHTML = "⏳ Processing...";
-        btn.classList.add("loading");
-        form.classList.add("loading");
+        // Check if cart is empty
+        if (cartItems.length === 0) {
+          showFlashMessage(
+            "Your cart is empty. Please add items to proceed.",
+            "error"
+          );
+          return;
+        }
 
-        // Validate form
-        const requiredFields = document.querySelectorAll(
-          "input[required], select[required]"
-        );
-        let isValid = true;
-
+        // Check if all required fields are filled
+        let allFieldsFilled = true;
         requiredFields.forEach((field) => {
           if (!field.value.trim()) {
+            allFieldsFilled = false;
             field.style.borderColor = "#e74c3c";
-            isValid = false;
           } else {
             field.style.borderColor = "#e0e6ed";
           }
         });
 
-        if (!selectedPaymentMethod) {
-          alert("Please select a payment method");
-          btn.innerHTML = "Complete Order";
-          btn.classList.remove("loading");
-          form.classList.remove("loading");
+        if (!allFieldsFilled) {
+          showFlashMessage("Please fill in all required fields.", "error");
           return;
         }
 
-        if (!isValid) {
-          alert("Please fill in all required fields");
-          btn.innerHTML = "Complete Order";
-          btn.classList.remove("loading");
-          form.classList.remove("loading");
+        if (!selectedPaymentMethod) {
+          showFlashMessage("Please select a payment method.", "error");
+          return;
+        }
+
+        // Validate email format
+        const email = document.getElementById("email").value;
+        if (!isValidEmail(email)) {
+          showFlashMessage("Please enter a valid email address.", "error");
+          return;
+        }
+
+        // Validate phone number
+        const phone = document.getElementById("phone").value;
+        if (!isValidPhone(phone)) {
+          showFlashMessage("Please enter a valid phone number.", "error");
           return;
         }
 
         // Simulate processing
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+
         setTimeout(() => {
-          btn.innerHTML = "✅ Order Complete!";
-          btn.style.background = "linear-gradient(135deg, #27ae60, #2ecc71)";
-          btn.classList.remove("loading");
-          btn.classList.add("success-animation");
-          form.classList.remove("loading");
+          // Clear cart
+          localStorage.removeItem("cartItems");
+          localStorage.removeItem("cartCount");
 
           // Show success message
+          showFlashMessage(
+            "🎉 Order completed successfully! You will receive a confirmation email shortly.",
+            "success"
+          );
+
+          // Redirect to homepage after delay
           setTimeout(() => {
-            alert(
-              "🎉 Order completed successfully! You will receive a confirmation email shortly."
-            );
-          }, 500);
+            window.location.href = "index.html";
+          }, 2000);
         }, 2000);
       }
 
+      // Email validation
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      // Phone validation
+      function isValidPhone(phone) {
+        return /^(\+250|250)?[0-9]{9}$/.test(phone.replace(/\s/g, ""));
+      }
+
       // Auto-format card number
-      document
-        .getElementById("cardNumber")
-        .addEventListener("input", function (e) {
-          let value = e.target.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
-          let formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
-          if (formattedValue !== value) {
-            e.target.value = formattedValue;
-          }
-        });
+      document.addEventListener("DOMContentLoaded", function () {
+        loadCartItems();
 
-      // Auto-format expiry date
-      document
-        .getElementById("expiryDate")
-        .addEventListener("input", function (e) {
-          let value = e.target.value.replace(/\D/g, "");
-          if (value.length >= 2) {
-            value = value.substring(0, 2) + "/" + value.substring(2, 4);
-          }
-          e.target.value = value;
-        });
+        const cardNumber = document.getElementById("cardNumber");
+        if (cardNumber) {
+          cardNumber.addEventListener("input", function (e) {
+            let value = e.target.value
+              .replace(/\s/g, "")
+              .replace(/[^0-9]/gi, "");
+            let formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
+            if (formattedValue !== value) {
+              e.target.value = formattedValue;
+            }
+          });
+        }
 
-      // Limit CVV to 3-4 digits
-      document.getElementById("cvv").addEventListener("input", function (e) {
-        e.target.value = e.target.value.replace(/\D/g, "").substring(0, 4);
+        // Auto-format expiry date
+        const expiryDate = document.getElementById("expiryDate");
+        if (expiryDate) {
+          expiryDate.addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, "");
+            if (value.length >= 2) {
+              value = value.substring(0, 2) + "/" + value.substring(2, 4);
+            }
+            e.target.value = value;
+          });
+        }
+
+        // Limit CVV to 3-4 digits
+        const cvv = document.getElementById("cvv");
+        if (cvv) {
+          cvv.addEventListener("input", function (e) {
+            e.target.value = e.target.value.replace(/\D/g, "").substring(0, 4);
+          });
+        }
       });
     </script>
   </body>

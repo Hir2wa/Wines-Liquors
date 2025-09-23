@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account - Customer Account</title>
+    <link rel="stylesheet" href="css/all.min.css" />
+    <script src="login.js" defer></script>
     <style>
       * {
         margin: 0;
@@ -24,45 +26,121 @@
         background: white;
         border-bottom: 1px solid #e1e3e5;
         padding: 0 24px;
-        height: 60px;
+        height: 70px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .back-to-home {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #dc3545;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+      }
+
+      .back-to-home:hover {
+        color: #c82333;
+        background: rgba(220, 53, 69, 0.15);
+        transform: translateX(-2px);
+        border-color: rgba(220, 53, 69, 0.3);
+      }
+
+      .back-to-home i {
+        font-size: 16px;
       }
 
       .logo {
         display: flex;
         align-items: center;
-        gap: 8px;
       }
 
-      .shopify-logo {
-        width: 32px;
-        height: 32px;
-        background: #95bf47;
-        border-radius: 6px;
+      .logo img {
+        height: 35px;
+        width: auto;
+      }
+
+      .nav-right {
         display: flex;
         align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 18px;
-      }
-
-      .store-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: #202223;
+        gap: 20px;
       }
 
       .help-link {
-        color: #005bd3;
+        color: #6c757d;
         text-decoration: none;
         font-size: 14px;
+        font-weight: 500;
+        transition: color 0.3s ease;
       }
 
       .help-link:hover {
-        text-decoration: underline;
+        color: #dc3545;
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 768px) {
+        .header {
+          padding: 0 16px;
+          height: 60px;
+        }
+
+        .nav-left {
+          gap: 12px;
+        }
+
+        .back-to-home {
+          padding: 8px 12px;
+          font-size: 14px;
+        }
+
+        .back-to-home span {
+          display: none;
+        }
+
+        .back-to-home i {
+          font-size: 18px;
+        }
+
+        .logo img {
+          height: 30px;
+        }
+
+        .help-link {
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header {
+          padding: 0 12px;
+        }
+
+        .nav-left {
+          gap: 8px;
+        }
+
+        .back-to-home {
+          padding: 6px 10px;
+        }
+
+        .logo img {
+          height: 28px;
+        }
       }
 
       .main-content {
@@ -390,11 +468,18 @@
   </head>
   <body>
     <header class="header">
-      <div class="logo">
-        <div class="shopify-logo">S</div>
-        <span class="store-name">###</span>
+      <div class="nav-left">
+        <a href="index.html" class="back-to-home">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <div class="logo">
+          <img src="images/logo.png" alt="Total Wine & More Logo" />
+        </div>
       </div>
-      <a href="#" class="help-link">Need help?</a>
+      <div class="nav-right">
+        <a href="#" class="help-link">Need help?</a>
+      </div>
     </header>
 
     <main class="main-content">
@@ -593,7 +678,7 @@
         .getElementById("signupForm")
         .addEventListener("submit", function (e) {
           e.preventDefault();
-          handleSignup();
+          handleRegister(e);
         });
 
       // Real-time validation

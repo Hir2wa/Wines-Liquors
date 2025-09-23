@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Champagne & Cognac - Total Wine & More</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Sub-page Navigation -->
+    <nav class="sub-page-nav">
+      <div class="sub-nav-container">
+        <div class="back-to-home">
+          <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+        <div class="sub-logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="Total Wine & More Logo" />
+          </a>
+        </div>
+        <div class="sub-nav-actions">
+          <div class="sub-search">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              placeholder="Search champagne..."
+              class="sub-search-input"
+            />
+          </div>
+          <a href="Order.html" class="sub-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+          <div class="sub-user">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <div class="breadcrumb-wrapper">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <div class="breadcrumb-path">
+            <a href="index.html" class="breadcrumb-link">
+              <i class="fas fa-home"></i>
+              <span>HOME</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Wine.html" class="breadcrumb-link">
+              <span>Wine</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Whiskey.html" class="breadcrumb-link">
+              <span>WHISKEY</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="GinVodka.html" class="breadcrumb-link">
+              <span> Gin&Vodka</span>
+            </a>
+
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Champagne&Cognac</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <!-- Champagne Header -->
+    <section class="wine-header">
+      <div class="wine-text">
+        <h2>Premium Champagne & Cognac Collection</h2>
+        <p>
+          Discover our exquisite selection of the world's finest champagnes and
+          cognacs. From legendary French houses to rare vintage collections,
+          elevate your celebrations with our premium spirits.
+        </p>
+      </div>
+      <div class="wine-image">
+        <img src="images/WINE1.webp" alt="Premium Champagne Collection" />
+      </div>
+    </section>
+
+    <!-- Champagne Page Content -->
+    <div class="wine-page-container">
+      <!-- Sidebar Filters -->
+      <aside class="wine-sidebar">
+        <h3>Filters</h3>
+
+        <!-- Category Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Category</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="champagne"
+                checked
+              />
+              Champagne</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="cognac"
+                checked
+              />
+              Cognac</label
+            >
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Price Range</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="under-100k"
+                checked
+              />
+              Under 100,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="100k-200k"
+                checked
+              />
+              100,000 - 200,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="over-200k"
+                checked
+              />
+              Over 200,000frw</label
+            >
+          </div>
+        </div>
+
+        <!-- Size Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Size</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="700ml"
+                checked
+              />
+              700ML</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="750ml"
+                checked
+              />
+              750ML</label
+            >
+          </div>
+        </div>
+
+        <!-- Clear Filters Button -->
+        <div class="wine-filter-group">
+          <button class="clear-filters-btn" onclick="clearAllFilters()">
+            <i class="fas fa-times"></i>
+            Clear All Filters
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="wine-main-content">
+        <!-- Champagne Section -->
+        <section class="wine-category-section">
+          <div class="wine-category-header">
+            <h3 class="wine-category-title">Premium Champagne</h3>
+            <p class="wine-category-subtitle">
+              Celebrate with the finest French champagne
+            </p>
+          </div>
+          <div class="wine-products-grid">
+            <div class="wine-product-card">
+              <img src="images/WINE2.webp" alt="Veuve Clicquot Rose" />
+              <div class="wine-product-info">
+                <h4>Veuve Clicquot Rose</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">180,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Veuve Clicquot Rose', '180,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="images/WINE2.webp" alt="Veuve Clicquot Brut" />
+              <div class="wine-product-info">
+                <h4>Veuve Clicquot Brut</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">160,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Veuve Clicquot Brut', '160,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="images/WINE2.webp" alt="Moët Nectar Imperial" />
+              <div class="wine-product-info">
+                <h4>Moët Nectar Imperial</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">200,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Moët Nectar Imperial', '200,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="images/WINE2.webp" alt="Moët Rose Imperial" />
+              <div class="wine-product-info">
+                <h4>Moët Rose Imperial</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">220,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Moët Rose Imperial', '220,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Cognac Section -->
+        <section class="wine-category-section">
+          <div class="wine-category-header">
+            <h3 class="wine-category-title">Premium Cognac</h3>
+            <p class="wine-category-subtitle">
+              Experience the finest French cognac craftsmanship
+            </p>
+          </div>
+          <div class="wine-products-grid">
+            <div class="wine-product-card">
+              <img src="images/WHISKEY.jpg" alt="Hennessy VSOP" />
+              <div class="wine-product-info">
+                <h4>Hennessy VSOP</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">120,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Hennessy VSOP', '120,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="images/WHISKEY.jpg" alt="Hennessy VS" />
+              <div class="wine-product-info">
+                <h4>Hennessy VS</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">80,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Hennessy VS', '80,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="images/WHISKEY.jpg" alt="Rémy Martin VSOP" />
+              <div class="wine-product-info">
+                <h4>Rémy Martin VSOP</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">140,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Rémy Martin VSOP', '140,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="images/WHISKEY.jpg" alt="Martell VSOP" />
+              <div class="wine-product-info">
+                <h4>Martell VSOP</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">130,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Martell VSOP', '130,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <!-- Featured Products Section -->
+
+      <!-- Collapsible Sections -->
+      <div class="footer-sections">
+        <div class="footer-section">
+          <div class="section-header" data-section="shop">
+            <h3>SHOP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="shop-content">
+            <ul>
+              <li><a href="#">Discover All Spirits</a></li>
+              <li><a href="#">Find Your Wine</a></li>
+              <li><a href="#">Explore Champagne</a></li>
+              <li><a href="#">Celebrity Spirits</a></li>
+              <li><a href="#">Limited Editions</a></li>
+              <li><a href="#">Rare & Exceptional</a></li>
+              <li><a href="#">Single Barrel Exclusives</a></li>
+              <li><a href="#">Glassware</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="help">
+            <h3>HELP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="help-content">
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Customer Support</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="story">
+            <h3>OUR STORY</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="story-content">
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Partner With Us</a></li>
+              <li><a href="#">Corporate Orders</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Cocktail Lounge</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+
+      <!-- Brand Logo -->
+      <div class="footer-logo">
+        <h2>RESERVE BAR</h2>
+      </div>
+
+      <!-- Copyright -->
+      <div class="copyright">
+        <p>© 2012 - 2025 ReserveBar.com</p>
+      </div>
+
+      <!-- Legal Disclaimer -->
+      <div class="legal-disclaimer">
+        <p>
+          By using this site you acknowledge you are at least 21 years old and
+          you agree to our Terms & Conditions. *Take $10 off your first order of
+          $100 or more when you enter your exclusive code at checkout.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

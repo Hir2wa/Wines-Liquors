@@ -1,7 +1,322 @@
 // CORRECTED Mobile Navigation JavaScript
 
+// Wine Filter Toggle Function
+function toggleWineFilter(button) {
+  const filterGroup = button.closest(".wine-filter-group");
+  filterGroup.classList.toggle("active");
+}
+
+// Filter Functionality
+function applyFilters() {
+  const checkboxes = document.querySelectorAll(
+    '.wine-filter-content input[type="checkbox"]'
+  );
+  const products = document.querySelectorAll(".wine-product-card");
+  const categories = document.querySelectorAll(".wine-category-section");
+
+  // Get selected filters
+  const selectedFilters = {
+    category: [],
+    price: [],
+    size: [],
+  };
+
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const filterType = checkbox.getAttribute("data-filter");
+      const filterValue = checkbox.getAttribute("data-value");
+      if (filterType && filterValue) {
+        selectedFilters[filterType].push(filterValue);
+      }
+    }
+  });
+
+  // Filter products
+  products.forEach((product) => {
+    let showProduct = true;
+
+    // Check category filter
+    if (selectedFilters.category.length > 0) {
+      const productCategory = product.getAttribute("data-category");
+      if (!selectedFilters.category.includes(productCategory)) {
+        showProduct = false;
+      }
+    }
+
+    // Check price filter
+    if (selectedFilters.price.length > 0 && showProduct) {
+      const productPrice = product.getAttribute("data-price");
+      if (!selectedFilters.price.includes(productPrice)) {
+        showProduct = false;
+      }
+    }
+
+    // Check size filter
+    if (selectedFilters.size.length > 0 && showProduct) {
+      const productSize = product.getAttribute("data-size");
+      if (!selectedFilters.size.includes(productSize)) {
+        showProduct = false;
+      }
+    }
+
+    // Show/hide product
+    if (showProduct) {
+      product.style.display = "block";
+      product.classList.remove("filtered-out");
+    } else {
+      product.style.display = "none";
+      product.classList.add("filtered-out");
+    }
+  });
+
+  // Hide empty category sections
+  categories.forEach((category) => {
+    const visibleProducts = category.querySelectorAll(
+      ".wine-product-card:not(.filtered-out)"
+    );
+    if (visibleProducts.length === 0) {
+      category.style.display = "none";
+    } else {
+      category.style.display = "block";
+    }
+  });
+
+  // Update filter counts
+  updateFilterCounts();
+}
+
+// Clear all filters
+function clearAllFilters() {
+  const checkboxes = document.querySelectorAll(
+    '.wine-filter-content input[type="checkbox"]'
+  );
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+  applyFilters();
+}
+
+// Update filter counts
+function updateFilterCounts() {
+  const filterGroups = document.querySelectorAll(".wine-filter-group");
+
+  filterGroups.forEach((group) => {
+    const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    const checkedCount = Array.from(checkboxes).filter(
+      (cb) => cb.checked
+    ).length;
+    const totalCount = checkboxes.length;
+
+    const title = group.querySelector(".wine-filter-title span");
+    if (title && checkedCount < totalCount) {
+      title.textContent =
+        title.textContent.replace(/ \(\d+\/\d+\)/, "") +
+        ` (${checkedCount}/${totalCount})`;
+    } else if (title) {
+      title.textContent = title.textContent.replace(/ \(\d+\/\d+\)/, "");
+    }
+  });
+}
+
+// Add event listeners to filter checkboxes
+function initializeFilters() {
+  const checkboxes = document.querySelectorAll(
+    '.wine-filter-content input[type="checkbox"]'
+  );
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", applyFilters);
+  });
+
+  // Auto-assign data attributes to product cards
+  autoAssignDataAttributes();
+}
+
+// Auto-assign data attributes to product cards based on their content
+function autoAssignDataAttributes() {
+  const productCards = document.querySelectorAll(".wine-product-card");
+
+  productCards.forEach((card) => {
+    // Get product info
+    const productName =
+      card.querySelector("h4")?.textContent?.toLowerCase() || "";
+    const productPrice = card.querySelector(".wine-price")?.textContent || "";
+    const productSize =
+      card.querySelector(".wine-size")?.textContent?.toLowerCase() || "";
+
+    // Determine category based on section or product name
+    const categorySection = card.closest(".wine-category-section");
+    let category = "wine";
+
+    if (categorySection) {
+      const sectionTitle =
+        categorySection
+          .querySelector(".wine-category-title")
+          ?.textContent?.toLowerCase() || "";
+      if (sectionTitle.includes("champagne")) category = "champagne";
+      else if (sectionTitle.includes("cognac")) category = "cognac";
+      else if (sectionTitle.includes("whiskey")) category = "whiskey";
+      else if (sectionTitle.includes("tequila")) category = "tequila";
+      else if (sectionTitle.includes("gin")) category = "gin";
+      else if (sectionTitle.includes("vodka")) category = "vodka";
+      else if (sectionTitle.includes("wine bottle")) category = "wine-bottle";
+      else if (sectionTitle.includes("sparkling")) category = "sparkling-wine";
+      else if (sectionTitle.includes("wine box")) category = "wine-box";
+    }
+
+    // Determine price range
+    let priceRange = "under-50k";
+    const priceNum = parseInt(productPrice.replace(/[^\d]/g, ""));
+    if (priceNum >= 200000) priceRange = "over-200k";
+    else if (priceNum >= 100000) priceRange = "100k-200k";
+    else if (priceNum >= 50000) priceRange = "50k-100k";
+    else if (priceNum >= 100000) priceRange = "over-100k";
+
+    // Determine size
+    let size = "750ml";
+    if (productSize.includes("700ml")) size = "700ml";
+    else if (productSize.includes("1.5l")) size = "1.5l";
+    else if (productSize.includes("3l")) size = "3l";
+
+    // Set data attributes
+    card.setAttribute("data-category", category);
+    card.setAttribute("data-price", priceRange);
+    card.setAttribute("data-size", size);
+  });
+}
+
+// Cart Functionality
+let cartCount = 0;
+
+function addToCart(productName, productPrice) {
+  // Increment cart count
+  cartCount++;
+
+  // Store cart item in localStorage
+  const cartItem = {
+    name: productName,
+    price: productPrice,
+    id: Date.now(), // Unique ID for each item
+  };
+
+  // Get existing cart items
+  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+  cartItems.push(cartItem);
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+  // Update cart count display
+  updateCartCount();
+
+  // Add bounce animation to the product card
+  const productCard = event.target.closest(
+    ".wine-product-card, .champagne-product-card"
+  );
+  if (productCard) {
+    productCard.classList.add("bounce-animation");
+    setTimeout(() => {
+      productCard.classList.remove("bounce-animation");
+    }, 600);
+  }
+
+  // Show success message
+  showCartMessage(`${productName} added to cart!`);
+
+  // Store in localStorage for persistence
+  localStorage.setItem("cartCount", cartCount);
+}
+
+function updateCartCount() {
+  const cartCountElements = document.querySelectorAll(".cart-count");
+  cartCountElements.forEach((element) => {
+    element.textContent = cartCount;
+    element.classList.add("updated");
+
+    // Add bounce animation to cart icon
+    const cartIcon = element.closest(
+      ".sub-cart, .fas.fa-shopping-cart"
+    ).parentElement;
+    if (cartIcon) {
+      cartIcon.classList.add("cart-bounce");
+      setTimeout(() => {
+        cartIcon.classList.remove("cart-bounce");
+        element.classList.remove("updated");
+      }, 500);
+    }
+  });
+}
+
+function showCartMessage(message) {
+  // Create toast notification
+  const toast = document.createElement("div");
+  toast.className = "cart-toast";
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10000;
+    font-size: 14px;
+    font-weight: 500;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  `;
+
+  document.body.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => {
+    toast.style.transform = "translateX(0)";
+  }, 100);
+
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.style.transform = "translateX(100%)";
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 300);
+  }, 3000);
+}
+
+// Initialize cart count from localStorage
+function initializeCart() {
+  const savedCount = localStorage.getItem("cartCount");
+  if (savedCount) {
+    cartCount = parseInt(savedCount);
+    updateCartCount();
+  }
+}
+
+// Handle profile click with validation
+function handleProfileClick() {
+  const userData = localStorage.getItem("userData");
+
+  if (!userData) {
+    // User not logged in - show login prompt
+    if (
+      confirm(
+        "You need to sign in to view your profile. Would you like to sign in now?"
+      )
+    ) {
+      window.location.href = "login.html";
+    }
+  } else {
+    // User is logged in - go to profile page
+    window.location.href = "Profile.html";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Mobile sidebar script loading...");
+
+  // Initialize cart functionality
+  initializeCart();
+
+  // Initialize filters
+  initializeFilters();
 
   // Get elements
   const hamburgerBtn = document.querySelector(".mobile-menu-toggle");

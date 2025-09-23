@@ -1,8 +1,8 @@
 // Sample user data (in real app, this would be in database)
 const sampleUsers = {
-  "john@example.com": {
-    name: "John Doe",
-    email: "john@example.com",
+  "Alain@example.com": {
+    name: "Alain Fabrice",
+    email: "Alain@example.com",
     phone: "+250 788 123 456",
     address: "KG 15 Ave, Kigali",
     city: "Kigali",
@@ -40,8 +40,8 @@ function togglePassword(inputId) {
 function handleLogin(event) {
   event.preventDefault();
 
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
   // Reset error messages
   document
@@ -51,10 +51,10 @@ function handleLogin(event) {
   // Basic validation
   if (!email || !password) {
     if (!email) {
-      showError("loginEmailError", "Email is required");
+      showError("emailError", "Email is required");
     }
     if (!password) {
-      showError("loginPasswordError", "Password is required");
+      showError("passwordError", "Password is required");
     }
     return;
   }
@@ -66,19 +66,34 @@ function handleLogin(event) {
 
   setTimeout(() => {
     if (sampleUsers[email]) {
-      // Store user data for checkout auto-fill
+      // Store user data for profile and checkout auto-fill
       const userData = sampleUsers[email];
-      Object.keys(userData).forEach((key) => {
-        localStorage.setItem("user_" + key, userData[key]);
-      });
+      const profileData = {
+        firstName: userData.name.split(" ")[0] || "",
+        lastName: userData.name.split(" ").slice(1).join(" ") || "",
+        email: userData.email,
+        phone: userData.phone,
+        address: userData.address,
+        city: userData.city,
+        state: userData.district,
+        zipCode: "",
+        dateOfBirth: "",
+      };
+
+      localStorage.setItem("userData", JSON.stringify(profileData));
       localStorage.setItem("user_logged_in", "true");
 
-      alert(
-        "Login successful! Your information will be auto-filled at checkout."
+      showFlashMessage(
+        "Login successful! Welcome back to Total Wine & More.",
+        "success"
       );
-      window.location.href = "checkout.html";
+
+      // Redirect after a short delay
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1500);
     } else {
-      showError("loginEmailError", "Invalid email or password");
+      showError("emailError", "Invalid email or password");
       button.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
       button.disabled = false;
     }
@@ -145,27 +160,100 @@ function handleRegister(event) {
   button.disabled = true;
 
   setTimeout(() => {
-    // Store new user data
-    const userData = { name, email, phone };
-    Object.keys(userData).forEach((key) => {
-      localStorage.setItem("user_" + key, userData[key]);
-    });
+    // Store new user data in profile format
+    const profileData = {
+      firstName: name.split(" ")[0] || "",
+      lastName: name.split(" ").slice(1).join(" ") || "",
+      email: email,
+      phone: phone,
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      dateOfBirth: "",
+    };
+
+    localStorage.setItem("userData", JSON.stringify(profileData));
     localStorage.setItem("user_logged_in", "true");
 
-    alert("Account created successfully! Welcome to WineStore.");
-    window.location.href = "checkout.html";
+    showFlashMessage(
+      "Account created successfully! Welcome to Total Wine & More.",
+      "success"
+    );
+
+    // Redirect after a short delay
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 1500);
   }, 2000);
 }
 
 function showError(elementId, message) {
   const element = document.getElementById(elementId);
-  element.textContent = message;
-  element.style.display = "block";
+  if (element) {
+    element.textContent = message;
+    element.style.display = "block";
+  }
+}
+
+function showFlashMessage(message, type = "success") {
+  // Create flash message container
+  const flashDiv = document.createElement("div");
+  flashDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === "success" ? "#28a745" : "#dc3545"};
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10000;
+    font-weight: 500;
+    font-size: 14px;
+    max-width: 350px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  `;
+
+  // Add icon
+  const icon = document.createElement("i");
+  icon.className =
+    type === "success" ? "fas fa-check-circle" : "fas fa-exclamation-circle";
+  icon.style.fontSize = "18px";
+
+  // Add message text
+  const messageText = document.createElement("span");
+  messageText.textContent = message;
+
+  flashDiv.appendChild(icon);
+  flashDiv.appendChild(messageText);
+
+  // Add to page
+  document.body.appendChild(flashDiv);
+
+  // Animate in
+  setTimeout(() => {
+    flashDiv.style.transform = "translateX(0)";
+  }, 100);
+
+  // Auto remove after 3 seconds
+  setTimeout(() => {
+    flashDiv.style.transform = "translateX(100%)";
+    setTimeout(() => {
+      if (flashDiv.parentNode) {
+        flashDiv.parentNode.removeChild(flashDiv);
+      }
+    }, 300);
+  }, 3000);
 }
 
 function showForgotPassword() {
   alert(
-    "Password reset functionality would be implemented here. For demo, use: john@example.com"
+    "Password reset functionality would be implemented here. For demo, use: Alain@example.com"
   );
 }
 
@@ -173,15 +261,18 @@ function socialLogin(provider) {
   alert(`${provider} login would be integrated here`);
 }
 
-// Auto-format phone number
-document
-  .getElementById("registerPhone")
-  .addEventListener("input", function (e) {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.startsWith("250")) {
-      value = "+" + value;
-    } else if (!value.startsWith("+250") && value.length >= 9) {
-      value = "+250 " + value;
-    }
-    e.target.value = value;
-  });
+// Auto-format phone number (only if element exists)
+document.addEventListener("DOMContentLoaded", function () {
+  const phoneInput = document.getElementById("registerPhone");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.startsWith("250")) {
+        value = "+" + value;
+      } else if (!value.startsWith("+250") && value.length >= 9) {
+        value = "+250 " + value;
+      }
+      e.target.value = value;
+    });
+  }
+});

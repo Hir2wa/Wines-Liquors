@@ -87,23 +87,28 @@ document.addEventListener("DOMContentLoaded", function () {
     if (mainLink) {
       mainLink.addEventListener("click", function (e) {
         if (window.innerWidth <= 768) {
-          e.preventDefault();
-          console.log("Mega menu clicked in mobile");
+          // Only prevent default for links that are just placeholders (#)
+          // Allow actual navigation links (like Wine.html) to work
+          if (mainLink.getAttribute("href") === "#") {
+            e.preventDefault();
+            console.log("Mega menu clicked in mobile");
 
-          // Close other mega menus
-          megaMenusAll.forEach((otherMenu) => {
-            if (otherMenu !== megaMenu) {
-              otherMenu.classList.remove("active");
-              const otherProductsContent =
-                otherMenu.querySelectorAll(".products-content");
-              otherProductsContent.forEach((content) =>
-                content.classList.remove("active")
-              );
-            }
-          });
+            // Close other mega menus
+            megaMenusAll.forEach((otherMenu) => {
+              if (otherMenu !== megaMenu) {
+                otherMenu.classList.remove("active");
+                const otherProductsContent =
+                  otherMenu.querySelectorAll(".products-content");
+                otherProductsContent.forEach((content) =>
+                  content.classList.remove("active")
+                );
+              }
+            });
 
-          // Toggle current mega menu
-          megaMenu.classList.toggle("active");
+            // Toggle current mega menu
+            megaMenu.classList.toggle("active");
+          }
+          // If it's a real link (like Wine.html), let it navigate normally
         }
       });
     }
@@ -140,10 +145,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Handle window resize - close sidebar on desktop
+  // Handle window resize - close sidebar and search on desktop
   window.addEventListener("resize", function () {
     if (window.innerWidth > 768) {
       closeMobileMenu();
+      closeSearch(); // Also close search when switching to desktop
     }
   });
 
@@ -381,6 +387,64 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Add click outside functionality to close mobile search
+  document.addEventListener("click", function (e) {
+    // Only handle on mobile view
+    if (window.innerWidth <= 768) {
+      const searchBar = document.querySelector(".search-bar");
+      const mobileSearchToggle = document.querySelector(
+        ".mobile-search-toggle"
+      );
+
+      // Check if search is open and click is outside search area
+      if (searchBar && searchBar.classList.contains("active")) {
+        const isClickInsideSearch = searchBar.contains(e.target);
+        const isClickOnToggle =
+          mobileSearchToggle && mobileSearchToggle.contains(e.target);
+
+        // If click is outside search bar and not on the toggle button, close search
+        if (!isClickInsideSearch && !isClickOnToggle) {
+          closeSearch();
+        }
+      }
+    }
+  });
+
+  // Add scroll functionality to close mobile search and enhance sticky nav
+  let scrollTimeout;
+  window.addEventListener(
+    "scroll",
+    function () {
+      const navAll = document.querySelector(".navAll");
+
+      // Enhance sticky navigation shadow when scrolling
+      if (navAll) {
+        if (window.scrollY > 10) {
+          navAll.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+        } else {
+          navAll.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)";
+        }
+      }
+
+      // Only handle mobile search closing on mobile view
+      if (window.innerWidth <= 768) {
+        const searchBar = document.querySelector(".search-bar");
+
+        // Check if search is open
+        if (searchBar && searchBar.classList.contains("active")) {
+          // Clear existing timeout
+          clearTimeout(scrollTimeout);
+
+          // Set a small delay to avoid closing immediately on every scroll event
+          scrollTimeout = setTimeout(function () {
+            closeSearch();
+          }, 150); // 150ms delay to allow for smooth scrolling
+        }
+      }
+    },
+    { passive: true }
+  ); // Use passive listener for better performance
+
   if (closeBtn) {
     closeBtn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -401,23 +465,28 @@ document.addEventListener("DOMContentLoaded", function () {
     if (mainLink) {
       mainLink.addEventListener("click", function (e) {
         if (window.innerWidth <= 768) {
-          e.preventDefault();
-          console.log("Mega menu clicked in mobile");
+          // Only prevent default for links that are just placeholders (#)
+          // Allow actual navigation links (like Wine.html) to work
+          if (mainLink.getAttribute("href") === "#") {
+            e.preventDefault();
+            console.log("Mega menu clicked in mobile");
 
-          // Close other mega menus
-          megaMenusAll.forEach((otherMenu) => {
-            if (otherMenu !== megaMenu) {
-              otherMenu.classList.remove("active");
-              const otherProductsContent =
-                otherMenu.querySelectorAll(".products-content");
-              otherProductsContent.forEach((content) =>
-                content.classList.remove("active")
-              );
-            }
-          });
+            // Close other mega menus
+            megaMenusAll.forEach((otherMenu) => {
+              if (otherMenu !== megaMenu) {
+                otherMenu.classList.remove("active");
+                const otherProductsContent =
+                  otherMenu.querySelectorAll(".products-content");
+                otherProductsContent.forEach((content) =>
+                  content.classList.remove("active")
+                );
+              }
+            });
 
-          // Toggle current mega menu
-          megaMenu.classList.toggle("active");
+            // Toggle current mega menu
+            megaMenu.classList.toggle("active");
+          }
+          // If it's a real link (like Wine.html), let it navigate normally
         }
       });
     }
@@ -454,10 +523,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Handle window resize - close sidebar on desktop
+  // Handle window resize - close sidebar and search on desktop
   window.addEventListener("resize", function () {
     if (window.innerWidth > 768) {
       closeMobileMenu();
+      closeSearch(); // Also close search when switching to desktop
     }
   });
 

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rum - Total Wine & More</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Sub-page Navigation -->
+    <nav class="sub-page-nav">
+      <div class="sub-nav-container">
+        <div class="back-to-home">
+          <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+        <div class="sub-logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="Total Wine & More Logo" />
+          </a>
+        </div>
+        <div class="sub-nav-actions">
+          <div class="sub-search">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              placeholder="Search rum..."
+              class="sub-search-input"
+            />
+          </div>
+          <a href="Order.html" class="sub-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+          <div class="sub-user">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <div class="breadcrumb-wrapper">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <div class="breadcrumb-path">
+            <a href="index.html" class="breadcrumb-link">
+              <i class="fas fa-home"></i>
+              <span>HOME</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Champagne.html" class="breadcrumb-link">
+              <span>Champagne&Cognac</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Whiskey.html" class="breadcrumb-link">
+              <span>WHISKEY</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="GinVodka.html" class="breadcrumb-link">
+              <span> Gin&Vodka</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Wine.html" class="breadcrumb-link">
+              <span> Wine</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Rum</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Rum Header -->
+    <section class="wine-header">
+      <div class="wine-text">
+        <h2>Premium Rum Collection</h2>
+        <p>
+          Discover our exceptional selection of rums from the Caribbean and
+          beyond. From smooth white rums to aged dark rums, find your perfect
+          spirit for cocktails or sipping.
+        </p>
+      </div>
+      <div class="wine-image">
+        <img src="images/WHISKEY.jpg" alt="Premium Rum Collection" />
+      </div>
+    </section>
+
+    <!-- Rum Page Content -->
+    <div class="wine-page-container">
+      <!-- Sidebar Filters -->
+      <aside class="wine-sidebar">
+        <h3>Filters</h3>
+
+        <!-- Category Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Category</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="white-rum"
+                checked
+              />
+              White Rum</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="dark-rum"
+                checked
+              />
+              Dark Rum</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="spiced-rum"
+                checked
+              />
+              Spiced Rum</label
+            >
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Price Range</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="under-50k"
+                checked
+              />
+              Under 50,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="50k-100k"
+                checked
+              />
+              50,000 - 100,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="over-100k"
+                checked
+              />
+              Over 100,000frw</label
+            >
+          </div>
+        </div>
+
+        <!-- Size Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Size</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="700ml"
+                checked
+              />
+              700ML</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="750ml"
+                checked
+              />
+              750ML</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="1l"
+                checked
+              />
+              1L</label
+            >
+          </div>
+        </div>
+
+        <!-- Clear Filters Button -->
+        <div class="wine-filter-group">
+          <button class="clear-filters-btn" onclick="clearAllFilters()">
+            <i class="fas fa-times"></i>
+            Clear All Filters
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="wine-main-content">
+        <!-- Rum Section -->
+        <section class="wine-category-section">
+          <div class="wine-category-header">
+            <h3 class="wine-category-title">Premium Rum</h3>
+            <p class="wine-category-subtitle">
+              Premium selection of rums from around the world
+            </p>
+          </div>
+          <div class="wine-products-grid">
+            <div class="wine-product-card">
+              <img src="image/RUM/BACARDI BLANCA.jpg" alt="Bacardi Blanca" />
+              <div class="wine-product-info">
+                <h4>Bacardi Blanca</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">60,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Bacardi Blanca', '60,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/RUM/BACARDI CARTA NEGRO.jpg"
+                alt="Bacardi Carta Negro"
+              />
+              <div class="wine-product-info">
+                <h4>Bacardi Carta Negro</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">70,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Bacardi Carta Negro', '70,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/RUM/CAPTAIN MORGAN.jpg" alt="Captain Morgan" />
+              <div class="wine-product-info">
+                <h4>Captain Morgan</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">65,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Captain Morgan', '65,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/RUM/HAVANA CLUB 3YRS.jpg"
+                alt="Havana Club 3Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Havana Club 3Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">80,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Havana Club 3Yrs', '80,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/RUM/HAVANA CLUB 7YRS.jpg"
+                alt="Havana Club 7Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Havana Club 7Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">120,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Havana Club 7Yrs', '120,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/RUM/HAVANA CLUB ESPESIAL.jpg"
+                alt="Havana Club Especial"
+              />
+              <div class="wine-product-info">
+                <h4>Havana Club Especial</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">100,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Havana Club Especial', '100,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/RUM/MALIBU.jpg" alt="Malibu" />
+              <div class="wine-product-info">
+                <h4>Malibu</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">75,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Malibu', '75,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <!-- Featured Products Section -->
+
+      <!-- Collapsible Sections -->
+      <div class="footer-sections">
+        <div class="footer-section">
+          <div class="section-header" data-section="shop">
+            <h3>SHOP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="shop-content">
+            <ul>
+              <li><a href="#">Discover All Spirits</a></li>
+              <li><a href="#">Find Your Wine</a></li>
+              <li><a href="#">Explore Champagne</a></li>
+              <li><a href="#">Celebrity Spirits</a></li>
+              <li><a href="#">Limited Editions</a></li>
+              <li><a href="#">Rare & Exceptional</a></li>
+              <li><a href="#">Single Barrel Exclusives</a></li>
+              <li><a href="#">Glassware</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="help">
+            <h3>HELP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="help-content">
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Customer Support</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="story">
+            <h3>OUR STORY</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="story-content">
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Partner With Us</a></li>
+              <li><a href="#">Corporate Orders</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Cocktail Lounge</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+
+      <!-- Brand Logo -->
+      <div class="footer-logo">
+        <h2>RESERVE BAR</h2>
+      </div>
+
+      <!-- Copyright -->
+      <div class="copyright">
+        <p>© 2012 - 2025 ReserveBar.com</p>
+      </div>
+
+      <!-- Legal Disclaimer -->
+      <div class="legal-disclaimer">
+        <p>
+          By using this site you acknowledge you are at least 21 years old and
+          you agree to our Terms & Conditions. *Take $10 off your first order of
+          $100 or more when you enter your exclusive code at checkout.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

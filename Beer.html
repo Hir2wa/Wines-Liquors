@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beer - Total Wine & More</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Sub-page Navigation -->
+    <nav class="sub-page-nav">
+      <div class="sub-nav-container">
+        <div class="back-to-home">
+          <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+        <div class="sub-logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="Total Wine & More Logo" />
+          </a>
+        </div>
+        <div class="sub-nav-actions">
+          <div class="sub-search">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              placeholder="Search beer..."
+              class="sub-search-input"
+            />
+          </div>
+          <a href="Order.html" class="sub-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+          <div class="sub-user">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <div class="breadcrumb-wrapper">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <div class="breadcrumb-path">
+            <a href="index.html" class="breadcrumb-link">
+              <i class="fas fa-home"></i>
+              <span>HOME</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Champagne.html" class="breadcrumb-link">
+              <span>Champagne&Cognac</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Whiskey.html" class="breadcrumb-link">
+              <span>WHISKEY</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="GinVodka.html" class="breadcrumb-link">
+              <span> Gin&Vodka</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Wine.html" class="breadcrumb-link">
+              <span> Wine</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Beer</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Beer Header -->
+    <section class="wine-header">
+      <div class="wine-text">
+        <h2>Premium Beer Collection</h2>
+        <p>
+          Discover our exceptional selection of imported and local beers from
+          around the world. From refreshing lagers to rich ales, find your
+          perfect brew for any occasion.
+        </p>
+      </div>
+      <div class="wine-image">
+        <img src="images/WHISKEY.jpg" alt="Premium Beer Collection" />
+      </div>
+    </section>
+
+    <!-- Beer Page Content -->
+    <div class="wine-page-container">
+      <!-- Sidebar Filters -->
+      <aside class="wine-sidebar">
+        <h3>Filters</h3>
+
+        <!-- Category Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Category</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="lager"
+                checked
+              />
+              Lager</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="ale"
+                checked
+              />
+              Ale</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="non-alcoholic"
+                checked
+              />
+              Non-Alcoholic</label
+            >
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Price Range</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="under-5k"
+                checked
+              />
+              Under 5,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="5k-10k"
+                checked
+              />
+              5,000 - 10,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="over-10k"
+                checked
+              />
+              Over 10,000frw</label
+            >
+          </div>
+        </div>
+
+        <!-- Size Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Size</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="330ml"
+                checked
+              />
+              330ML</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="500ml"
+                checked
+              />
+              500ML</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="1l"
+                checked
+              />
+              1L</label
+            >
+          </div>
+        </div>
+
+        <!-- Clear Filters Button -->
+        <div class="wine-filter-group">
+          <button class="clear-filters-btn" onclick="clearAllFilters()">
+            <i class="fas fa-times"></i>
+            Clear All Filters
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="wine-main-content">
+        <!-- Beer Section -->
+        <section class="wine-category-section">
+          <div class="wine-category-header">
+            <h3 class="wine-category-title">Premium Beer</h3>
+            <p class="wine-category-subtitle">
+              Premium selection of imported and local beers
+            </p>
+          </div>
+          <div class="wine-products-grid">
+            <div class="wine-product-card">
+              <img
+                src="image/CANSIMPORTEDBEER/STELLA ARTOIS.jpg"
+                alt="Stella Artois"
+              />
+              <div class="wine-product-info">
+                <h4>Stella Artois</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">3,500frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Stella Artois', '3,500frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/CANSIMPORTEDBEER/CARLSBERG.jpg" alt="Carlsberg" />
+              <div class="wine-product-info">
+                <h4>Carlsberg</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">3,200frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Carlsberg', '3,200frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/CANSIMPORTEDBEER/LEFFE.jpg" alt="Leffe" />
+              <div class="wine-product-info">
+                <h4>Leffe</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">4,500frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Leffe', '4,500frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/CANSIMPORTEDBEER/SAVANNA.jpg" alt="Savanna" />
+              <div class="wine-product-info">
+                <h4>Savanna</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">2,800frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Savanna', '2,800frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/CANSIMPORTEDBEER/BAVARIA 0 ALCH.jpg"
+                alt="Bavaria 0% Alcohol"
+              />
+              <div class="wine-product-info">
+                <h4>Bavaria 0% Alcohol</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">2,500frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Bavaria 0% Alcohol', '2,500frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/CANSIMPORTEDBEER/BROK.jpg" alt="Brok" />
+              <div class="wine-product-info">
+                <h4>Brok</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">2,200frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Brok', '2,200frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/CANSIMPORTEDBEER/EXO.jpg" alt="Exo" />
+              <div class="wine-product-info">
+                <h4>Exo</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">2,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Exo', '2,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img src="image/CANSIMPORTEDBEER/GUARANNA.jpg" alt="Guarana" />
+              <div class="wine-product-info">
+                <h4>Guarana</h4>
+                <p class="wine-size">330ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">1,800frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Guarana', '1,800frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <!-- Featured Products Section -->
+
+      <!-- Collapsible Sections -->
+      <div class="footer-sections">
+        <div class="footer-section">
+          <div class="section-header" data-section="shop">
+            <h3>SHOP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="shop-content">
+            <ul>
+              <li><a href="#">Discover All Spirits</a></li>
+              <li><a href="#">Find Your Wine</a></li>
+              <li><a href="#">Explore Champagne</a></li>
+              <li><a href="#">Celebrity Spirits</a></li>
+              <li><a href="#">Limited Editions</a></li>
+              <li><a href="#">Rare & Exceptional</a></li>
+              <li><a href="#">Single Barrel Exclusives</a></li>
+              <li><a href="#">Glassware</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="help">
+            <h3>HELP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="help-content">
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Customer Support</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="story">
+            <h3>OUR STORY</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="story-content">
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Partner With Us</a></li>
+              <li><a href="#">Corporate Orders</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Cocktail Lounge</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+
+      <!-- Brand Logo -->
+      <div class="footer-logo">
+        <h2>RESERVE BAR</h2>
+      </div>
+
+      <!-- Copyright -->
+      <div class="copyright">
+        <p>© 2012 - 2025 ReserveBar.com</p>
+      </div>
+
+      <!-- Legal Disclaimer -->
+      <div class="legal-disclaimer">
+        <p>
+          By using this site you acknowledge you are at least 21 years old and
+          you agree to our Terms & Conditions. *Take $10 off your first order of
+          $100 or more when you enter your exclusive code at checkout.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

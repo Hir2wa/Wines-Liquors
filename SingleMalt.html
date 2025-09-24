@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Single Malt Whiskey - Total Wine & More</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Sub-page Navigation -->
+    <nav class="sub-page-nav">
+      <div class="sub-nav-container">
+        <div class="back-to-home">
+          <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+        <div class="sub-logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="Total Wine & More Logo" />
+          </a>
+        </div>
+        <div class="sub-nav-actions">
+          <div class="sub-search">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              placeholder="Search single malt..."
+              class="sub-search-input"
+            />
+          </div>
+          <a href="Order.html" class="sub-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+          <div class="sub-user">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <div class="breadcrumb-wrapper">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <div class="breadcrumb-path">
+            <a href="index.html" class="breadcrumb-link">
+              <i class="fas fa-home"></i>
+              <span>HOME</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Champagne.html" class="breadcrumb-link">
+              <span>Champagne&Cognac</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Whiskey.html" class="breadcrumb-link">
+              <span>WHISKEY</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="GinVodka.html" class="breadcrumb-link">
+              <span> Gin&Vodka</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="Wine.html" class="breadcrumb-link">
+              <span> Wine</span>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Single Malt</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Single Malt Header -->
+    <section class="wine-header">
+      <div class="wine-text">
+        <h2>Premium Single Malt Whiskey Collection</h2>
+        <p>
+          Discover our exceptional selection of single malt whiskeys from
+          Scotland's finest distilleries. From smooth 12-year expressions to
+          rare 18-year vintages, experience the art of single malt
+          craftsmanship.
+        </p>
+      </div>
+      <div class="wine-image">
+        <img src="images/SCOTCH.jpg" alt="Premium Single Malt Collection" />
+      </div>
+    </section>
+
+    <!-- Single Malt Page Content -->
+    <div class="wine-page-container">
+      <!-- Sidebar Filters -->
+      <aside class="wine-sidebar">
+        <h3>Filters</h3>
+
+        <!-- Category Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Category</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="glenfiddich"
+                checked
+              />
+              Glenfiddich</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="category"
+                data-value="glenlivet"
+                checked
+              />
+              Glenlivet</label
+            >
+          </div>
+        </div>
+
+        <!-- Age Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Age</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="age"
+                data-value="12yrs"
+                checked
+              />
+              12 Years</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="age"
+                data-value="15yrs"
+                checked
+              />
+              15 Years</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="age"
+                data-value="18yrs"
+                checked
+              />
+              18 Years</label
+            >
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Price Range</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="under-100k"
+                checked
+              />
+              Under 100,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="100k-200k"
+                checked
+              />
+              100,000 - 200,000frw</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="price"
+                data-value="over-200k"
+                checked
+              />
+              Over 200,000frw</label
+            >
+          </div>
+        </div>
+
+        <!-- Size Filter -->
+        <div class="wine-filter-group collapsible">
+          <button class="wine-filter-title" onclick="toggleWineFilter(this)">
+            <span>Size</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="wine-filter-content">
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="700ml"
+                checked
+              />
+              700ML</label
+            ><br />
+            <label
+              ><input
+                type="checkbox"
+                data-filter="size"
+                data-value="750ml"
+                checked
+              />
+              750ML</label
+            >
+          </div>
+        </div>
+
+        <!-- Clear Filters Button -->
+        <div class="wine-filter-group">
+          <button class="clear-filters-btn" onclick="clearAllFilters()">
+            <i class="fas fa-times"></i>
+            Clear All Filters
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="wine-main-content">
+        <!-- Single Malt Section -->
+        <section class="wine-category-section">
+          <div class="wine-category-header">
+            <h3 class="wine-category-title">Premium Single Malt Whiskey</h3>
+            <p class="wine-category-subtitle">
+              Premium selection of single malt whiskeys from Scotland's finest
+              distilleries
+            </p>
+          </div>
+          <div class="wine-products-grid">
+            <div class="wine-product-card">
+              <img
+                src="image/SINGLE MART/GLENFIDDICH 12YRS.jpg"
+                alt="Glenfiddich 12Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Glenfiddich 12Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">120,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Glenfiddich 12Yrs', '120,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/SINGLE MART/GLENFIDDICH 15YRS.jpg"
+                alt="Glenfiddich 15Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Glenfiddich 15Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">180,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Glenfiddich 15Yrs', '180,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/SINGLE MART/GLENFIDDICH 18YRS.jpg"
+                alt="Glenfiddich 18Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Glenfiddich 18Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">250,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Glenfiddich 18Yrs', '250,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/SINGLE MART/GLENLIVET 15YRS.jpg"
+                alt="Glenlivet 15Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Glenlivet 15Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">170,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Glenlivet 15Yrs', '170,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/SINGLE MART/GLENLIVET 18YRS.jpg"
+                alt="Glenlivet 18Yrs"
+              />
+              <div class="wine-product-info">
+                <h4>Glenlivet 18Yrs</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">240,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Glenlivet 18Yrs', '240,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="wine-product-card">
+              <img
+                src="image/SINGLE MART/GLENLIVET FOUNDERS RESERVE.jpg"
+                alt="Glenlivet Founders Reserve"
+              />
+              <div class="wine-product-info">
+                <h4>Glenlivet Founders Reserve</h4>
+                <p class="wine-size">700ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">110,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Glenlivet Founders Reserve', '110,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <!-- Featured Products Section -->
+
+      <!-- Collapsible Sections -->
+      <div class="footer-sections">
+        <div class="footer-section">
+          <div class="section-header" data-section="shop">
+            <h3>SHOP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="shop-content">
+            <ul>
+              <li><a href="#">Discover All Spirits</a></li>
+              <li><a href="#">Find Your Wine</a></li>
+              <li><a href="#">Explore Champagne</a></li>
+              <li><a href="#">Celebrity Spirits</a></li>
+              <li><a href="#">Limited Editions</a></li>
+              <li><a href="#">Rare & Exceptional</a></li>
+              <li><a href="#">Single Barrel Exclusives</a></li>
+              <li><a href="#">Glassware</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="help">
+            <h3>HELP</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="help-content">
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Customer Support</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="section-header" data-section="story">
+            <h3>OUR STORY</h3>
+            <i class="fas fa-plus section-toggle"></i>
+          </div>
+          <div class="section-content" id="story-content">
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Partner With Us</a></li>
+              <li><a href="#">Corporate Orders</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Cocktail Lounge</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+
+      <!-- Brand Logo -->
+      <div class="footer-logo">
+        <h2>RESERVE BAR</h2>
+      </div>
+
+      <!-- Copyright -->
+      <div class="copyright">
+        <p>© 2012 - 2025 ReserveBar.com</p>
+      </div>
+
+      <!-- Legal Disclaimer -->
+      <div class="legal-disclaimer">
+        <p>
+          By using this site you acknowledge you are at least 21 years old and
+          you agree to our Terms & Conditions. *Take $10 off your first order of
+          $100 or more when you enter your exclusive code at checkout.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

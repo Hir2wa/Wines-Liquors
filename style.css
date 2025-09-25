@@ -2426,12 +2426,19 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
+.wine-product-card:hover img {
+  transform: scale(1.05);
+}
+
 .wine-product-card img {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  background: #f8f9fa;
+  height: 200px;
+  object-fit: contain;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 8px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+  padding: 10px;
 }
 
 .wine-product-info {
@@ -2523,7 +2530,10 @@ body {
   }
 
   .wine-product-card img {
-    height: 120px;
+    width: 100%;
+    height: 160px;
+    padding: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
 
   .wine-product-info {
@@ -2568,7 +2578,10 @@ body {
   }
 
   .wine-product-card img {
-    height: 100px;
+    width: 100%;
+    height: 140px;
+    padding: 6px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
 
   .wine-product-info {

@@ -1,14 +1,4 @@
-// Sample user data (in real app, this would be in database)
-const sampleUsers = {
-  "Alain@example.com": {
-    name: "Alain Fabrice",
-    email: "Alain@example.com",
-    phone: "+250 788 123 456",
-    address: "KG 15 Ave, Kigali",
-    city: "Kigali",
-    district: "kigali",
-  },
-};
+// User authentication using real API
 
 function switchTab(tabName) {
   // Update tab buttons
@@ -37,11 +27,23 @@ function togglePassword(inputId) {
   }
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
+  console.log("handleLogin called");
   event.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const emailElement = document.getElementById("email");
+  const passwordElement = document.getElementById("password");
+
+  if (!emailElement || !passwordElement) {
+    console.log("Email or password element not found");
+    return;
+  }
+
+  const email = emailElement.value;
+  const password = passwordElement.value;
+
+  console.log("Email:", email);
+  console.log("Password:", password ? "***" : "empty");
 
   // Reset error messages
   document
@@ -59,133 +61,94 @@ function handleLogin(event) {
     return;
   }
 
-  // Simulate login (in real app, make API call)
+  // Show loading state
   const button = event.target;
   button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
   button.disabled = true;
 
-  setTimeout(() => {
-    if (sampleUsers[email]) {
-      // Store user data for profile and checkout auto-fill
-      const userData = sampleUsers[email];
+  try {
+    const response = await fetch("http://localhost:8000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        emailOrPhone: email,
+        password: password,
+        deviceInfo: navigator.userAgent,
+      }),
+    });
+
+    console.log("Login API response status:", response.status);
+
+    const result = await response.json();
+    console.log("Login API response:", result);
+
+    if (response.ok) {
+      // Store user data and session
+      const userData = result.data.user;
+      const sessionToken = result.data.session_token;
+
+      console.log("Login successful!");
+      console.log("User data:", userData);
+      console.log("Session token:", sessionToken ? "Present" : "Missing");
+
       const profileData = {
-        firstName: userData.name.split(" ")[0] || "",
-        lastName: userData.name.split(" ").slice(1).join(" ") || "",
+        id: userData.id,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
         email: userData.email,
         phone: userData.phone,
-        address: userData.address,
-        city: userData.city,
-        state: userData.district,
-        zipCode: "",
-        dateOfBirth: "",
+        isVerified: userData.is_verified,
+        emailVerified: userData.email_verified,
+        phoneVerified: userData.phone_verified,
+        isAdmin: userData.is_admin || false,
       };
 
       localStorage.setItem("userData", JSON.stringify(profileData));
+      localStorage.setItem("sessionToken", sessionToken);
       localStorage.setItem("user_logged_in", "true");
 
-      showFlashMessage(
-        "Login successful! Welcome back to Total Wine & More.",
-        "success"
+      console.log("Data saved to localStorage:");
+      console.log("userData:", localStorage.getItem("userData"));
+      console.log(
+        "sessionToken:",
+        localStorage.getItem("sessionToken") ? "Saved" : "Not saved"
       );
+      console.log("Is Admin:", userData.is_admin);
 
-      // Redirect after a short delay
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 1500);
+      // Check if user is admin and show mode selection
+      if (userData.is_admin) {
+        showAdminModeSelection();
+      } else {
+        showFlashMessage(
+          "Login successful! Welcome back to Total Wine & More.",
+          "success"
+        );
+
+        // Redirect after a short delay
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+      }
     } else {
-      showError("emailError", "Invalid email or password");
-      button.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+      showError("emailError", result.message || "Invalid email or password");
+      button.innerHTML = "Log in";
       button.disabled = false;
     }
-  }, 1500);
+  } catch (error) {
+    showError(
+      "emailError",
+      "Network error. Please check your connection and try again."
+    );
+    button.innerHTML = "Log in";
+    button.disabled = false;
+  }
 }
 
 function handleRegister(event) {
-  event.preventDefault();
-
-  const name = document.getElementById("registerName").value;
-  const email = document.getElementById("registerEmail").value;
-  const phone = document.getElementById("registerPhone").value;
-  const password = document.getElementById("registerPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  // Reset error messages
-  document
-    .querySelectorAll(".error-message")
-    .forEach((el) => (el.style.display = "none"));
-
-  // Validation
-  let isValid = true;
-
-  if (!name) {
-    showError("registerNameError", "Name is required");
-    isValid = false;
-  }
-
-  if (!email) {
-    showError("registerEmailError", "Email is required");
-    isValid = false;
-  } else if (sampleUsers[email]) {
-    showError("registerEmailError", "Email already exists");
-    isValid = false;
-  }
-
-  if (!phone) {
-    showError("registerPhoneError", "Phone number is required");
-    isValid = false;
-  }
-
-  if (!password) {
-    showError("registerPasswordError", "Password is required");
-    isValid = false;
-  } else if (password.length < 6) {
-    showError(
-      "registerPasswordError",
-      "Password must be at least 6 characters"
-    );
-    isValid = false;
-  }
-
-  if (password !== confirmPassword) {
-    showError("confirmPasswordError", "Passwords do not match");
-    isValid = false;
-  }
-
-  if (!isValid) return;
-
-  // Simulate registration
-  const button = event.target;
-  button.innerHTML =
-    '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-  button.disabled = true;
-
-  setTimeout(() => {
-    // Store new user data in profile format
-    const profileData = {
-      firstName: name.split(" ")[0] || "",
-      lastName: name.split(" ").slice(1).join(" ") || "",
-      email: email,
-      phone: phone,
-      address: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      dateOfBirth: "",
-    };
-
-    localStorage.setItem("userData", JSON.stringify(profileData));
-    localStorage.setItem("user_logged_in", "true");
-
-    showFlashMessage(
-      "Account created successfully! Welcome to Total Wine & More.",
-      "success"
-    );
-
-    // Redirect after a short delay
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 1500);
-  }, 2000);
+  // Redirect to the dedicated registration page
+  window.location.href = "Register.html";
 }
 
 function showError(elementId, message) {
@@ -251,18 +214,179 @@ function showFlashMessage(message, type = "success") {
   }, 3000);
 }
 
+function showAdminModeSelection() {
+  // Create admin mode selection modal
+  const modalDiv = document.createElement("div");
+  modalDiv.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  `;
+
+  const modalContent = document.createElement("div");
+  modalContent.style.cssText = `
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  `;
+
+  modalContent.innerHTML = `
+    <div style="margin-bottom: 30px;">
+      <i class="fas fa-user-shield" style="font-size: 3rem; color: #dc3545; margin-bottom: 15px;"></i>
+      <h2 style="color: #333; margin-bottom: 10px;">Welcome, Admin!</h2>
+      <p style="color: #666; font-size: 16px;">You have admin privileges. How would you like to continue?</p>
+    </div>
+    
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+      <button id="adminModeBtn" style="
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+      ">
+        <i class="fas fa-cog"></i>
+        Continue as Admin
+      </button>
+      
+      <button id="userModeBtn" style="
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+      ">
+        <i class="fas fa-user"></i>
+        Continue as User
+      </button>
+    </div>
+    
+    <p style="color: #999; font-size: 12px; margin-top: 20px;">
+      You can switch between modes anytime from your profile
+    </p>
+  `;
+
+  modalDiv.appendChild(modalContent);
+  document.body.appendChild(modalDiv);
+
+  // Add hover effects
+  const adminBtn = modalContent.querySelector("#adminModeBtn");
+  const userBtn = modalContent.querySelector("#userModeBtn");
+
+  adminBtn.addEventListener("mouseenter", () => {
+    adminBtn.style.background = "#c82333";
+    adminBtn.style.transform = "translateY(-2px)";
+  });
+  adminBtn.addEventListener("mouseleave", () => {
+    adminBtn.style.background = "#dc3545";
+    adminBtn.style.transform = "translateY(0)";
+  });
+
+  userBtn.addEventListener("mouseenter", () => {
+    userBtn.style.background = "#218838";
+    userBtn.style.transform = "translateY(-2px)";
+  });
+  userBtn.addEventListener("mouseleave", () => {
+    userBtn.style.background = "#28a745";
+    userBtn.style.transform = "translateY(0)";
+  });
+
+  // Handle admin mode selection
+  adminBtn.addEventListener("click", () => {
+    localStorage.setItem("admin_mode", "true");
+    showFlashMessage("Welcome to Admin Dashboard!", "success");
+    setTimeout(() => {
+      window.location.href = "AdminDashboard.html";
+    }, 1000);
+  });
+
+  // Handle user mode selection
+  userBtn.addEventListener("click", () => {
+    localStorage.setItem("admin_mode", "false");
+    showFlashMessage("Welcome back to Total Wine & More!", "success");
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 1000);
+  });
+}
+
 function showForgotPassword() {
-  alert(
-    "Password reset functionality would be implemented here. For demo, use: Alain@example.com"
+  showFlashMessage(
+    "Password reset functionality is not yet implemented.",
+    "error"
   );
 }
 
 function socialLogin(provider) {
-  alert(`${provider} login would be integrated here`);
+  showFlashMessage(`${provider} login is not yet implemented.`, "error");
+}
+
+// Check if user is already logged in
+function checkLoginStatus() {
+  const isLoggedIn = localStorage.getItem("user_logged_in") === "true";
+  const userData = localStorage.getItem("userData");
+
+  if (isLoggedIn && userData) {
+    const user = JSON.parse(userData);
+    showFlashMessage(
+      `You are already logged in as ${user.firstName} ${user.lastName}. Please log out first if you want to switch accounts.`,
+      "error"
+    );
+
+    // Redirect to home page after 3 seconds
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 3000);
+
+    return true;
+  }
+  return false;
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem("userData");
+  localStorage.removeItem("sessionToken");
+  localStorage.removeItem("user_logged_in");
+
+  showFlashMessage("You have been logged out successfully.", "success");
+
+  // Redirect to login page after 2 seconds
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 2000);
 }
 
 // Auto-format phone number (only if element exists)
 document.addEventListener("DOMContentLoaded", function () {
+  // Check if user is already logged in
+  if (checkLoginStatus()) {
+    return; // Stop execution if already logged in
+  }
+
   const phoneInput = document.getElementById("registerPhone");
   if (phoneInput) {
     phoneInput.addEventListener("input", function (e) {
@@ -275,4 +399,16 @@ document.addEventListener("DOMContentLoaded", function () {
       e.target.value = value;
     });
   }
+
+  // Add form submit event handler (only on login page)
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    console.log("Login form found, adding submit handler");
+    loginForm.addEventListener("submit", function (e) {
+      console.log("Form submitted, preventing default");
+      e.preventDefault(); // Prevent default form submission
+      handleLogin(e);
+    });
+  }
+  // Note: No error message if form not found (Register page doesn't have login form)
 });

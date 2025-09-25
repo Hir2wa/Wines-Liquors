@@ -5,12 +5,40 @@
  */
 
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'total_wine_orders';
-    private $username = 'postgres';
-    private $password = '2003';
-    private $port = '5432';
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
+    private $port;
     private $conn;
+
+    public function __construct() {
+        // Check if we're on Railway (production)
+        if (getenv('DATABASE_URL')) {
+            $url = parse_url(getenv('DATABASE_URL'));
+            $this->host = $url['host'];
+            $this->db_name = substr($url['path'], 1);
+            $this->username = $url['user'];
+            $this->password = $url['pass'];
+            $this->port = $url['port'] ?? '5432';
+        } 
+        // Check if we're on Railway with individual environment variables
+        else if (getenv('PGHOST')) {
+            $this->host = getenv('PGHOST');
+            $this->db_name = getenv('PGDATABASE');
+            $this->username = getenv('PGUSER');
+            $this->password = getenv('PGPASSWORD');
+            $this->port = getenv('PGPORT') ?? '5432';
+        } 
+        // Local development
+        else {
+            $this->host = 'localhost';
+            $this->db_name = 'total_wine_orders';
+            $this->username = 'postgres';
+            $this->password = '2003';
+            $this->port = '5432';
+        }
+    }
 
     /**
      * Get database connection

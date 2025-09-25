@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PHP Integration Test - Total Wine & More</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .test-container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .test-button {
+        background: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .test-button:hover {
+        background: #c82333;
+      }
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+      .loading {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🧪 PHP Integration Test - Total Wine & More</h1>
+      <p>
+        This page tests the complete PHP backend integration to ensure
+        everything works correctly.
+      </p>
+
+      <div class="test-section">
+        <h3>1. API Health Check</h3>
+        <button class="test-button" onclick="testAPIHealth()">
+          Test API Connection
+        </button>
+        <div id="healthResult" class="test-result" style="display: none"></div>
+      </div>
+
+      <div class="test-section">
+        <h3>2. Test Order Creation</h3>
+        <button class="test-button" onclick="testOrderCreation()">
+          Create Test Order
+        </button>
+        <div
+          id="orderCreationResult"
+          class="test-result"
+          style="display: none"
+        ></div>
+      </div>
+
+      <div class="test-section">
+        <h3>3. Test Order Tracking</h3>
+        <button class="test-button" onclick="testOrderTracking()">
+          Test Order Lookup
+        </button>
+        <div
+          id="orderTrackingResult"
+          class="test-result"
+          style="display: none"
+        ></div>
+      </div>
+
+      <div class="test-section">
+        <h3>4. Test Admin Dashboard</h3>
+        <button class="test-button" onclick="testAdminDashboard()">
+          Test Dashboard Data
+        </button>
+        <div id="adminResult" class="test-result" style="display: none"></div>
+      </div>
+
+      <div class="test-section">
+        <h3>5. Test Customer Orders</h3>
+        <button class="test-button" onclick="testCustomerOrders()">
+          Test Customer Order History
+        </button>
+        <div
+          id="customerResult"
+          class="test-result"
+          style="display: none"
+        ></div>
+      </div>
+
+      <div class="test-section">
+        <h3>6. Test Admin Functions</h3>
+        <button class="test-button" onclick="testAdminFunctions()">
+          Test Payment Approval
+        </button>
+        <div
+          id="adminFunctionsResult"
+          class="test-result"
+          style="display: none"
+        ></div>
+      </div>
+
+      <div class="test-section">
+        <h3>7. Complete Integration Test</h3>
+        <button class="test-button" onclick="runCompleteTest()">
+          Run All Tests
+        </button>
+        <div
+          id="completeTestResult"
+          class="test-result"
+          style="display: none"
+        ></div>
+      </div>
+
+      <div class="test-section">
+        <h3>8. Navigation Test</h3>
+        <p>Test all updated pages:</p>
+        <a
+          href="Order.html"
+          class="test-button"
+          style="text-decoration: none; display: inline-block"
+          >Test Order Page</a
+        >
+        <a
+          href="OrderTracking.html"
+          class="test-button"
+          style="text-decoration: none; display: inline-block"
+          >Test Tracking Page</a
+        >
+        <a
+          href="OrderHistory.html"
+          class="test-button"
+          style="text-decoration: none; display: inline-block"
+          >Test History Page</a
+        >
+        <a
+          href="AdminDashboard.html"
+          class="test-button"
+          style="text-decoration: none; display: inline-block"
+          >Test Admin Dashboard</a
+        >
+      </div>
+    </div>
+
+    <script src="js/api-client.js"></script>
+    <script>
+      let testOrderId = null;
+
+      // Test API Health
+      async function testAPIHealth() {
+        const result = document.getElementById("healthResult");
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = "Testing API connection...";
+
+        try {
+          const response = await apiClient.checkHealth();
+          result.className = "test-result success";
+          result.textContent = `✅ API Health Check Successful!\n\nResponse:\n${JSON.stringify(
+            response,
+            null,
+            2
+          )}`;
+        } catch (error) {
+          result.className = "test-result error";
+          result.textContent = `❌ API Health Check Failed!\n\nError: ${error.message}\n\nMake sure:\n1. Web server is running\n2. Database is set up\n3. API files are accessible`;
+        }
+      }
+
+      // Test Order Creation
+      async function testOrderCreation() {
+        const result = document.getElementById("orderCreationResult");
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = "Creating test order...";
+
+        try {
+          const testOrder = {
+            customerInfo: {
+              email: "test@example.com",
+              phone: "+250123456789",
+              firstName: "Test",
+              lastName: "User",
+              address: "123 Test Street",
+              city: "Kigali",
+              country: "Rwanda",
+            },
+            items: [
+              {
+                name: "Test Wine Bottle",
+                price: "25,000frw",
+                quantity: 1,
+                image: "images/WINE1.webp",
+              },
+            ],
+            paymentMethod: "card",
+            total: "30,000frw",
+          };
+
+          const response = await createOrder(testOrder);
+          testOrderId = response.orderId;
+
+          result.className = "test-result success";
+          result.textContent = `✅ Order Creation Successful!\n\nOrder ID: ${
+            response.orderId
+          }\n\nResponse:\n${JSON.stringify(response, null, 2)}`;
+        } catch (error) {
+          result.className = "test-result error";
+          result.textContent = `❌ Order Creation Failed!\n\nError: ${error.message}\n\nCheck:\n1. Database connection\n2. API endpoint accessibility\n3. Order data format`;
+        }
+      }
+
+      // Test Order Tracking
+      async function testOrderTracking() {
+        const result = document.getElementById("orderTrackingResult");
+
+        if (!testOrderId) {
+          result.className = "test-result error";
+          result.style.display = "block";
+          result.textContent =
+            "❌ No test order ID available. Please create a test order first.";
+          return;
+        }
+
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = `Tracking order ${testOrderId}...`;
+
+        try {
+          const response = await trackOrder(testOrderId);
+
+          result.className = "test-result success";
+          result.textContent = `✅ Order Tracking Successful!\n\nOrder ID: ${
+            response.orderId
+          }\nStatus: ${response.status}\nPayment Status: ${
+            response.paymentStatus
+          }\n\nFull Response:\n${JSON.stringify(response, null, 2)}`;
+        } catch (error) {
+          result.className = "test-result error";
+          result.textContent = `❌ Order Tracking Failed!\n\nError: ${error.message}\n\nCheck:\n1. Order exists in database\n2. Order ID format is correct\n3. API endpoint is working`;
+        }
+      }
+
+      // Test Admin Dashboard
+      async function testAdminDashboard() {
+        const result = document.getElementById("adminResult");
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = "Loading admin dashboard data...";
+
+        try {
+          const response = await getDashboardData();
+
+          result.className = "test-result success";
+          result.textContent = `✅ Admin Dashboard Data Loaded!\n\nStats:\n- Total Orders: ${
+            response.stats.total_orders
+          }\n- Total Revenue: ${
+            response.stats.total_revenue
+          }frw\n- Unique Customers: ${
+            response.stats.unique_customers
+          }\n- Pending Payments: ${
+            response.stats.pending_payments
+          }\n\nRecent Orders: ${
+            response.recentOrders.length
+          }\nPending Payments: ${
+            response.pendingPayments.length
+          }\n\nFull Response:\n${JSON.stringify(response, null, 2)}`;
+        } catch (error) {
+          result.className = "test-result error";
+          result.textContent = `❌ Admin Dashboard Failed!\n\nError: ${error.message}\n\nCheck:\n1. Database has data\n2. Admin API endpoint is working\n3. Database queries are correct`;
+        }
+      }
+
+      // Test Customer Orders
+      async function testCustomerOrders() {
+        const result = document.getElementById("customerResult");
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = "Loading customer orders...";
+
+        try {
+          const response = await getCustomerOrders("test@example.com");
+
+          result.className = "test-result success";
+          result.textContent = `✅ Customer Orders Loaded!\n\nFound ${
+            response.length
+          } orders for test@example.com\n\nOrders:\n${response
+            .map(
+              (order) =>
+                `- ${order.id}: ${order.status} (${order.total_amount}frw)`
+            )
+            .join("\n")}\n\nFull Response:\n${JSON.stringify(
+            response,
+            null,
+            2
+          )}`;
+        } catch (error) {
+          result.className = "test-result error";
+          result.textContent = `❌ Customer Orders Failed!\n\nError: ${error.message}\n\nCheck:\n1. Customer email exists in database\n2. API endpoint is working\n3. Database query is correct`;
+        }
+      }
+
+      // Test Admin Functions
+      async function testAdminFunctions() {
+        const result = document.getElementById("adminFunctionsResult");
+
+        if (!testOrderId) {
+          result.className = "test-result error";
+          result.style.display = "block";
+          result.textContent =
+            "❌ No test order ID available. Please create a test order first.";
+          return;
+        }
+
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = `Testing admin functions for order ${testOrderId}...`;
+
+        try {
+          // Test payment approval
+          const paymentResponse = await updatePaymentStatus(
+            testOrderId,
+            "approved",
+            "test-admin",
+            "Test payment approval"
+          );
+
+          result.className = "test-result success";
+          result.textContent = `✅ Admin Functions Test Successful!\n\nPayment Status Updated:\n${JSON.stringify(
+            paymentResponse,
+            null,
+            2
+          )}\n\nNote: Order status should automatically change to 'processing' when payment is approved.`;
+        } catch (error) {
+          result.className = "test-result error";
+          result.textContent = `❌ Admin Functions Failed!\n\nError: ${error.message}\n\nCheck:\n1. Order exists in database\n2. Admin API endpoints are working\n3. Database update queries are correct`;
+        }
+      }
+
+      // Run Complete Test
+      async function runCompleteTest() {
+        const result = document.getElementById("completeTestResult");
+        result.className = "test-result loading";
+        result.style.display = "block";
+        result.textContent = "Running complete integration test...\n\n";
+
+        const tests = [
+          { name: "API Health Check", fn: testAPIHealth },
+          { name: "Order Creation", fn: testOrderCreation },
+          { name: "Order Tracking", fn: testOrderTracking },
+          { name: "Admin Dashboard", fn: testAdminDashboard },
+          { name: "Customer Orders", fn: testCustomerOrders },
+          { name: "Admin Functions", fn: testAdminFunctions },
+        ];
+
+        let passed = 0;
+        let failed = 0;
+        let results = [];
+
+        for (const test of tests) {
+          try {
+            result.textContent += `Running ${test.name}...\n`;
+            await test.fn();
+            passed++;
+            results.push(`✅ ${test.name}: PASSED`);
+          } catch (error) {
+            failed++;
+            results.push(`❌ ${test.name}: FAILED - ${error.message}`);
+          }
+        }
+
+        result.className =
+          failed === 0 ? "test-result success" : "test-result error";
+        result.textContent =
+          `🎯 Complete Integration Test Results\n\n` +
+          `Tests Passed: ${passed}\n` +
+          `Tests Failed: ${failed}\n` +
+          `Success Rate: ${Math.round((passed / tests.length) * 100)}%\n\n` +
+          `Detailed Results:\n${results.join("\n")}\n\n` +
+          (failed === 0
+            ? "🎉 All tests passed! Your PHP integration is working perfectly!"
+            : "⚠️ Some tests failed. Check the individual test results above for details.");
+      }
+
+      // Auto-run health check on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🧪 PHP Integration Test Page Loaded");
+        testAPIHealth();
+      });
+    </script>
+  </body>
+</html>

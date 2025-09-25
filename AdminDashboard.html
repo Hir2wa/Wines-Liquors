@@ -360,6 +360,137 @@
         background: #5a6268;
       }
 
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 12px;
+        max-width: 800px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid #e9ecef;
+        background: #f8f9fa;
+        border-radius: 12px 12px 0 0;
+      }
+
+      .modal-header h3 {
+        margin: 0;
+        color: #2c3e50;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6c757d;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-close:hover {
+        color: #dc3545;
+      }
+
+      .modal-body {
+        padding: 30px;
+      }
+
+      .order-details-grid,
+      .payment-details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+
+      .detail-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #dc3545;
+      }
+
+      .detail-section h4 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+      }
+
+      .detail-section p {
+        margin-bottom: 10px;
+        color: #495057;
+      }
+
+      .detail-section strong {
+        color: #2c3e50;
+      }
+
+      .items-list {
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .item-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background: white;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+      }
+
+      .item-name {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .item-quantity {
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+
+      .item-price {
+        color: #dc3545;
+        font-weight: 600;
+      }
+
+      .modal-footer {
+        padding: 20px 30px;
+        border-top: 1px solid #e9ecef;
+        background: #f8f9fa;
+        border-radius: 0 0 12px 12px;
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+      }
+
       /* Reports Grid */
       .reports-grid {
         display: grid;
@@ -1384,7 +1515,7 @@
       // Section-specific data loading functions
       function loadOrdersData() {
         // Load orders from API
-        fetch('http://localhost:8000/api/orders')
+        fetch('/api/orders')
           .then(response => response.json())
           .then(data => {
             const tbody = document.getElementById('ordersTableBody');
@@ -1401,7 +1532,7 @@
                 <td>${new Date(order.created_at).toLocaleDateString()}</td>
                 <td>
                   <div class="action-buttons">
-                    <button class="btn-sm btn-primary" onclick="viewOrder('${order.order_id}')">View</button>
+                    <button class="btn-sm btn-info" onclick="viewOrderDetails('${order.order_id}')">Details</button>
                     <button class="btn-sm btn-warning" onclick="updateOrder('${order.order_id}')">Update</button>
                   </div>
                 </td>
@@ -1417,7 +1548,7 @@
 
       function loadPaymentsData() {
         // Load payments data from API
-        fetch('http://localhost:8000/api/orders')
+        fetch('/api/orders')
           .then(response => response.json())
           .then(data => {
             // Calculate payment statistics
@@ -1463,6 +1594,7 @@
                   <div class="action-buttons">
                     <button class="btn-sm btn-success" onclick="approvePayment('${order.order_id}')">Approve</button>
                     <button class="btn-sm btn-danger" onclick="rejectPayment('${order.order_id}')">Reject</button>
+                    <button class="btn-sm btn-info" onclick="viewPaymentDetails('${order.order_id}')">Details</button>
                   </div>
                 </td>
               `;
@@ -1624,7 +1756,7 @@
 
       function loadCustomersData() {
         // Load customers data from API
-        fetch('http://localhost:8000/api/orders')
+        fetch('/api/orders')
           .then(response => response.json())
           .then(data => {
             // Group orders by customer to calculate stats
@@ -1767,7 +1899,7 @@
       }
 
       function updatePaymentStatus(orderId, status) {
-        return fetch(`http://localhost:8000/api/orders/${orderId}/payment`, {
+        return fetch(`/api/orders/${orderId}/payment`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -1795,6 +1927,127 @@
         const subject = 'Total Wine & More - Customer Support';
         const body = 'Hello, we hope you are enjoying your recent purchase from Total Wine & More.';
         window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+      }
+
+      // Order and Payment Details Functions
+      function viewOrderDetails(orderId) {
+        // Fetch order details and show in modal
+        fetch(`/api/orders/${orderId}`)
+          .then(response => response.json())
+          .then(data => {
+            showOrderModal(data);
+          })
+          .catch(error => {
+            console.error('Error fetching order details:', error);
+            showNotification('Failed to load order details', 'error');
+          });
+      }
+
+      function viewPaymentDetails(orderId) {
+        // Fetch payment details and show in modal
+        fetch(`/api/orders/${orderId}`)
+          .then(response => response.json())
+          .then(data => {
+            showPaymentModal(data);
+          })
+          .catch(error => {
+            console.error('Error fetching payment details:', error);
+            showNotification('Failed to load payment details', 'error');
+          });
+      }
+
+      function showOrderModal(order) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Order Details - ${order.order_id}</h3>
+              <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="order-details-grid">
+                <div class="detail-section">
+                  <h4>Customer Information</h4>
+                  <p><strong>Name:</strong> ${order.customer_name}</p>
+                  <p><strong>Email:</strong> ${order.customer_email}</p>
+                  <p><strong>Phone:</strong> ${order.customer_phone}</p>
+                  <p><strong>Address:</strong> ${order.customer_address}</p>
+                </div>
+                <div class="detail-section">
+                  <h4>Order Information</h4>
+                  <p><strong>Order ID:</strong> ${order.order_id}</p>
+                  <p><strong>Total Amount:</strong> ${order.total}frw</p>
+                  <p><strong>Status:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
+                  <p><strong>Payment Status:</strong> <span class="status-badge status-${order.payment_status}">${order.payment_status}</span></p>
+                  <p><strong>Payment Method:</strong> ${order.payment_method}</p>
+                  <p><strong>Order Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
+                </div>
+                <div class="detail-section">
+                  <h4>Order Items</h4>
+                  <div class="items-list">
+                    ${order.items ? order.items.map(item => `
+                      <div class="item-detail">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-quantity">Qty: ${item.quantity}</span>
+                        <span class="item-price">${item.price}frw</span>
+                      </div>
+                    `).join('') : 'No items found'}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" onclick="updateOrder('${order.order_id}')">Update Order</button>
+              <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+
+      function showPaymentModal(order) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Payment Details - ${order.order_id}</h3>
+              <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="payment-details-grid">
+                <div class="detail-section">
+                  <h4>Payment Information</h4>
+                  <p><strong>Payment ID:</strong> PAY-${order.order_id}</p>
+                  <p><strong>Amount:</strong> ${order.total}frw</p>
+                  <p><strong>Method:</strong> ${order.payment_method || 'Mobile Money'}</p>
+                  <p><strong>Status:</strong> <span class="status-badge status-${order.payment_status}">${order.payment_status}</span></p>
+                  <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
+                </div>
+                <div class="detail-section">
+                  <h4>Customer Information</h4>
+                  <p><strong>Name:</strong> ${order.customer_name}</p>
+                  <p><strong>Email:</strong> ${order.customer_email}</p>
+                  <p><strong>Phone:</strong> ${order.customer_phone}</p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-success" onclick="approvePayment('${order.order_id}'); closeModal();">Approve Payment</button>
+              <button class="btn btn-danger" onclick="rejectPayment('${order.order_id}'); closeModal();">Reject Payment</button>
+              <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+
+      function closeModal() {
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) {
+          modal.remove();
+        }
       }
     </script>
   </body>

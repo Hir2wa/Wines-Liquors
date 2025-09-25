@@ -360,6 +360,78 @@
         background: #5a6268;
       }
 
+      /* Payment Method Badges */
+      .payment-method-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .payment-mobile_money {
+        background: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+      }
+
+      .payment-bank_transfer {
+        background: #f3e5f5;
+        color: #7b1fa2;
+        border: 1px solid #e1bee7;
+      }
+
+      .payment-cash_on_delivery {
+        background: #e8f5e8;
+        color: #388e3c;
+        border: 1px solid #c8e6c9;
+      }
+
+      .payment-card {
+        background: #fff3e0;
+        color: #f57c00;
+        border: 1px solid #ffcc02;
+      }
+
+      .payment-momo {
+        background: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+      }
+
+      /* Payment Actions Grid */
+      .payment-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .btn-block {
+        width: 100%;
+        padding: 10px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-warning {
+        background: #ffc107;
+        color: #212529;
+        border: 1px solid #ffc107;
+      }
+
+      .btn-warning:hover {
+        background: #e0a800;
+        border-color: #d39e00;
+      }
+
       /* Modal Styles */
       .modal-overlay {
         position: fixed;
@@ -967,7 +1039,8 @@
                     <th>Customer</th>
                     <th>Total</th>
                     <th>Status</th>
-                    <th>Payment</th>
+                    <th>Payment Status</th>
+                    <th>Payment Method</th>
                     <th>Date</th>
                     <th>Actions</th>
                   </tr>
@@ -1529,6 +1602,12 @@
                 <td>${order.total}frw</td>
                 <td><span class="status-badge status-${order.status}">${order.status}</span></td>
                 <td><span class="status-badge status-${order.payment_status}">${order.payment_status}</span></td>
+                <td>
+                  <span class="payment-method-badge payment-${order.payment_method || 'mobile_money'}">
+                    <i class="${getPaymentMethodIcon(order.payment_method || 'mobile_money')}"></i>
+                    ${getPaymentMethodLabel(order.payment_method || 'mobile_money')}
+                  </span>
+                </td>
                 <td>${new Date(order.created_at).toLocaleDateString()}</td>
                 <td>
                   <div class="action-buttons">
@@ -1587,7 +1666,11 @@
                 <td>${order.order_id}</td>
                 <td>${order.customer_name}</td>
                 <td>${order.total}</td>
-                <td>${order.payment_method || 'Mobile Money'}</td>
+                <td>
+                  <span class="payment-method-badge payment-${order.payment_method || 'mobile_money'}">
+                    ${getPaymentMethodLabel(order.payment_method || 'mobile_money')}
+                  </span>
+                </td>
                 <td><span class="status-badge status-${order.payment_status}">${order.payment_status}</span></td>
                 <td>${new Date(order.created_at).toLocaleDateString()}</td>
                 <td>
@@ -1929,6 +2012,64 @@
         window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
       }
 
+      // Enhanced payment management functions
+      function requestPaymentProof(orderId) {
+        if (confirm(`Request payment proof for order ${orderId}?`)) {
+          // This would typically send an email to the customer requesting proof
+          showNotification(`Payment proof request sent for order ${orderId}`, 'success');
+          
+          // Update order status to "proof_requested"
+          updateOrderStatus(orderId, 'proof_requested')
+            .then(() => {
+              showNotification(`Order ${orderId} status updated to "Proof Requested"`, 'success');
+              loadPaymentsData(); // Refresh payments
+            })
+            .catch(error => {
+              showNotification(`Failed to update order status: ${error.message}`, 'error');
+            });
+        }
+      }
+
+      function updateOrderStatus(orderId, status) {
+        return fetch(`/api/orders/${orderId}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            status: status,
+            updated_by: 'admin'
+          })
+        })
+        .then(response => response.json());
+      }
+
+      function markAsPaid(orderId) {
+        if (confirm(`Mark order ${orderId} as paid?`)) {
+          updatePaymentStatus(orderId, 'paid')
+            .then(() => {
+              showNotification(`Order ${orderId} marked as paid!`, 'success');
+              loadPaymentsData(); // Refresh payments
+            })
+            .catch(error => {
+              showNotification(`Failed to mark as paid: ${error.message}`, 'error');
+            });
+        }
+      }
+
+      function markAsFailed(orderId) {
+        if (confirm(`Mark payment for order ${orderId} as failed?`)) {
+          updatePaymentStatus(orderId, 'failed')
+            .then(() => {
+              showNotification(`Payment for order ${orderId} marked as failed!`, 'success');
+              loadPaymentsData(); // Refresh payments
+            })
+            .catch(error => {
+              showNotification(`Failed to mark as failed: ${error.message}`, 'error');
+            });
+        }
+      }
+
       // Order and Payment Details Functions
       function viewOrderDetails(orderId) {
         // Fetch order details and show in modal
@@ -2012,7 +2153,7 @@
         modal.innerHTML = `
           <div class="modal-content">
             <div class="modal-header">
-              <h3>Payment Details - ${order.order_id}</h3>
+              <h3>Payment Management - ${order.order_id}</h3>
               <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -2021,7 +2162,12 @@
                   <h4>Payment Information</h4>
                   <p><strong>Payment ID:</strong> PAY-${order.order_id}</p>
                   <p><strong>Amount:</strong> ${order.total}frw</p>
-                  <p><strong>Method:</strong> ${order.payment_method || 'Mobile Money'}</p>
+                  <p><strong>Method:</strong> 
+                    <span class="payment-method-badge payment-${order.payment_method || 'mobile_money'}">
+                      <i class="${getPaymentMethodIcon(order.payment_method || 'mobile_money')}"></i>
+                      ${getPaymentMethodLabel(order.payment_method || 'mobile_money')}
+                    </span>
+                  </p>
                   <p><strong>Status:</strong> <span class="status-badge status-${order.payment_status}">${order.payment_status}</span></p>
                   <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
                 </div>
@@ -2030,12 +2176,28 @@
                   <p><strong>Name:</strong> ${order.customer_name}</p>
                   <p><strong>Email:</strong> ${order.customer_email}</p>
                   <p><strong>Phone:</strong> ${order.customer_phone}</p>
+                  <p><strong>Address:</strong> ${order.customer_address || 'Not provided'}</p>
+                </div>
+                <div class="detail-section">
+                  <h4>Payment Actions</h4>
+                  <div class="payment-actions-grid">
+                    <button class="btn btn-success btn-block" onclick="approvePayment('${order.order_id}'); closeModal();">
+                      <i class="fas fa-check"></i> Approve Payment
+                    </button>
+                    <button class="btn btn-danger btn-block" onclick="rejectPayment('${order.order_id}'); closeModal();">
+                      <i class="fas fa-times"></i> Reject Payment
+                    </button>
+                    <button class="btn btn-warning btn-block" onclick="requestPaymentProof('${order.order_id}'); closeModal();">
+                      <i class="fas fa-file-invoice"></i> Request Proof
+                    </button>
+                    <button class="btn btn-info btn-block" onclick="contactCustomer('${order.customer_email}');">
+                      <i class="fas fa-envelope"></i> Contact Customer
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-success" onclick="approvePayment('${order.order_id}'); closeModal();">Approve Payment</button>
-              <button class="btn btn-danger" onclick="rejectPayment('${order.order_id}'); closeModal();">Reject Payment</button>
               <button class="btn btn-secondary" onclick="closeModal()">Close</button>
             </div>
           </div>
@@ -2048,6 +2210,29 @@
         if (modal) {
           modal.remove();
         }
+      }
+
+      // Payment method helper functions
+      function getPaymentMethodLabel(method) {
+        const labels = {
+          'mobile_money': 'Mobile Money',
+          'bank_transfer': 'Bank Transfer',
+          'cash_on_delivery': 'Cash on Delivery',
+          'card': 'Credit/Debit Card',
+          'momo': 'Mobile Money'
+        };
+        return labels[method] || method;
+      }
+
+      function getPaymentMethodIcon(method) {
+        const icons = {
+          'mobile_money': 'fas fa-mobile-alt',
+          'bank_transfer': 'fas fa-university',
+          'cash_on_delivery': 'fas fa-hand-holding-usd',
+          'card': 'fas fa-credit-card',
+          'momo': 'fas fa-mobile-alt'
+        };
+        return icons[method] || 'fas fa-money-bill';
       }
     </script>
   </body>

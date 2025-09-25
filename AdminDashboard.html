@@ -297,9 +297,67 @@
       .product-card {
         background: white;
         border-radius: 8px;
-        padding: 20px;
+        padding: 25px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .product-icon {
+        font-size: 2.5rem;
+        color: #dc3545;
+        margin-bottom: 15px;
+      }
+
+      .product-card h3 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+      }
+
+      .product-card p {
+        color: #6c757d;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+      }
+
+      .product-stats {
+        margin-bottom: 20px;
+      }
+
+      .product-stats .stat {
+        background: #f8f9fa;
+        color: #495057;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .product-actions .btn {
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #5a6268;
       }
 
       /* Reports Grid */
@@ -1358,42 +1416,275 @@
       }
 
       function loadPaymentsData() {
-        // Load payments data
-        document.getElementById('totalRevenue').textContent = '0frw';
-        document.getElementById('pendingPayments').textContent = '0';
-        document.getElementById('todayPayments').textContent = '0';
-        
-        // Load payments table
-        const tbody = document.getElementById('paymentsTableBody');
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">No payment data available</td></tr>';
+        // Load payments data from API
+        fetch('http://localhost:8000/api/orders')
+          .then(response => response.json())
+          .then(data => {
+            // Calculate payment statistics
+            let totalRevenue = 0;
+            let pendingPayments = 0;
+            let todayPayments = 0;
+            const today = new Date().toDateString();
+            
+            data.orders.forEach(order => {
+              const orderTotal = parseFloat(order.total.replace(/[^\d.]/g, ''));
+              totalRevenue += orderTotal;
+              
+              if (order.payment_status === 'pending') {
+                pendingPayments++;
+              }
+              
+              const orderDate = new Date(order.created_at).toDateString();
+              if (orderDate === today) {
+                todayPayments++;
+              }
+            });
+            
+            // Update payment stats
+            document.getElementById('totalRevenue').textContent = `${totalRevenue.toLocaleString()}frw`;
+            document.getElementById('pendingPayments').textContent = pendingPayments.toString();
+            document.getElementById('todayPayments').textContent = todayPayments.toString();
+            
+            // Load payments table
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = '';
+            
+            data.orders.forEach(order => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>PAY-${order.order_id}</td>
+                <td>${order.order_id}</td>
+                <td>${order.customer_name}</td>
+                <td>${order.total}</td>
+                <td>${order.payment_method || 'Mobile Money'}</td>
+                <td><span class="status-badge status-${order.payment_status}">${order.payment_status}</span></td>
+                <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn-sm btn-success" onclick="approvePayment('${order.order_id}')">Approve</button>
+                    <button class="btn-sm btn-danger" onclick="rejectPayment('${order.order_id}')">Reject</button>
+                  </div>
+                </td>
+              `;
+              tbody.appendChild(row);
+            });
+          })
+          .catch(error => {
+            console.error('Error loading payments:', error);
+            showNotification('Failed to load payment data', 'error');
+            
+            // Show fallback data
+            document.getElementById('totalRevenue').textContent = '0frw';
+            document.getElementById('pendingPayments').textContent = '0';
+            document.getElementById('todayPayments').textContent = '0';
+            
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">Failed to load payment data</td></tr>';
+          });
       }
 
       function loadProductsData() {
-        // Load products data
+        // Load products data based on your HTML pages
         const grid = document.getElementById('productsGrid');
         grid.innerHTML = `
           <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-wine-bottle"></i>
+            </div>
             <h3>Wine Collection</h3>
             <p>Premium wines from around the world</p>
-            <button class="btn btn-primary">Manage</button>
+            <div class="product-stats">
+              <span class="stat">11 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="Wine.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('wine')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
           </div>
+          
           <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-glass-whiskey"></i>
+            </div>
             <h3>Whiskey Selection</h3>
-            <p>Fine whiskeys and spirits</p>
-            <button class="btn btn-primary">Manage</button>
+            <p>Fine whiskeys and premium spirits</p>
+            <div class="product-stats">
+              <span class="stat">13 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="Whiskey.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('whiskey')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
           </div>
+          
           <div class="product-card">
-            <h3>Beer & Ciders</h3>
+            <div class="product-icon">
+              <i class="fas fa-beer"></i>
+            </div>
+            <h3>Beer Collection</h3>
             <p>Local and imported beers</p>
-            <button class="btn btn-primary">Manage</button>
+            <div class="product-stats">
+              <span class="stat">8 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="Beer.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('beer')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-cocktail"></i>
+            </div>
+            <h3>Single Malt Whiskey</h3>
+            <p>Premium single malt selections</p>
+            <div class="product-stats">
+              <span class="stat">6 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="SingleMalt.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('single-malt')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-wine-glass-alt"></i>
+            </div>
+            <h3>Gin & Vodka</h3>
+            <p>Premium gin and vodka collection</p>
+            <div class="product-stats">
+              <span class="stat">14 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="GinVodka.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('gin-vodka')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-champagne-glasses"></i>
+            </div>
+            <h3>Champagne</h3>
+            <p>Luxury champagne collection</p>
+            <div class="product-stats">
+              <span class="stat">6 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="Champagne.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('champagne')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-tropical-drink"></i>
+            </div>
+            <h3>Rum Collection</h3>
+            <p>Premium rum selections</p>
+            <div class="product-stats">
+              <span class="stat">7 Products</span>
+            </div>
+            <div class="product-actions">
+              <a href="Rum.html" class="btn btn-primary" target="_blank">
+                <i class="fas fa-eye"></i> View Products
+              </a>
+              <button class="btn btn-secondary" onclick="manageProducts('rum')">
+                <i class="fas fa-cog"></i> Manage
+              </button>
+            </div>
           </div>
         `;
       }
 
       function loadCustomersData() {
-        // Load customers data
-        const tbody = document.getElementById('customersTableBody');
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">No customer data available</td></tr>';
+        // Load customers data from API
+        fetch('http://localhost:8000/api/orders')
+          .then(response => response.json())
+          .then(data => {
+            // Group orders by customer to calculate stats
+            const customerStats = {};
+            
+            data.orders.forEach(order => {
+              const customerKey = order.customer_email;
+              
+              if (!customerStats[customerKey]) {
+                customerStats[customerKey] = {
+                  name: order.customer_name,
+                  email: order.customer_email,
+                  phone: order.customer_phone,
+                  orderCount: 0,
+                  totalSpent: 0,
+                  lastOrder: order.created_at
+                };
+              }
+              
+              customerStats[customerKey].orderCount++;
+              const orderTotal = parseFloat(order.total.replace(/[^\d.]/g, ''));
+              customerStats[customerKey].totalSpent += orderTotal;
+              
+              // Update last order date if this is more recent
+              if (new Date(order.created_at) > new Date(customerStats[customerKey].lastOrder)) {
+                customerStats[customerKey].lastOrder = order.created_at;
+              }
+            });
+            
+            // Load customers table
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = '';
+            
+            Object.values(customerStats).forEach((customer, index) => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${customer.name}</td>
+                <td>${customer.email}</td>
+                <td>${customer.phone}</td>
+                <td>${customer.orderCount}</td>
+                <td>${customer.totalSpent.toLocaleString()}frw</td>
+                <td><span class="status-badge status-delivered">Active</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn-sm btn-primary" onclick="viewCustomer('${customer.email}')">View</button>
+                    <button class="btn-sm btn-info" onclick="contactCustomer('${customer.email}')">Contact</button>
+                  </div>
+                </td>
+              `;
+              tbody.appendChild(row);
+            });
+          })
+          .catch(error => {
+            console.error('Error loading customers:', error);
+            showNotification('Failed to load customer data', 'error');
+            
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">Failed to load customer data</td></tr>';
+          });
       }
 
       function loadReportsData() {
@@ -1444,6 +1735,66 @@
           localStorage.removeItem('admin_mode');
           window.location.href = 'login.html';
         }
+      }
+
+      // Payment action functions
+      function approvePayment(orderId) {
+        if (confirm(`Approve payment for order ${orderId}?`)) {
+          // Update payment status to approved
+          updatePaymentStatus(orderId, 'approved')
+            .then(() => {
+              showNotification(`Payment for order ${orderId} approved!`, 'success');
+              loadPaymentsData(); // Refresh payments
+            })
+            .catch(error => {
+              showNotification(`Failed to approve payment: ${error.message}`, 'error');
+            });
+        }
+      }
+
+      function rejectPayment(orderId) {
+        if (confirm(`Reject payment for order ${orderId}?`)) {
+          // Update payment status to rejected
+          updatePaymentStatus(orderId, 'rejected')
+            .then(() => {
+              showNotification(`Payment for order ${orderId} rejected!`, 'success');
+              loadPaymentsData(); // Refresh payments
+            })
+            .catch(error => {
+              showNotification(`Failed to reject payment: ${error.message}`, 'error');
+            });
+        }
+      }
+
+      function updatePaymentStatus(orderId, status) {
+        return fetch(`http://localhost:8000/api/orders/${orderId}/payment`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            payment_status: status,
+            updated_by: 'admin'
+          })
+        })
+        .then(response => response.json());
+      }
+
+      // Product management functions
+      function manageProducts(category) {
+        showNotification(`Product management for ${category} coming soon!`, 'info');
+      }
+
+      // Customer action functions
+      function viewCustomer(email) {
+        showNotification(`Viewing customer details for ${email}`, 'info');
+        // Could open a modal or navigate to customer details
+      }
+
+      function contactCustomer(email) {
+        const subject = 'Total Wine & More - Customer Support';
+        const body = 'Hello, we hope you are enjoying your recent purchase from Total Wine & More.';
+        window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
       }
     </script>
   </body>

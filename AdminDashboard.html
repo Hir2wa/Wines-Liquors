@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Total Wine & More</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="Header.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- Admin Header -->
+      <header class="admin-header">
+        <div class="admin-header-content">
+          <div class="admin-logo">
+            <img src="images/logo.png" alt="Total Wine & More Logo" />
+            <h1>Admin Dashboard</h1>
+          </div>
+          <div class="admin-actions">
+            <div class="notification-bell">
+              <i class="fas fa-bell"></i>
+              <span class="notification-count">3</span>
+            </div>
+            <div class="admin-profile">
+              <i class="fas fa-user-shield"></i>
+              <span>Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Admin Sidebar -->
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <ul>
+            <li class="active">
+              <a href="#dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="#orders">
+                <i class="fas fa-shopping-cart"></i>
+                Orders
+                <span class="badge">12</span>
+              </a>
+            </li>
+            <li>
+              <a href="#payments">
+                <i class="fas fa-credit-card"></i>
+                Payments
+                <span class="badge new">5</span>
+              </a>
+            </li>
+            <li>
+              <a href="#products">
+                <i class="fas fa-wine-bottle"></i>
+                Products
+              </a>
+            </li>
+            <li>
+              <a href="#customers">
+                <i class="fas fa-users"></i>
+                Customers
+              </a>
+            </li>
+            <li>
+              <a href="#reports">
+                <i class="fas fa-chart-bar"></i>
+                Reports
+              </a>
+            </li>
+            <li>
+              <a href="#settings">
+                <i class="fas fa-cog"></i>
+                Settings
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Admin Main Content -->
+      <main class="admin-main">
+        <!-- Dashboard Overview -->
+        <section class="dashboard-overview">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Total Orders</h3>
+                <p class="stat-number">1,247</p>
+                <span class="stat-change positive">+12%</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Revenue</h3>
+                <p class="stat-number">$45,230</p>
+                <span class="stat-change positive">+8%</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Customers</h3>
+                <p class="stat-number">892</p>
+                <span class="stat-change positive">+5%</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-wine-bottle"></i>
+              </div>
+              <div class="stat-content">
+                <h3>Products</h3>
+                <p class="stat-number">156</p>
+                <span class="stat-change neutral">0%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Orders -->
+        <section class="recent-orders">
+          <div class="section-header">
+            <h2>Recent Orders</h2>
+            <button class="btn-primary">View All</button>
+          </div>
+          <div class="orders-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Products</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#ORD-001</td>
+                  <td>John Doe</td>
+                  <td>3 items</td>
+                  <td>$125.00</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>2024-01-15</td>
+                  <td>
+                    <button class="btn-sm btn-primary">View</button>
+                    <button class="btn-sm btn-success">Approve</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>#ORD-002</td>
+                  <td>Jane Smith</td>
+                  <td>2 items</td>
+                  <td>$89.50</td>
+                  <td><span class="status processing">Processing</span></td>
+                  <td>2024-01-15</td>
+                  <td>
+                    <button class="btn-sm btn-primary">View</button>
+                    <button class="btn-sm btn-warning">Update</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>#ORD-003</td>
+                  <td>Mike Johnson</td>
+                  <td>5 items</td>
+                  <td>$234.75</td>
+                  <td><span class="status shipped">Shipped</span></td>
+                  <td>2024-01-14</td>
+                  <td>
+                    <button class="btn-sm btn-primary">View</button>
+                    <button class="btn-sm btn-info">Track</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Payment Notifications -->
+        <section class="payment-notifications">
+          <div class="section-header">
+            <h2>Payment Notifications</h2>
+            <span class="notification-badge">5 New</span>
+          </div>
+          <div class="notifications-list">
+            <div class="notification-item new">
+              <div class="notification-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="notification-content">
+                <h4>Payment Received</h4>
+                <p>Order #ORD-001 - $125.00 from John Doe</p>
+                <span class="notification-time">2 minutes ago</span>
+              </div>
+              <div class="notification-actions">
+                <button class="btn-sm btn-success">Approve</button>
+                <button class="btn-sm btn-danger">Reject</button>
+              </div>
+            </div>
+            <div class="notification-item new">
+              <div class="notification-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="notification-content">
+                <h4>Payment Received</h4>
+                <p>Order #ORD-002 - $89.50 from Jane Smith</p>
+                <span class="notification-time">15 minutes ago</span>
+              </div>
+              <div class="notification-actions">
+                <button class="btn-sm btn-success">Approve</button>
+                <button class="btn-sm btn-danger">Reject</button>
+              </div>
+            </div>
+            <div class="notification-item">
+              <div class="notification-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="notification-content">
+                <h4>Payment Received</h4>
+                <p>Order #ORD-003 - $234.75 from Mike Johnson</p>
+                <span class="notification-time">1 hour ago</span>
+              </div>
+              <div class="notification-actions">
+                <button class="btn-sm btn-success">Approve</button>
+                <button class="btn-sm btn-danger">Reject</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="js/api-client.js"></script>
+    <script>
+      // Admin Dashboard JavaScript
+      document.addEventListener("DOMContentLoaded", function () {
+        loadDashboardData();
+        setupEventListeners();
+        startRealTimeUpdates();
+      });
+
+      function loadDashboardData() {
+        // Load dashboard data using PHP API
+        getDashboardData()
+          .then((data) => {
+            // Update stats
+            updateStats(data.stats);
+
+            // Load recent orders
+            loadRecentOrders(data.recentOrders);
+
+            // Load payment notifications
+            loadPaymentNotifications(data.pendingPayments);
+          })
+          .catch((error) => {
+            console.error("Failed to load dashboard data:", error);
+            showNotification("Failed to load dashboard data", "error");
+          });
+      }
+
+      function updateStats(stats) {
+        document.querySelector(
+          ".stat-card:nth-child(1) .stat-number"
+        ).textContent = stats.total_orders.toLocaleString();
+        document.querySelector(
+          ".stat-card:nth-child(2) .stat-number"
+        ).textContent = `${stats.total_revenue.toLocaleString()}frw`;
+        document.querySelector(
+          ".stat-card:nth-child(3) .stat-number"
+        ).textContent = stats.unique_customers.toLocaleString();
+        document.querySelector(
+          ".stat-card:nth-child(4) .stat-number"
+        ).textContent = stats.pending_payments.toLocaleString();
+      }
+
+      function loadRecentOrders(orders) {
+        const ordersTable = document.querySelector(".orders-table tbody");
+
+        ordersTable.innerHTML = "";
+        orders.forEach((order) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+              <td>#${order.id}</td>
+              <td>${order.customer_first_name} ${order.customer_last_name}</td>
+              <td>${order.item_count} items</td>
+              <td>${order.total_amount.toLocaleString()}frw</td>
+              <td><span class="status ${order.status}">${
+            order.status.charAt(0).toUpperCase() + order.status.slice(1)
+          }</span></td>
+              <td>${new Date(order.created_at).toLocaleDateString()}</td>
+              <td>
+                <button class="btn-sm btn-primary" onclick="viewOrder('${
+                  order.id
+                }')">View</button>
+                ${
+                  order.status === "pending"
+                    ? `<button class="btn-sm btn-success" onclick="approveOrder('${order.id}')">Approve</button>`
+                    : ""
+                }
+                ${
+                  order.status === "processing"
+                    ? `<button class="btn-sm btn-warning" onclick="updateOrder('${order.id}')">Update</button>`
+                    : ""
+                }
+                ${
+                  order.status === "shipped"
+                    ? `<button class="btn-sm btn-info" onclick="trackOrder('${order.id}')">Track</button>`
+                    : ""
+                }
+              </td>
+            `;
+          ordersTable.appendChild(row);
+        });
+      }
+
+      function loadPaymentNotifications(orders) {
+        const notificationsList = document.querySelector(".notifications-list");
+
+        notificationsList.innerHTML = "";
+        orders.forEach((order) => {
+          const notification = document.createElement("div");
+          notification.className = "notification-item new";
+          notification.innerHTML = `
+              <div class="notification-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="notification-content">
+                <h4>Payment Received</h4>
+                <p>Order #${
+                  order.id
+                } - ${order.total_amount.toLocaleString()}frw from ${
+            order.customer_first_name
+          } ${order.customer_last_name}</p>
+                <span class="notification-time">${getTimeAgo(
+                  order.created_at
+                )}</span>
+              </div>
+              <div class="notification-actions">
+                <button class="btn-sm btn-success" onclick="approvePayment('${
+                  order.id
+                }')">Approve</button>
+                <button class="btn-sm btn-danger" onclick="rejectPayment('${
+                  order.id
+                }')">Reject</button>
+              </div>
+            `;
+          notificationsList.appendChild(notification);
+        });
+
+        // Update notification count
+        const notificationCount = document.querySelector(".notification-count");
+        notificationCount.textContent = orders.length;
+      }
+
+      function setupEventListeners() {
+        // Handle notification clicks
+        document.addEventListener("click", function (e) {
+          if (e.target.closest(".notification-item")) {
+            e.target.closest(".notification-item").classList.remove("new");
+          }
+        });
+      }
+
+      function startRealTimeUpdates() {
+        // Real-time updates simulation
+        setInterval(() => {
+          loadDashboardData();
+        }, 30000); // Update every 30 seconds
+      }
+
+      function approvePayment(orderId) {
+        updatePaymentStatus(
+          orderId,
+          "approved",
+          "admin",
+          "Payment approved by admin"
+        )
+          .then(() => {
+            showNotification(
+              `Payment for order ${orderId} approved successfully!`,
+              "success"
+            );
+            loadDashboardData();
+          })
+          .catch((error) => {
+            console.error("Failed to approve payment:", error);
+            showNotification(
+              `Failed to approve payment: ${error.message}`,
+              "error"
+            );
+          });
+      }
+
+      function rejectPayment(orderId) {
+        updatePaymentStatus(
+          orderId,
+          "rejected",
+          "admin",
+          "Payment rejected by admin"
+        )
+          .then(() => {
+            showNotification(`Payment for order ${orderId} rejected.`, "error");
+            loadDashboardData();
+          })
+          .catch((error) => {
+            console.error("Failed to reject payment:", error);
+            showNotification(
+              `Failed to reject payment: ${error.message}`,
+              "error"
+            );
+          });
+      }
+
+      function approveOrder(orderId) {
+        updateOrderStatus(
+          orderId,
+          "processing",
+          "admin",
+          "Order approved by admin"
+        )
+          .then(() => {
+            showNotification(
+              `Order ${orderId} approved and moved to processing!`,
+              "success"
+            );
+            loadDashboardData();
+          })
+          .catch((error) => {
+            console.error("Failed to approve order:", error);
+            showNotification(
+              `Failed to approve order: ${error.message}`,
+              "error"
+            );
+          });
+      }
+
+      function updateOrder(orderId) {
+        const newStatus = prompt(
+          "Update order status (processing/shipped/completed):"
+        );
+        if (
+          newStatus &&
+          ["processing", "shipped", "completed"].includes(newStatus)
+        ) {
+          updateOrderStatus(
+            orderId,
+            newStatus,
+            "admin",
+            `Status updated to ${newStatus} by admin`
+          )
+            .then(() => {
+              showNotification(
+                `Order ${orderId} status updated to ${newStatus}!`,
+                "success"
+              );
+              loadDashboardData();
+            })
+            .catch((error) => {
+              console.error("Failed to update order:", error);
+              showNotification(
+                `Failed to update order: ${error.message}`,
+                "error"
+              );
+            });
+        }
+      }
+
+      function viewOrder(orderId) {
+        window.open(`OrderTracking.html?order=${orderId}`, "_blank");
+      }
+
+      function trackOrder(orderId) {
+        window.open(`OrderTracking.html?order=${orderId}`, "_blank");
+      }
+
+      function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === "success" ? "#28a745" : "#dc3545"};
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-weight: 500;
+            font-size: 14px;
+            max-width: 350px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+          `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.transform = "translateX(0)";
+        }, 100);
+
+        setTimeout(() => {
+          notification.style.transform = "translateX(100%)";
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 300);
+        }, 3000);
+      }
+
+      function getTimeAgo(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return "Just now";
+        if (diffInSeconds < 3600)
+          return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+        if (diffInSeconds < 86400)
+          return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+        return `${Math.floor(diffInSeconds / 86400)} days ago`;
+      }
+    </script>
+  </body>
+</html>

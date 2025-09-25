@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Authentication API</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #c82333;
+      }
+      .result {
+        margin: 10px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        white-space: pre-wrap;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔐 Authentication API Test</h1>
+
+    <div class="test-section">
+      <h3>1. Test API Health</h3>
+      <button onclick="testHealth()">Test Health</button>
+      <div id="healthResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h3>2. Test User Registration</h3>
+      <button onclick="testRegistration()">Test Registration</button>
+      <div id="registrationResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h3>3. Test User Login</h3>
+      <button onclick="testLogin()">Test Login</button>
+      <div id="loginResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h3>4. Test Verification</h3>
+      <button onclick="testVerification()">Test Verification</button>
+      <div id="verificationResult" class="result"></div>
+    </div>
+
+    <script>
+      let testUserId = null;
+
+      async function testHealth() {
+        const resultDiv = document.getElementById("healthResult");
+        resultDiv.textContent = "Testing...";
+
+        try {
+          const response = await fetch("api/health");
+          const data = await response.json();
+
+          resultDiv.textContent = `✅ Health Check: ${JSON.stringify(
+            data,
+            null,
+            2
+          )}`;
+          resultDiv.className = "result success";
+        } catch (error) {
+          resultDiv.textContent = `❌ Error: ${error.message}`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      async function testRegistration() {
+        const resultDiv = document.getElementById("registrationResult");
+        resultDiv.textContent = "Testing registration...";
+
+        try {
+          const response = await fetch("api/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: "test@example.com",
+              password: "password123",
+              firstName: "Test",
+              lastName: "User",
+              phone: "+250123456789",
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            testUserId = data.data.user_id;
+            resultDiv.textContent = `✅ Registration Success: ${JSON.stringify(
+              data,
+              null,
+              2
+            )}`;
+            resultDiv.className = "result success";
+          } else {
+            resultDiv.textContent = `❌ Registration Failed: ${JSON.stringify(
+              data,
+              null,
+              2
+            )}`;
+            resultDiv.className = "result error";
+          }
+        } catch (error) {
+          resultDiv.textContent = `❌ Error: ${error.message}`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      async function testLogin() {
+        const resultDiv = document.getElementById("loginResult");
+        resultDiv.textContent = "Testing login...";
+
+        try {
+          const response = await fetch("api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              emailOrPhone: "test@example.com",
+              password: "password123",
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            resultDiv.textContent = `✅ Login Success: ${JSON.stringify(
+              data,
+              null,
+              2
+            )}`;
+            resultDiv.className = "result success";
+          } else {
+            resultDiv.textContent = `❌ Login Failed: ${JSON.stringify(
+              data,
+              null,
+              2
+            )}`;
+            resultDiv.className = "result error";
+          }
+        } catch (error) {
+          resultDiv.textContent = `❌ Error: ${error.message}`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      async function testVerification() {
+        const resultDiv = document.getElementById("verificationResult");
+        resultDiv.textContent = "Testing verification...";
+
+        if (!testUserId) {
+          resultDiv.textContent = "❌ Please register a user first";
+          resultDiv.className = "result error";
+          return;
+        }
+
+        try {
+          const response = await fetch("api/auth/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: testUserId,
+              code: "123456",
+              type: "email",
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            resultDiv.textContent = `✅ Verification Success: ${JSON.stringify(
+              data,
+              null,
+              2
+            )}`;
+            resultDiv.className = "result success";
+          } else {
+            resultDiv.textContent = `❌ Verification Failed: ${JSON.stringify(
+              data,
+              null,
+              2
+            )}`;
+            resultDiv.className = "result error";
+          }
+        } catch (error) {
+          resultDiv.textContent = `❌ Error: ${error.message}`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      // Auto-test health on page load
+      window.onload = function () {
+        testHealth();
+      };
+    </script>
+  </body>
+</html>
+

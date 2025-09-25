@@ -5,12 +5,31 @@
  */
 
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'total_wine_orders';
-    private $username = 'postgres';
-    private $password = '2003';
-    private $port = '5432';
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
+    private $port;
     private $conn;
+
+    public function __construct() {
+        // Check if we're on Heroku (production)
+        if (getenv('DATABASE_URL')) {
+            $url = parse_url(getenv('DATABASE_URL'));
+            $this->host = $url['host'];
+            $this->db_name = substr($url['path'], 1);
+            $this->username = $url['user'];
+            $this->password = $url['pass'];
+            $this->port = $url['port'] ?? '5432';
+        } else {
+            // Local development
+            $this->host = 'localhost';
+            $this->db_name = 'total_wine_orders';
+            $this->username = 'postgres';
+            $this->password = '2003';
+            $this->port = '5432';
+        }
+    }
 
     /**
      * Get database connection

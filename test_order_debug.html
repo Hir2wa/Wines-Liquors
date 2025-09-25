@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Debug Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f8f9fa;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+      }
+      .btn {
+        background: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .btn:hover {
+        background: #c82333;
+      }
+      .result {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        font-family: monospace;
+        white-space: pre-wrap;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔍 Order Debug Test</h1>
+      <p>This page helps debug the order creation process step by step.</p>
+
+      <div class="test-section">
+        <h3>1. Test API Connection</h3>
+        <button class="btn" onclick="testConnection()">Test Connection</button>
+        <div id="connectionResult" class="result"></div>
+      </div>
+
+      <div class="test-section">
+        <h3>2. Test Order Creation (Raw)</h3>
+        <button class="btn" onclick="testOrderRaw()">Test Raw Order</button>
+        <div id="rawResult" class="result"></div>
+      </div>
+
+      <div class="test-section">
+        <h3>3. Test Order Creation (Using API Client)</h3>
+        <button class="btn" onclick="testOrderAPI()">Test API Client</button>
+        <div id="apiResult" class="result"></div>
+      </div>
+
+      <div class="test-section">
+        <h3>4. Test with Cart Items</h3>
+        <button class="btn" onclick="addTestCart()">Add Test Cart</button>
+        <button class="btn" onclick="testWithCart()">Test with Cart</button>
+        <div id="cartResult" class="result"></div>
+      </div>
+    </div>
+
+    <script src="js/api-client.js"></script>
+    <script>
+      // Clean price format
+      function cleanPrice(price) {
+        if (!price) return "0";
+        return price.toString().replace(/[^\d.]/g, "");
+      }
+
+      async function testConnection() {
+        const resultDiv = document.getElementById("connectionResult");
+        resultDiv.innerHTML = "Testing connection...\n";
+        resultDiv.className = "result";
+
+        try {
+          const response = await fetch("http://localhost:8000/api/orders", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          resultDiv.innerHTML = `Connection Test Results:\n`;
+          resultDiv.innerHTML += `Status: ${response.status}\n`;
+          resultDiv.innerHTML += `Status Text: ${response.statusText}\n`;
+          resultDiv.innerHTML += `Headers: ${JSON.stringify(
+            [...response.headers.entries()],
+            null,
+            2
+          )}\n\n`;
+
+          const text = await response.text();
+          resultDiv.innerHTML += `Raw Response:\n${text}\n`;
+
+          if (response.ok) {
+            resultDiv.className = "result success";
+          } else {
+            resultDiv.className = "result error";
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `Connection Error: ${error.message}`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      async function testOrderRaw() {
+        const resultDiv = document.getElementById("rawResult");
+        resultDiv.innerHTML = "Testing raw order creation...\n";
+        resultDiv.className = "result";
+
+        const orderData = {
+          customerInfo: {
+            email: "test@example.com",
+            phone: "+250780146863",
+            firstName: "Test",
+            lastName: "User",
+            address: "123 Test Street",
+            city: "Kigali",
+            country: "Rwanda",
+          },
+          items: [
+            {
+              name: "Premium Red Wine",
+              price: "25000",
+              quantity: 2,
+              image: "images/WINE1.webp",
+            },
+          ],
+          paymentMethod: "mobile_money",
+          total: "50000",
+        };
+
+        try {
+          resultDiv.innerHTML += `Sending data:\n${JSON.stringify(
+            orderData,
+            null,
+            2
+          )}\n\n`;
+
+          const response = await fetch("http://localhost:8000/api/orders", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderData),
+          });
+
+          resultDiv.innerHTML += `Response Status: ${response.status}\n`;
+          resultDiv.innerHTML += `Response Headers: ${JSON.stringify(
+            [...response.headers.entries()],
+            null,
+            2
+          )}\n\n`;
+
+          const responseText = await response.text();
+          resultDiv.innerHTML += `Raw Response Text:\n${responseText}\n\n`;
+
+          // Try to parse JSON
+          try {
+            const jsonData = JSON.parse(responseText);
+            resultDiv.innerHTML += `Parsed JSON:\n${JSON.stringify(
+              jsonData,
+              null,
+              2
+            )}\n`;
+            resultDiv.className = "result success";
+          } catch (parseError) {
+            resultDiv.innerHTML += `JSON Parse Error: ${parseError.message}\n`;
+            resultDiv.innerHTML += `First 200 chars of response:\n${responseText.substring(
+              0,
+              200
+            )}\n`;
+            resultDiv.className = "result error";
+          }
+        } catch (error) {
+          resultDiv.innerHTML += `Request Error: ${error.message}`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      async function testOrderAPI() {
+        const resultDiv = document.getElementById("apiResult");
+        resultDiv.innerHTML = "Testing with API client...\n";
+        resultDiv.className = "result";
+
+        const orderData = {
+          customerInfo: {
+            email: "test@example.com",
+            phone: "+250780146863",
+            firstName: "Test",
+            lastName: "User",
+            address: "123 Test Street",
+            city: "Kigali",
+            country: "Rwanda",
+          },
+          items: [
+            {
+              name: "Premium Red Wine",
+              price: "25000",
+              quantity: 2,
+              image: "images/WINE1.webp",
+            },
+          ],
+          paymentMethod: "mobile_money",
+          total: "50000",
+        };
+
+        try {
+          resultDiv.innerHTML += `Using API client to create order...\n`;
+          resultDiv.innerHTML += `Data: ${JSON.stringify(
+            orderData,
+            null,
+            2
+          )}\n\n`;
+
+          const response = await apiClient.createOrder(orderData);
+          resultDiv.innerHTML += `API Client Response:\n${JSON.stringify(
+            response,
+            null,
+            2
+          )}\n`;
+          resultDiv.className = "result success";
+        } catch (error) {
+          resultDiv.innerHTML += `API Client Error: ${error.message}\n`;
+          resultDiv.innerHTML += `Error Stack: ${error.stack}\n`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      function addTestCart() {
+        const testItems = [
+          {
+            name: "Premium Red Wine",
+            price: "25,000frw",
+            quantity: 2,
+            image: "images/WINE1.webp",
+          },
+          {
+            name: "Elegant White Wine",
+            price: "30,000frw",
+            quantity: 1,
+            image: "images/WINE2.webp",
+          },
+        ];
+
+        localStorage.setItem("cartItems", JSON.stringify(testItems));
+
+        const resultDiv = document.getElementById("cartResult");
+        resultDiv.innerHTML = `Added test cart items:\n${JSON.stringify(
+          testItems,
+          null,
+          2
+        )}`;
+        resultDiv.className = "result success";
+      }
+
+      async function testWithCart() {
+        const resultDiv = document.getElementById("cartResult");
+        resultDiv.innerHTML = "Testing with cart items...\n";
+        resultDiv.className = "result";
+
+        const cartData = localStorage.getItem("cartItems");
+        if (!cartData) {
+          resultDiv.innerHTML =
+            "No cart items found. Please add test cart first.";
+          resultDiv.className = "result error";
+          return;
+        }
+
+        try {
+          const cartItems = JSON.parse(cartData);
+          resultDiv.innerHTML += `Cart items: ${JSON.stringify(
+            cartItems,
+            null,
+            2
+          )}\n\n`;
+
+          // Format items like Order.html does
+          const formattedItems = cartItems.map((item) => ({
+            name: item.name || item.title || "Unknown Item",
+            price: cleanPrice(item.price) || "0",
+            quantity: item.quantity || 1,
+            image: item.image || item.src || null,
+          }));
+
+          resultDiv.innerHTML += `Formatted items: ${JSON.stringify(
+            formattedItems,
+            null,
+            2
+          )}\n\n`;
+
+          const orderData = {
+            customerInfo: {
+              email: "test@example.com",
+              phone: "+250780146863",
+              firstName: "Test",
+              lastName: "User",
+              address: "123 Test Street",
+              city: "Kigali",
+              country: "Rwanda",
+            },
+            items: formattedItems,
+            paymentMethod: "mobile_money",
+            total: cleanPrice("80000frw"),
+          };
+
+          resultDiv.innerHTML += `Order data: ${JSON.stringify(
+            orderData,
+            null,
+            2
+          )}\n\n`;
+
+          const response = await fetch("http://localhost:8000/api/orders", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderData),
+          });
+
+          const responseText = await response.text();
+          resultDiv.innerHTML += `Response: ${responseText}\n`;
+
+          if (response.ok) {
+            const jsonData = JSON.parse(responseText);
+            resultDiv.innerHTML += `Success! Order ID: ${jsonData.data.orderId}\n`;
+            resultDiv.className = "result success";
+          } else {
+            resultDiv.className = "result error";
+          }
+        } catch (error) {
+          resultDiv.innerHTML += `Error: ${error.message}\n`;
+          resultDiv.className = "result error";
+        }
+      }
+
+      // Auto-test connection on page load
+      window.addEventListener("load", function () {
+        testConnection();
+      });
+    </script>
+  </body>
+</html>

@@ -34,6 +34,10 @@
           </a>
         </div>
 
+        <!-- Mobile Search Overlay -->
+        <div class="mobile-search-overlay"></div>
+
+        <!-- Search Bar -->
         <div class="search-bar">
           <div class="input-search">
             <i class="fas fa-search"></i>
@@ -43,7 +47,10 @@
               class="input-search-field"
             />
           </div>
-          <button class="searchButton">Search</button>
+          <button class="searchButton">
+            <i class="fas fa-search search-icon"></i>
+            <span class="search-text">Search</span>
+          </button>
           <button class="search-close" aria-label="Close search">
             <i class="fas fa-times"></i>
           </button>
@@ -64,7 +71,7 @@
         <button class="mobile-search-toggle" aria-label="Open search">
           <i class="fas fa-search"></i>
         </button>
-        <a href="Order.html" class="sub-cart">
+        <a href="MyOrders.html" class="sub-cart">
           <i class="fas fa-shopping-cart"></i>
           <span class="cart-count">0</span>
         </a>
@@ -644,14 +651,14 @@
       <div class="wines-container" id="wines-list">
         <div class="wine-card">
           <div class="wine-image">
-            <img src="images/WINE2.webp" alt="Lallier Champagne" />
+            <img src="images/WINE1.webp" alt="Lallier Champagne" />
           </div>
           <p class="wine-name">Lallier Champagne</p>
         </div>
         <div class="wine-card">
           <div class="wine-image">
             <img
-              src="images/WINE1.webp"
+              src="images/WINE2.webp"
               alt="Swiftsure Marlborough Sauvignon Blanc"
             />
           </div>
@@ -659,9 +666,15 @@
         </div>
         <div class="wine-card">
           <div class="wine-image">
-            <img src="images/WINE1.webp" alt="Premium Red Wine" />
+            <img src="images/WINE3.webp" alt="Premium Red Wine" />
           </div>
           <p class="wine-name">Premium Red Wine</p>
+        </div>
+        <div class="wine-card">
+          <div class="wine-image">
+            <img src="images/WINE4.webp" alt="Elegant White Wine" />
+          </div>
+          <p class="wine-name">Elegant White Wine</p>
         </div>
       </div>
     </div>
@@ -812,5 +825,10 @@
       </div>
     </footer>
     <div class="mobile-menu-overlay"></div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
   </body>
 </html>

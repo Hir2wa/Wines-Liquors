@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Log in - Customer Account</title>
     <link rel="stylesheet" href="css/all.min.css" />
-    <script src="login.js" defer></script>
+    <script src="login.js?v=202509251800" defer></script>
     <style>
       * {
         margin: 0;
@@ -508,9 +508,7 @@
 
         <div class="create-account">
           <p class="create-account-text">Don't have an account?</p>
-          <a href="#" class="create-account-link" onclick="showCreateAccount()"
-            >Create account</a
-          >
+          <a href="Register.html" class="create-account-link">Create account</a>
         </div>
 
         <div class="privacy-notice">
@@ -522,13 +520,6 @@
     </main>
 
     <script>
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          handleLogin(e);
-        });
-
       // handleLogin function is now provided by login.js
 
       function showError(inputId, errorId) {
@@ -549,26 +540,19 @@
       }
 
       function socialLogin(provider) {
-        alert(
-          `Social login with ${provider} clicked! In a real implementation, this would initiate OAuth flow.`
-        );
+        showFlashMessage(`${provider} login is not yet implemented.`, "error");
       }
 
       function showForgotPassword() {
         const email = document.getElementById("email").value;
         if (email) {
-          alert(`Password reset link would be sent to: ${email}`);
-        } else {
-          alert(
-            'Please enter your email address first, then click "Forgot password?"'
+          showFlashMessage(
+            `Password reset functionality is not yet implemented.`,
+            "error"
           );
+        } else {
+          showFlashMessage("Please enter your email address first.", "error");
         }
-      }
-
-      function showCreateAccount() {
-        alert(
-          "In a real implementation, this would redirect to the account creation page."
-        );
       }
 
       // Real-time email validation
@@ -591,6 +575,63 @@
           }
         });
       });
+
+      function showFlashMessage(message, type = "success") {
+        // Create flash message container
+        const flashDiv = document.createElement("div");
+        flashDiv.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${type === "success" ? "#28a745" : "#dc3545"};
+          color: white;
+          padding: 16px 24px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          z-index: 10000;
+          font-weight: 500;
+          font-size: 14px;
+          max-width: 350px;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        `;
+
+        // Add icon
+        const icon = document.createElement("i");
+        icon.className =
+          type === "success"
+            ? "fas fa-check-circle"
+            : "fas fa-exclamation-circle";
+        icon.style.fontSize = "18px";
+
+        // Add message text
+        const messageText = document.createElement("span");
+        messageText.textContent = message;
+
+        flashDiv.appendChild(icon);
+        flashDiv.appendChild(messageText);
+
+        // Add to page
+        document.body.appendChild(flashDiv);
+
+        // Animate in
+        setTimeout(() => {
+          flashDiv.style.transform = "translateX(0)";
+        }, 100);
+
+        // Auto remove after 4 seconds
+        setTimeout(() => {
+          flashDiv.style.transform = "translateX(100%)";
+          setTimeout(() => {
+            if (flashDiv.parentNode) {
+              flashDiv.parentNode.removeChild(flashDiv);
+            }
+          }, 300);
+        }, 4000);
+      }
     </script>
   </body>
 </html>

@@ -195,6 +195,7 @@ function addToCart(productName, productPrice) {
   const cartItem = {
     name: productName,
     price: productPrice,
+    quantity: 1, // Default quantity
     id: Date.now(), // Unique ID for each item
   };
 
@@ -304,9 +305,33 @@ function handleProfileClick() {
       window.location.href = "login.html";
     }
   } else {
-    // User is logged in - go to profile page
-    window.location.href = "Profile.html";
+    // User is logged in - show options (Profile or Logout)
+    const user = JSON.parse(userData);
+    const choice = confirm(
+      `Welcome ${user.firstName}!\n\nClick OK to go to your profile, or Cancel to logout.`
+    );
+
+    if (choice) {
+      // Go to profile page
+      window.location.href = "Profile.html";
+    } else {
+      // Logout
+      logout();
+    }
   }
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem("userData");
+  localStorage.removeItem("sessionToken");
+  localStorage.removeItem("user_logged_in");
+
+  // Show logout message
+  alert("You have been logged out successfully.");
+
+  // Refresh the page to update the UI
+  window.location.reload();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -904,4 +929,565 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   console.log("Mobile sidebar script loaded completely");
+});
+
+// ========================================
+// SEARCH FUNCTIONALITY
+// ========================================
+
+// Search data structure with categories and products
+const searchData = {
+  categories: [
+    {
+      name: "wine",
+      page: "Wine.html",
+      keywords: [
+        "wine",
+        "wine bottle",
+        "wine box",
+        "sparkling wine",
+        "prosecco",
+        "champagne",
+      ],
+    },
+    {
+      name: "whiskey",
+      page: "Whiskey.html",
+      keywords: ["whiskey", "whisky", "bourbon", "scotch", "irish whiskey"],
+    },
+    {
+      name: "beer",
+      page: "Beer.html",
+      keywords: ["beer", "ale", "lager", "stout", "ipa"],
+    },
+    {
+      name: "champagne",
+      page: "Champagne.html",
+      keywords: ["champagne", "cognac", "sparkling", "bubbly"],
+    },
+    {
+      name: "gin",
+      page: "GinVodka.html",
+      keywords: ["gin", "vodka", "gin and tonic"],
+    },
+    {
+      name: "vodka",
+      page: "GinVodka.html",
+      keywords: ["vodka", "gin", "clear spirits"],
+    },
+    {
+      name: "rum",
+      page: "Rum.html",
+      keywords: ["rum", "dark rum", "white rum", "spiced rum"],
+    },
+    {
+      name: "tequila",
+      page: "Whiskey.html",
+      keywords: ["tequila", "margarita", "mexican spirits"],
+    },
+    {
+      name: "single malt",
+      page: "SingleMalt.html",
+      keywords: ["single malt", "scotch", "glenfiddich", "glenlivet"],
+    },
+  ],
+  products: [
+    // Wine products
+    { name: "cellar cask", category: "wine", page: "Wine.html" },
+    { name: "four cousins", category: "wine", page: "Wine.html" },
+    { name: "grand verdus", category: "wine", page: "Wine.html" },
+    { name: "jacobs", category: "wine", page: "Wine.html" },
+    { name: "nederburg", category: "wine", page: "Wine.html" },
+    { name: "pinta negra", category: "wine", page: "Wine.html" },
+    { name: "baron sparkling", category: "wine", page: "Wine.html" },
+    { name: "canitelli prosecco", category: "wine", page: "Wine.html" },
+    { name: "freixnet", category: "wine", page: "Wine.html" },
+    { name: "maison castel", category: "wine", page: "Wine.html" },
+    { name: "masottina", category: "wine", page: "Wine.html" },
+    { name: "signore prosecco", category: "wine", page: "Wine.html" },
+
+    // Whiskey products
+    { name: "chivas", category: "whiskey", page: "Whiskey.html" },
+    { name: "jack daniels", category: "whiskey", page: "Whiskey.html" },
+    { name: "ballantine", category: "whiskey", page: "Whiskey.html" },
+    { name: "black label", category: "whiskey", page: "Whiskey.html" },
+    { name: "red label", category: "whiskey", page: "Whiskey.html" },
+    { name: "double black", category: "whiskey", page: "Whiskey.html" },
+    { name: "william lowson", category: "whiskey", page: "Whiskey.html" },
+
+    // Tequila products
+    { name: "jose cuervo", category: "tequila", page: "Whiskey.html" },
+    { name: "olmeca", category: "tequila", page: "Whiskey.html" },
+    { name: "patron", category: "tequila", page: "Whiskey.html" },
+    { name: "camino", category: "tequila", page: "Whiskey.html" },
+
+    // Gin & Vodka products
+    { name: "beefeater", category: "gin", page: "GinVodka.html" },
+    { name: "gordon", category: "gin", page: "GinVodka.html" },
+    { name: "tanqueray", category: "gin", page: "GinVodka.html" },
+    { name: "hendrick", category: "gin", page: "GinVodka.html" },
+    { name: "absolute", category: "vodka", page: "GinVodka.html" },
+    { name: "smirnoff", category: "vodka", page: "GinVodka.html" },
+    { name: "belvedere", category: "vodka", page: "GinVodka.html" },
+    { name: "ciroc", category: "vodka", page: "GinVodka.html" },
+    { name: "stoli", category: "vodka", page: "GinVodka.html" },
+
+    // Rum products
+    { name: "bacardi", category: "rum", page: "Rum.html" },
+    { name: "captain morgan", category: "rum", page: "Rum.html" },
+    { name: "havana club", category: "rum", page: "Rum.html" },
+    { name: "malibu", category: "rum", page: "Rum.html" },
+
+    // Single Malt products
+    { name: "glenfiddich", category: "single malt", page: "SingleMalt.html" },
+    { name: "glenlivet", category: "single malt", page: "SingleMalt.html" },
+
+    // Champagne products
+    { name: "moet", category: "champagne", page: "Champagne.html" },
+    { name: "veuve clicquot", category: "champagne", page: "Champagne.html" },
+    { name: "ruinart", category: "champagne", page: "Champagne.html" },
+    { name: "courvoisier", category: "champagne", page: "Champagne.html" },
+    { name: "hennessy", category: "champagne", page: "Champagne.html" },
+    { name: "martel", category: "champagne", page: "Champagne.html" },
+    { name: "remy martin", category: "champagne", page: "Champagne.html" },
+
+    // Beer products
+    { name: "bavaria", category: "beer", page: "Beer.html" },
+    { name: "brok", category: "beer", page: "Beer.html" },
+    { name: "carlsberg", category: "beer", page: "Beer.html" },
+    { name: "exo", category: "beer", page: "Beer.html" },
+    { name: "guarana", category: "beer", page: "Beer.html" },
+    { name: "leffe", category: "beer", page: "Beer.html" },
+    { name: "savanna", category: "beer", page: "Beer.html" },
+    { name: "stella artois", category: "beer", page: "Beer.html" },
+  ],
+};
+
+// Search function with improved regex matching
+function performSearch(query) {
+  if (!query || query.trim().length < 2) {
+    return null;
+  }
+
+  const searchTerm = query.toLowerCase().trim();
+
+  // Create regex pattern for flexible matching
+  const searchPattern = new RegExp(
+    searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+    "i"
+  );
+
+  // First, check for exact category matches
+  for (const category of searchData.categories) {
+    if (
+      searchPattern.test(category.name) ||
+      category.keywords.some((keyword) => searchPattern.test(keyword))
+    ) {
+      return {
+        type: "category",
+        name: category.name,
+        page: category.page,
+        query: searchTerm,
+      };
+    }
+  }
+
+  // Then, check for product matches with regex
+  for (const product of searchData.products) {
+    if (searchPattern.test(product.name)) {
+      return {
+        type: "product",
+        name: product.name,
+        category: product.category,
+        page: product.page,
+        query: searchTerm,
+      };
+    }
+  }
+
+  // Fuzzy matching for products (partial word matches)
+  const fuzzyPattern = new RegExp(searchTerm.split("").join(".*"), "i");
+  for (const product of searchData.products) {
+    if (fuzzyPattern.test(product.name)) {
+      return {
+        type: "product",
+        name: product.name,
+        category: product.category,
+        page: product.page,
+        query: searchTerm,
+      };
+    }
+  }
+
+  return null;
+}
+
+// Handle search functionality
+function handleSearch() {
+  const searchInputs = document.querySelectorAll(
+    ".input-search-field, .sub-search-input"
+  );
+
+  searchInputs.forEach((input) => {
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const query = this.value.trim();
+
+        if (query.length >= 2) {
+          const result = performSearch(query);
+
+          if (result) {
+            // Store search result in sessionStorage for filtering
+            sessionStorage.setItem("searchResult", JSON.stringify(result));
+            sessionStorage.setItem("searchQuery", query);
+
+            // Clear the input field
+            this.value = "";
+
+            // Redirect to the appropriate page
+            window.location.href = result.page;
+          } else {
+            // Show no results message
+            showNoResultsMessage(query);
+            // Clear the input field
+            this.value = "";
+            // Keep focus on input for mobile
+            this.focus();
+          }
+        } else {
+          // Show message for short queries
+          showNoResultsMessage("Please enter at least 2 characters");
+          // Clear the input field
+          this.value = "";
+          this.focus();
+        }
+      }
+    });
+  });
+
+  // Handle search button clicks
+  const searchButtons = document.querySelectorAll(".searchButton");
+  searchButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Find the search input - try multiple selectors for mobile compatibility
+      let searchInput =
+        this.parentElement.querySelector(".input-search-field") ||
+        this.parentElement.querySelector(".sub-search-input") ||
+        document.querySelector(".input-search-field") ||
+        document.querySelector(".sub-search-input");
+
+      if (searchInput) {
+        const query = searchInput.value.trim();
+
+        // Don't clear the input immediately on mobile
+        if (query.length >= 2) {
+          const result = performSearch(query);
+
+          if (result) {
+            // Store search result in sessionStorage for filtering
+            sessionStorage.setItem("searchResult", JSON.stringify(result));
+            sessionStorage.setItem("searchQuery", query);
+
+            // Clear the input field
+            searchInput.value = "";
+
+            // Redirect to the appropriate page
+            window.location.href = result.page;
+          } else {
+            // Show no results message in a better way
+            showNoResultsMessage(query);
+            // Clear the input field
+            searchInput.value = "";
+            // Keep focus on input for mobile
+            searchInput.focus();
+          }
+        } else {
+          // Show message for short queries
+          showNoResultsMessage("Please enter at least 2 characters");
+          // Clear the input field
+          searchInput.value = "";
+          searchInput.focus();
+        }
+      }
+    });
+  });
+}
+
+// Apply search filters when page loads
+function applySearchFilters() {
+  const searchResult = sessionStorage.getItem("searchResult");
+  const searchQuery = sessionStorage.getItem("searchQuery");
+
+  if (searchResult && searchQuery) {
+    const result = JSON.parse(searchResult);
+
+    // Clear previous search
+    sessionStorage.removeItem("searchResult");
+    sessionStorage.removeItem("searchQuery");
+
+    // Apply filters based on search result
+    if (result.type === "product") {
+      // Filter to show only matching products
+      filterProductsByName(result.name);
+    } else if (result.type === "category") {
+      // Filter to show only matching category
+      filterProductsByCategory(result.name);
+    }
+
+    // Show search results message
+    showSearchResultsMessage(searchQuery, result);
+  }
+}
+
+// Show search results message
+function showSearchResultsMessage(query, result) {
+  const message = document.createElement("div");
+  message.className = "search-results-message";
+  message.innerHTML = `
+    <div class="search-message-content">
+      <h3>Search Results for "${query}"</h3>
+      <p>Found ${result.type === "product" ? "product" : "category"}: ${
+    result.name
+  }</p>
+      <button onclick="clearSearchResults()" class="clear-search-btn">Clear Search</button>
+    </div>
+  `;
+
+  // Insert message at the top of the main content
+  const mainContent = document.querySelector(
+    ".wine-main-content, .spirits-container, .discover"
+  );
+  if (mainContent) {
+    mainContent.insertBefore(message, mainContent.firstChild);
+  }
+}
+
+// Clear search results
+function clearSearchResults() {
+  const products = document.querySelectorAll(
+    ".wine-product-card, .spirit-card"
+  );
+  products.forEach((product) => {
+    product.style.display = "block";
+    product.classList.remove("search-highlight");
+  });
+
+  const message = document.querySelector(".search-results-message");
+  if (message) {
+    message.remove();
+  }
+}
+
+// Show no results message
+function showNoResultsMessage(query) {
+  // Create a temporary message element
+  const message = document.createElement("div");
+  message.className = "no-results-message";
+  message.innerHTML = `
+    <div class="no-results-content">
+      <h3>No results found for "${query}"</h3>
+      <p>Try searching for:</p>
+      <ul>
+        <li>Categories: wine, whiskey, beer, gin, vodka, rum, tequila</li>
+        <li>Brands: chivas, jack daniels, bacardi, absolute, beefeater</li>
+        <li>Types: sparkling wine, single malt, cognac</li>
+      </ul>
+    </div>
+  `;
+
+  // Insert message at the top of the page
+  const mainContent = document.querySelector(
+    ".navAll, .wine-page-container, .spirits-container"
+  );
+  if (mainContent) {
+    mainContent.insertBefore(message, mainContent.firstChild);
+
+    // Remove message after 5 seconds
+    setTimeout(() => {
+      if (message.parentNode) {
+        message.remove();
+      }
+    }, 5000);
+  }
+}
+
+// Improved product filtering with regex
+function filterProductsByName(productName) {
+  const products = document.querySelectorAll(
+    ".wine-product-card, .spirit-card"
+  );
+
+  // Create regex pattern for flexible matching
+  const searchPattern = new RegExp(
+    productName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+    "i"
+  );
+
+  products.forEach((product) => {
+    const productTitle = product.querySelector("h4, .spirit-name");
+    if (productTitle) {
+      const title = productTitle.textContent;
+      if (searchPattern.test(title)) {
+        product.style.display = "block";
+        product.classList.add("search-highlight");
+      } else {
+        product.style.display = "none";
+      }
+    }
+  });
+}
+
+// Improved category filtering with regex
+function filterProductsByCategory(categoryName) {
+  const products = document.querySelectorAll(
+    ".wine-product-card, .spirit-card"
+  );
+
+  // Create regex pattern for flexible matching
+  const searchPattern = new RegExp(
+    categoryName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+    "i"
+  );
+
+  products.forEach((product) => {
+    const productCategory =
+      product.getAttribute("data-category") ||
+      product
+        .closest(".wine-category-section")
+        ?.querySelector(".wine-category-title")?.textContent;
+
+    if (productCategory && searchPattern.test(productCategory)) {
+      product.style.display = "block";
+      product.classList.add("search-highlight");
+    } else {
+      product.style.display = "none";
+    }
+  });
+}
+
+// ========================================
+// BACK TO TOP BUTTON FUNCTIONALITY
+// ========================================
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize search functionality
+  handleSearch();
+  applySearchFilters();
+
+  const backToTopButton = document.getElementById("backToTop");
+
+  if (backToTopButton) {
+    // Show/hide button based on scroll position
+    window.addEventListener("scroll", function () {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.add("show");
+      } else {
+        backToTopButton.classList.remove("show");
+      }
+    });
+
+    // Smooth scroll to top when clicked
+    backToTopButton.addEventListener("click", function () {
+      // Add bouncing animation
+      backToTopButton.classList.add("bounce");
+
+      // Remove bounce class after animation completes
+      setTimeout(() => {
+        backToTopButton.classList.remove("bounce");
+      }, 1000);
+
+      // Smooth scroll to top
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+
+    // Remove bounce class if user scrolls while animation is playing
+    window.addEventListener("scroll", function () {
+      if (backToTopButton.classList.contains("bounce")) {
+        backToTopButton.classList.remove("bounce");
+      }
+    });
+  }
+
+  // Mobile search functionality
+  const mobileSearchToggle = document.querySelector(".mobile-search-toggle");
+  const mobileSearchOverlay = document.querySelector(".mobile-search-overlay");
+  const searchBar = document.querySelector(".search-bar");
+  const searchInput = document.querySelector(".input-search-field");
+  const searchClose = document.querySelector(".search-close");
+  const body = document.body;
+
+  if (mobileSearchToggle && mobileSearchOverlay && searchBar) {
+    // Open mobile search
+    mobileSearchToggle.addEventListener("click", function () {
+      body.classList.add("mobile-search-active");
+      setTimeout(() => {
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }, 100);
+    });
+
+    // Close mobile search
+    function closeMobileSearch() {
+      body.classList.remove("mobile-search-active");
+      if (searchInput) {
+        searchInput.blur();
+        searchInput.value = "";
+      }
+    }
+
+    // Close on overlay click
+    mobileSearchOverlay.addEventListener("click", closeMobileSearch);
+
+    // Close on close button click
+    if (searchClose) {
+      searchClose.addEventListener("click", closeMobileSearch);
+    }
+
+    // Close on escape key
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "Escape" &&
+        body.classList.contains("mobile-search-active")
+      ) {
+        closeMobileSearch();
+      }
+    });
+
+    // Close when search is performed
+    const searchButton = document.querySelector(".searchButton");
+    if (searchButton) {
+      searchButton.addEventListener("click", function () {
+        // Clear the search input
+        if (searchInput) {
+          searchInput.value = "";
+        }
+        setTimeout(() => {
+          closeMobileSearch();
+        }, 500);
+      });
+    }
+
+    // Close on enter key in search input
+    if (searchInput) {
+      searchInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          // Clear the search input
+          this.value = "";
+          setTimeout(() => {
+            closeMobileSearch();
+          }, 500);
+        }
+      });
+    }
+  }
 });

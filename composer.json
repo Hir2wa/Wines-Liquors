@@ -3,7 +3,7 @@
     "description": "Wines & Liquors E-commerce Website",
     "type": "project",
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.0"
     },
     "autoload": {
         "psr-4": {
@@ -12,7 +12,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php setup/database_setup.php"
+            "php setup-railway.php"
         ]
     }
 }

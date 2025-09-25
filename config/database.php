@@ -13,7 +13,7 @@ class Database {
     private $conn;
 
     public function __construct() {
-        // Check if we're on Heroku (production)
+        // Check if we're on Railway (production)
         if (getenv('DATABASE_URL')) {
             $url = parse_url(getenv('DATABASE_URL'));
             $this->host = $url['host'];
@@ -21,8 +21,17 @@ class Database {
             $this->username = $url['user'];
             $this->password = $url['pass'];
             $this->port = $url['port'] ?? '5432';
-        } else {
-            // Local development
+        } 
+        // Check if we're on Railway with individual environment variables
+        else if (getenv('PGHOST')) {
+            $this->host = getenv('PGHOST');
+            $this->db_name = getenv('PGDATABASE');
+            $this->username = getenv('PGUSER');
+            $this->password = getenv('PGPASSWORD');
+            $this->port = getenv('PGPORT') ?? '5432';
+        } 
+        // Local development
+        else {
             $this->host = 'localhost';
             $this->db_name = 'total_wine_orders';
             $this->username = 'postgres';

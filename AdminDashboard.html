@@ -14,8 +14,115 @@
       /* Admin Dashboard Specific Styles */
       .admin-container {
         display: flex;
+        flex-direction: column;
         min-height: 100vh;
         background: #f8f9fa;
+      }
+
+      /* Admin Header */
+      .admin-header {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+        padding: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
+        height: 70px;
+      }
+
+      .admin-header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 30px;
+        height: 100%;
+        margin-left: 250px; /* Account for sidebar width */
+      }
+
+      .admin-logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .admin-logo img {
+        height: 40px;
+        width: auto;
+      }
+
+      .admin-logo h1 {
+        color: #2c3e50;
+        font-size: 1.5rem;
+        margin: 0;
+        font-weight: 600;
+      }
+
+      .admin-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .notification-bell {
+        position: relative;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 50%;
+        transition: background 0.3s ease;
+      }
+
+      .notification-bell:hover {
+        background: #f8f9fa;
+      }
+
+      .notification-bell i {
+        font-size: 1.2rem;
+        color: #6c757d;
+      }
+
+      .notification-count {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #dc3545;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+      }
+
+      .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .admin-profile:hover {
+        background: #e9ecef;
+      }
+
+      .admin-profile i {
+        color: #dc3545;
+        font-size: 1rem;
+      }
+
+      .admin-profile span {
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 0.9rem;
       }
 
       .admin-sidebar {
@@ -75,9 +182,19 @@
 
       .admin-main {
         margin-left: 250px;
+        margin-top: 70px; /* Account for fixed header */
         flex: 1;
         padding: 30px;
         overflow-y: auto;
+        min-height: calc(100vh - 70px);
+        max-width: calc(100vw - 250px);
+      }
+
+      /* Content wrapper for better centering */
+      .content-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
       }
 
       /* Content Sections */
@@ -95,7 +212,10 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
-        padding-bottom: 15px;
+        padding: 20px 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         border-bottom: 2px solid #e9ecef;
       }
 
@@ -103,6 +223,7 @@
         color: #2c3e50;
         font-size: 1.8rem;
         margin: 0;
+        font-weight: 600;
       }
 
       .header-actions {
@@ -357,8 +478,15 @@
           position: relative;
         }
         
+        .admin-header-content {
+          margin-left: 0;
+          padding: 0 15px;
+        }
+        
         .admin-main {
           margin-left: 0;
+          margin-top: 70px;
+          padding: 15px;
         }
         
         .orders-filters {
@@ -369,6 +497,14 @@
         .reports-grid,
         .settings-grid {
           grid-template-columns: 1fr;
+        }
+        
+        .admin-logo h1 {
+          font-size: 1.2rem;
+        }
+        
+        .admin-actions {
+          gap: 10px;
         }
       }
     </style>
@@ -449,6 +585,7 @@
 
       <!-- Admin Main Content -->
       <main class="admin-main">
+        <div class="content-wrapper">
         <!-- Dashboard Overview -->
         <section id="dashboard" class="content-section active">
           <div class="dashboard-overview">
@@ -827,6 +964,7 @@
           </div>
         </section>
 
+        </div>
       </main>
     </div>
 

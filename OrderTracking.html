@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Tracking - Total Wine & More</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="Header.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="tracking-container">
+      <!-- Header -->
+      <header class="tracking-header">
+        <div class="container">
+          <div class="header-content">
+            <a href="index.html" class="back-link">
+              <i class="fas fa-arrow-left"></i>
+              Back to Home
+            </a>
+            <div class="logo">
+              <img src="images/logo.png" alt="Total Wine & More Logo" />
+            </div>
+            <div class="header-actions">
+              <a href="MyOrders.html" class="cart-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Order Tracking Section -->
+      <section class="order-tracking-section">
+        <div class="container">
+          <div class="tracking-header-content">
+            <h1>Track Your Order</h1>
+            <p>Enter your order number to track your shipment</p>
+          </div>
+
+          <!-- Order Search -->
+          <div class="order-search">
+            <div class="search-form">
+              <input
+                type="text"
+                id="orderNumber"
+                placeholder="Enter Order Number (e.g., ORD-001)"
+                class="order-input"
+              />
+              <button onclick="trackOrder()" class="track-btn">
+                <i class="fas fa-search"></i>
+                Track Order
+              </button>
+            </div>
+          </div>
+
+          <!-- Order Details -->
+          <div class="order-details" id="orderDetails" style="display: none">
+            <div class="order-info">
+              <div class="order-header">
+                <h2>Order #<span id="orderId">ORD-001</span></h2>
+                <div class="order-status">
+                  <span class="status-badge" id="orderStatus">Processing</span>
+                </div>
+              </div>
+
+              <div class="order-summary">
+                <div class="summary-item">
+                  <label>Order Date:</label>
+                  <span id="orderDate">January 15, 2024</span>
+                </div>
+                <div class="summary-item">
+                  <label>Total Amount:</label>
+                  <span id="orderTotal">$125.00</span>
+                </div>
+                <div class="summary-item">
+                  <label>Payment Status:</label>
+                  <span id="paymentStatus" class="status-paid">Paid</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="order-items">
+              <h3>Order Items</h3>
+              <div class="items-list">
+                <div class="order-item">
+                  <div class="item-image">
+                    <img src="images/WINE1.webp" alt="Wine Bottle" />
+                  </div>
+                  <div class="item-details">
+                    <h4>Lallier Champagne</h4>
+                    <p>75CL</p>
+                    <span class="item-price">$45.00</span>
+                  </div>
+                  <div class="item-quantity">
+                    <span>Qty: 2</span>
+                  </div>
+                </div>
+                <div class="order-item">
+                  <div class="item-image">
+                    <img src="images/WINE2.webp" alt="Wine Bottle" />
+                  </div>
+                  <div class="item-details">
+                    <h4>Swiftsure Marlborough</h4>
+                    <p>75CL</p>
+                    <span class="item-price">$35.00</span>
+                  </div>
+                  <div class="item-quantity">
+                    <span>Qty: 1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tracking Timeline -->
+            <div class="tracking-timeline">
+              <h3>Order Progress</h3>
+              <div class="timeline">
+                <div class="timeline-item completed">
+                  <div class="timeline-marker">
+                    <i class="fas fa-check"></i>
+                  </div>
+                  <div class="timeline-content">
+                    <h4>Order Placed</h4>
+                    <p>Your order has been received and confirmed</p>
+                    <span class="timeline-date">Jan 15, 2024 - 10:30 AM</span>
+                  </div>
+                </div>
+                <div class="timeline-item completed">
+                  <div class="timeline-marker">
+                    <i class="fas fa-credit-card"></i>
+                  </div>
+                  <div class="timeline-content">
+                    <h4>Payment Confirmed</h4>
+                    <p>Payment has been processed successfully</p>
+                    <span class="timeline-date">Jan 15, 2024 - 10:35 AM</span>
+                  </div>
+                </div>
+                <div class="timeline-item active">
+                  <div class="timeline-marker">
+                    <i class="fas fa-box"></i>
+                  </div>
+                  <div class="timeline-content">
+                    <h4>Processing</h4>
+                    <p>Your order is being prepared for shipment</p>
+                    <span class="timeline-date">Jan 15, 2024 - 11:00 AM</span>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-marker">
+                    <i class="fas fa-shipping-fast"></i>
+                  </div>
+                  <div class="timeline-content">
+                    <h4>Shipped</h4>
+                    <p>Your order is on its way</p>
+                    <span class="timeline-date">Estimated: Jan 16, 2024</span>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-marker">
+                    <i class="fas fa-home"></i>
+                  </div>
+                  <div class="timeline-content">
+                    <h4>Delivered</h4>
+                    <p>Your order has been delivered</p>
+                    <span class="timeline-date">Estimated: Jan 17, 2024</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delivery Information -->
+            <div class="delivery-info">
+              <h3>Delivery Information</h3>
+              <div class="delivery-details">
+                <div class="delivery-address">
+                  <h4>Delivery Address</h4>
+                  <p>
+                    John Doe<br />
+                    123 Main Street<br />
+                    Kigali, Rwanda<br />
+                    +250 123 456 789
+                  </p>
+                </div>
+                <div class="delivery-method">
+                  <h4>Delivery Method</h4>
+                  <p>Standard Delivery (3-5 business days)</p>
+                  <p>Tracking Number: <strong>TRK123456789</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Order Found -->
+          <div class="no-order-found" id="noOrderFound" style="display: none">
+            <div class="no-order-content">
+              <i class="fas fa-search"></i>
+              <h3>Order Not Found</h3>
+              <p>
+                We couldn't find an order with that number. Please check your
+                order number and try again.
+              </p>
+              <button onclick="clearSearch()" class="btn-primary">
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="js/api-client.js"></script>
+    <script>
+      function trackOrder() {
+        const orderNumber = document.getElementById("orderNumber").value.trim();
+        const orderDetails = document.getElementById("orderDetails");
+        const noOrderFound = document.getElementById("noOrderFound");
+
+        if (!orderNumber) {
+          alert("Please enter an order number");
+          return;
+        }
+
+        // Track order using PHP API
+        trackOrder(orderNumber.toUpperCase())
+          .then((order) => {
+            orderDetails.style.display = "block";
+            noOrderFound.style.display = "none";
+
+            // Update order details with real data
+            document.getElementById("orderId").textContent = order.orderId;
+            document.getElementById("orderDate").textContent = new Date(
+              order.date
+            ).toLocaleDateString();
+            document.getElementById("orderTotal").textContent = order.total;
+            document.getElementById("paymentStatus").textContent =
+              order.paymentStatus;
+            document.getElementById("orderStatus").textContent = order.status;
+            document.getElementById(
+              "orderStatus"
+            ).className = `status-badge ${order.status}`;
+
+            // Update order items
+            updateOrderItems(order.items);
+
+            // Update delivery information
+            updateDeliveryInfo(order.customerInfo);
+
+            // Update timeline based on status
+            updateTimeline(order.status);
+          })
+          .catch((error) => {
+            console.error("Failed to track order:", error);
+            orderDetails.style.display = "none";
+            noOrderFound.style.display = "block";
+          });
+      }
+
+      function updateOrderItems(items) {
+        const itemsList = document.querySelector(".items-list");
+        itemsList.innerHTML = "";
+
+        items.forEach((item) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "order-item";
+          itemDiv.innerHTML = `
+            <div class="item-image">
+              <img src="${item.image || "images/WINE1.webp"}" alt="${
+            item.name
+          }" />
+            </div>
+            <div class="item-details">
+              <h4>${item.name}</h4>
+              <p>${item.size || "75CL"}</p>
+              <span class="item-price">${item.price}</span>
+            </div>
+            <div class="item-quantity">
+              <span>Qty: ${item.quantity || 1}</span>
+            </div>
+          `;
+          itemsList.appendChild(itemDiv);
+        });
+      }
+
+      function updateDeliveryInfo(customerInfo) {
+        const deliveryAddress = document.querySelector(".delivery-address p");
+        deliveryAddress.innerHTML = `
+          ${customerInfo.firstName} ${customerInfo.lastName}<br>
+          ${customerInfo.address}<br>
+          ${customerInfo.city}, ${customerInfo.country}<br>
+          ${customerInfo.phone}
+        `;
+      }
+
+      function updateTimeline(status) {
+        const timelineItems = document.querySelectorAll(".timeline-item");
+
+        // Reset all items
+        timelineItems.forEach((item) => {
+          item.classList.remove("completed", "active");
+        });
+
+        // Set appropriate status based on order status
+        switch (status) {
+          case "pending":
+            timelineItems[0].classList.add("completed");
+            timelineItems[1].classList.add("active");
+            break;
+          case "processing":
+            timelineItems[0].classList.add("completed");
+            timelineItems[1].classList.add("completed");
+            timelineItems[2].classList.add("active");
+            break;
+          case "shipped":
+            timelineItems[0].classList.add("completed");
+            timelineItems[1].classList.add("completed");
+            timelineItems[2].classList.add("completed");
+            timelineItems[3].classList.add("active");
+            break;
+          case "completed":
+            timelineItems.forEach((item) => item.classList.add("completed"));
+            break;
+        }
+      }
+
+      function clearSearch() {
+        document.getElementById("orderNumber").value = "";
+        document.getElementById("orderDetails").style.display = "none";
+        document.getElementById("noOrderFound").style.display = "none";
+      }
+
+      // Auto-track if order number is in URL
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderNumber = urlParams.get("order");
+        if (orderNumber) {
+          document.getElementById("orderNumber").value = orderNumber;
+          trackOrder();
+        }
+      });
+    </script>
+  </body>
+</html>

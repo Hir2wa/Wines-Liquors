@@ -21,6 +21,17 @@
     <link rel="stylesheet" href="Header.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
+    <script>
+      // Initialize filters as open by default
+      document.addEventListener("DOMContentLoaded", function () {
+        const filterGroups = document.querySelectorAll(
+          ".wine-filter-group.collapsible"
+        );
+        filterGroups.forEach((group) => {
+          group.classList.add("active");
+        });
+      });
+    </script>
   </head>
   <body>
     <!-- Simplified Sub-page Navigation -->
@@ -247,87 +258,22 @@
             <div
               class="wine-product-card"
               data-category="wine-bottle"
-              data-price="100k-100k"
+              data-price="100k"
               data-size="750ml"
             >
-              <img src="images/Pintanegra.jpeg" alt="Pinta Negra 75L" />
+              <img
+                src="image/WINE BOTTLE/PINTA NEGRA 75CL.jpg"
+                alt="Pinta Negra 75CL"
+              />
               <div class="wine-product-info">
-                <h4>Pinta Negra 75L</h4>
+                <h4>Pinta Negra 75CL</h4>
                 <p class="wine-size">750ML</p>
                 <div class="wine-product-footer">
                   <p class="wine-price">100,000frw</p>
                   <a
                     href="#"
                     class="wine-add-to-cart"
-                    onclick="addToCart('Pinta Negra 75L', '100,000frw'); return false;"
-                  >
-                    <i class="fas fa-shopping-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Pinta Negra 75L" />
-              <div class="wine-product-info">
-                <h4>Pinta Negra 75L</h4>
-                <p class="wine-size">750ML</p>
-                <div class="wine-product-footer">
-                  <p class="wine-price">100,000frw</p>
-                  <a
-                    href="#"
-                    class="wine-add-to-cart"
-                    onclick="addToCart('Pinta Negra 75L', '100,000frw'); return false;"
-                  >
-                    <i class="fas fa-shopping-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Pinta Negra 75L" />
-              <div class="wine-product-info">
-                <h4>Pinta Negra 75L</h4>
-                <p class="wine-size">750ML</p>
-                <div class="wine-product-footer">
-                  <p class="wine-price">100,000frw</p>
-                  <a
-                    href="#"
-                    class="wine-add-to-cart"
-                    onclick="addToCart('Pinta Negra 75L', '100,000frw'); return false;"
-                  >
-                    <i class="fas fa-shopping-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Pinta Negra 75L" />
-              <div class="wine-product-info">
-                <h4>Pinta Negra 75L</h4>
-                <p class="wine-size">750ML</p>
-                <div class="wine-product-footer">
-                  <p class="wine-price">100,000frw</p>
-                  <a
-                    href="#"
-                    class="wine-add-to-cart"
-                    onclick="addToCart('Pinta Negra 75L', '100,000frw'); return false;"
-                  >
-                    <i class="fas fa-shopping-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Pinta Negra 75L" />
-              <div class="wine-product-info">
-                <h4>Pinta Negra 75L</h4>
-                <p class="wine-size">750ML</p>
-                <div class="wine-product-footer">
-                  <p class="wine-price">100,000frw</p>
-                  <a
-                    href="#"
-                    class="wine-add-to-cart"
-                    onclick="addToCart('Pinta Negra 75L', '100,000frw'); return false;"
+                    onclick="addToCart('Pinta Negra 75CL', '100,000frw'); return false;"
                   >
                     <i class="fas fa-shopping-cart"></i>
                   </a>
@@ -335,8 +281,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Nederburg" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="120k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/GRAND VERDUS RESERVE.jpg"
+                alt="Grand Verdus Reserve"
+              />
               <div class="wine-product-info">
                 <h4>Grand Verdus Reserve</h4>
                 <p class="wine-size">750ML</p>
@@ -353,8 +307,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Grand Verdus" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="130k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/JACOBS DOUBLE BARREL.jpg"
+                alt="Jacobs Double Barrel"
+              />
               <div class="wine-product-info">
                 <h4>Jacobs Double Barrel</h4>
                 <p class="wine-size">750ML</p>
@@ -371,8 +333,13 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Nederburg" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="110k"
+              data-size="750ml"
+            >
+              <img src="image/WINE BOTTLE/NEDERBURG.jpg" alt="Nederburg" />
               <div class="wine-product-info">
                 <h4>Nederburg</h4>
                 <p class="wine-size">750ML</p>
@@ -389,8 +356,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Grand Verdus" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="115k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/GRAND VERDUS.jpg"
+                alt="Grand Verdus"
+              />
               <div class="wine-product-info">
                 <h4>Grand Verdus</h4>
                 <p class="wine-size">750ML</p>
@@ -407,8 +382,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Grand Verdus Generation" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="135k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/GRAND VERDUS GENERATION.jpg"
+                alt="Grand Verdus Generation"
+              />
               <div class="wine-product-info">
                 <h4>Grand Verdus Generation</h4>
                 <p class="wine-size">750ML</p>
@@ -425,8 +408,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Jacobs Reserve" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="140k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/JACOBS RESERVE.jpg"
+                alt="Jacobs Reserve"
+              />
               <div class="wine-product-info">
                 <h4>Jacobs Reserve</h4>
                 <p class="wine-size">750ML</p>
@@ -443,8 +434,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Cellar Cask 75CL" />
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="95k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/CELLAR CASK 75CL.jpg"
+                alt="Cellar Cask 75CL"
+              />
               <div class="wine-product-info">
                 <h4>Cellar Cask 75CL</h4>
                 <p class="wine-size">750ML</p>
@@ -460,11 +459,89 @@
                 </div>
               </div>
             </div>
+
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="90k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/FOURCOUSINS 75CL.jpg"
+                alt="Four Cousins 75CL"
+              />
+              <div class="wine-product-info">
+                <h4>Four Cousins 75CL</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">90,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Four Cousins 75CL', '90,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="125k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/GRAND SUD MERLOT,CHARDONAY.jpg"
+                alt="Grand Sud Merlot, Chardonnay"
+              />
+              <div class="wine-product-info">
+                <h4>Grand Sud Merlot, Chardonnay</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">125,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Grand Sud Merlot, Chardonnay', '125,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="wine-product-card"
+              data-category="wine-bottle"
+              data-price="145k"
+              data-size="750ml"
+            >
+              <img
+                src="image/WINE BOTTLE/GRAND VERDUS BOREDOUX SUPERIER.jpg"
+                alt="Grand Verdus Boredoux Superier"
+              />
+              <div class="wine-product-info">
+                <h4>Grand Verdus Boredoux Superier</h4>
+                <p class="wine-size">750ML</p>
+                <div class="wine-product-footer">
+                  <p class="wine-price">145,000frw</p>
+                  <a
+                    href="#"
+                    class="wine-add-to-cart"
+                    onclick="addToCart('Grand Verdus Boredoux Superier', '145,000frw'); return false;"
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <!-- Sparkling Wine Section -->
-        <section class="wine-category-section">
+        <section class="wine-category-section" data-category="sparkling-wine">
           <div class="wine-category-header">
             <h2 class="wine-category-title">Sparkling Wine</h2>
             <p class="wine-category-subtitle">
@@ -472,8 +549,16 @@
             </p>
           </div>
           <div class="wine-products-grid">
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Sparkling Wine 1" />
+            <div
+              class="wine-product-card"
+              data-category="sparkling-wine"
+              data-price="140k"
+              data-size="750ml"
+            >
+              <img
+                src="image/SPARKLING WINE/BARON SPARKLING.jpg"
+                alt="Baron Sparkling"
+              />
               <div class="wine-product-info">
                 <h4>Baron Sparkling</h4>
                 <p class="wine-size">750ML</p>
@@ -490,8 +575,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Sparkling Wine 2" />
+            <div
+              class="wine-product-card"
+              data-category="sparkling-wine"
+              data-price="125k"
+              data-size="750ml"
+            >
+              <img
+                src="image/SPARKLING WINE/CANITELLI PROSSECCO.jpg"
+                alt="Canitelli Prossecco"
+              />
               <div class="wine-product-info">
                 <h4>Canitelli Prossecco</h4>
                 <p class="wine-size">750ML</p>
@@ -508,8 +601,13 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Massotina" />
+            <div
+              class="wine-product-card"
+              data-category="sparkling-wine"
+              data-price="135k"
+              data-size="750ml"
+            >
+              <img src="image/SPARKLING WINE/MASOTTINA.jpg" alt="Massotina" />
               <div class="wine-product-info">
                 <h4>Massotina</h4>
                 <p class="wine-size">750ML</p>
@@ -526,8 +624,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Signore Prossecco" />
+            <div
+              class="wine-product-card"
+              data-category="sparkling-wine"
+              data-price="120k"
+              data-size="750ml"
+            >
+              <img
+                src="image/SPARKLING WINE/SIGNORE PROSSECCO.jpg"
+                alt="Signore Prossecco"
+              />
               <div class="wine-product-info">
                 <h4>Signore Prossecco</h4>
                 <p class="wine-size">750ML</p>
@@ -544,8 +650,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Maison Castel" />
+            <div
+              class="wine-product-card"
+              data-category="sparkling-wine"
+              data-price="130k"
+              data-size="750ml"
+            >
+              <img
+                src="image/SPARKLING WINE/MAISON CASTEL.jpg"
+                alt="Maison Castel"
+              />
               <div class="wine-product-info">
                 <h4>Maison Castel</h4>
                 <p class="wine-size">750ML</p>
@@ -562,8 +676,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Freixnet Ice" />
+            <div
+              class="wine-product-card"
+              data-category="sparkling-wine"
+              data-price="145k"
+              data-size="750ml"
+            >
+              <img
+                src="image/SPARKLING WINE/FREIXNET ICE.jpg"
+                alt="Freixnet Ice"
+              />
               <div class="wine-product-info">
                 <h4>Freixnet Ice</h4>
                 <p class="wine-size">750ML</p>
@@ -583,14 +705,19 @@
         </section>
 
         <!-- Wine Box Section -->
-        <section class="wine-category-section">
+        <section class="wine-category-section" data-category="wine-box">
           <div class="wine-category-header">
             <h2 class="wine-category-title">Wine Box</h2>
             <p class="wine-category-subtitle">Convenient boxed wine options</p>
           </div>
           <div class="wine-products-grid">
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Wine Box 1" />
+            <div
+              class="wine-product-card"
+              data-category="wine-box"
+              data-price="180k"
+              data-size="5l"
+            >
+              <img src="image/WINE BOX/DROSTDY 5L.jpg" alt="Drostdy 5L" />
               <div class="wine-product-info">
                 <h4>Drostdy 5L</h4>
                 <p class="wine-size">5000ML</p>
@@ -607,8 +734,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Wine Box 2" />
+            <div
+              class="wine-product-card"
+              data-category="wine-box"
+              data-price="200k"
+              data-size="5l"
+            >
+              <img
+                src="image/WINE BOX/PINTA NEGRA 5L.jpg"
+                alt="Pinta Negra 5L"
+              />
               <div class="wine-product-info">
                 <h4>Pinta Negra 5L</h4>
                 <p class="wine-size">5000ML</p>
@@ -625,8 +760,13 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Wine Box 3" />
+            <div
+              class="wine-product-card"
+              data-category="wine-box"
+              data-price="190k"
+              data-size="5l"
+            >
+              <img src="image/WINE BOX/BARON 5L.jpg" alt="Baron 5L" />
               <div class="wine-product-info">
                 <h4>Baron 5L</h4>
                 <p class="wine-size">5000ML</p>
@@ -643,8 +783,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="FourCousins 5L" />
+            <div
+              class="wine-product-card"
+              data-category="wine-box"
+              data-price="170k"
+              data-size="5l"
+            >
+              <img
+                src="image/WINE BOX/FOURCOUSINS 5L.jpg"
+                alt="FourCousins 5L"
+              />
               <div class="wine-product-info">
                 <h4>FourCousins 5L</h4>
                 <p class="wine-size">5000ML</p>
@@ -661,8 +809,16 @@
               </div>
             </div>
 
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Cellar Cask 5L" />
+            <div
+              class="wine-product-card"
+              data-category="wine-box"
+              data-price="185k"
+              data-size="5l"
+            >
+              <img
+                src="image/WINE BOX/CELLAR CASK 5L.jpg"
+                alt="Cellar Cask 5L"
+              />
               <div class="wine-product-info">
                 <h4>Cellar Cask 5L</h4>
                 <p class="wine-size">5000ML</p>
@@ -672,24 +828,6 @@
                     href="#"
                     class="wine-add-to-cart"
                     onclick="addToCart('Cellar Cask 5L', '185,000frw'); return false;"
-                  >
-                    <i class="fas fa-shopping-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="wine-product-card">
-              <img src="images/Pintanegra.jpeg" alt="Yulian 5L" />
-              <div class="wine-product-info">
-                <h4>Yulian 5L</h4>
-                <p class="wine-size">5000ML</p>
-                <div class="wine-product-footer">
-                  <p class="wine-price">175,000frw</p>
-                  <a
-                    href="#"
-                    class="wine-add-to-cart"
-                    onclick="addToCart('Yulian 5L', '175,000frw'); return false;"
                   >
                     <i class="fas fa-shopping-cart"></i>
                   </a>

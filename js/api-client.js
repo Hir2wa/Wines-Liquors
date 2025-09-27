@@ -5,7 +5,7 @@
 
 class APIClient {
   constructor() {
-    this.baseURL = "http://localhost:8000/api/";
+    this.baseURL = "/api/";
     this.defaultHeaders = {
       "Content-Type": "application/json",
     };

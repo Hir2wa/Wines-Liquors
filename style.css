@@ -1806,9 +1806,30 @@ body {
 
 /* Mobile Responsive Sub-nav */
 @media (max-width: 768px) {
+  /* Prevent mobile scroll issues */
+  body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sub-page-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .sub-nav-container {
-    padding: 10px 15px;
-    gap: 12px;
+    padding: 8px 10px;
+    gap: 8px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
   }
 
   .back-link span {
@@ -1816,14 +1837,61 @@ body {
   }
 
   .back-link {
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 6px;
+    flex-shrink: 0;
   }
 
-  /* Sub-search styles moved to consolidated section */
+  .sub-logo {
+    flex-shrink: 0;
+  }
 
   .sub-logo img {
-    height: 35px;
+    height: 30px;
+    width: auto;
+  }
+
+  .sub-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .sub-search {
+    display: none;
+  }
+
+  .sub-cart {
+    padding: 6px;
+    border-radius: 50%;
+  }
+
+  /* Mobile Breadcrumb Fixes */
+  .breadcrumb-container {
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb-wrapper {
+    padding: 6px 10px;
+    margin: 0;
+  }
+
+  .breadcrumb-path {
+    font-size: 11px;
+    gap: 3px;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb-link {
+    font-size: 11px;
+    padding: 2px 4px;
+  }
+
+  .breadcrumb-separator {
+    font-size: 9px;
+    margin: 0 2px;
   }
 }
 

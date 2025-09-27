@@ -395,7 +395,7 @@ body {
 #popular-list {
   display: flex;
   gap: 24px;
-  padding: 0 20px;
+  padding: 0 50px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
@@ -452,7 +452,7 @@ body {
 .spirits-container {
   display: flex;
   gap: 24px;
-  padding: 0 20px;
+  padding: 0 50px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
@@ -518,7 +518,7 @@ body {
 .wines-container {
   display: flex;
   gap: 24px;
-  padding: 0 20px;
+  padding: 0 50px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
@@ -1577,7 +1577,7 @@ body {
   /* Popular Categories - Large Desktop */
   #popular-list {
     gap: 30px;
-    padding: 0 40px;
+    padding: 0 50px;
   }
 
   #popular-list .items-desctiption {
@@ -1601,7 +1601,7 @@ body {
   /* Spirits Section - Large Desktop */
   .spirits-container {
     gap: 30px;
-    padding: 0 40px;
+    padding: 0 50px;
   }
 
   .spirit-card {
@@ -1627,7 +1627,7 @@ body {
   /* Wines Section - Large Desktop */
   .wines-container {
     gap: 30px;
-    padding: 0 40px;
+    padding: 0 50px;
   }
 
   .wine-card {

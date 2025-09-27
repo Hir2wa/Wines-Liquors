@@ -291,33 +291,96 @@ function initializeCart() {
   }
 }
 
+// Flash message function
+function showFlashMessage(message, type = "info") {
+  // Remove any existing flash message
+  const existingMessage = document.querySelector(".flash-message");
+  if (existingMessage) {
+    existingMessage.remove();
+  }
+
+  // Create flash message element
+  const flashMessage = document.createElement("div");
+  flashMessage.className = `flash-message flash-${type}`;
+  flashMessage.innerHTML = `
+    <div class="flash-content">
+      <i class="fas fa-${
+        type === "success" ? "check-circle" : "info-circle"
+      }"></i>
+      <span>${message}</span>
+    </div>
+  `;
+
+  // Add styles
+  flashMessage.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === "success" ? "#28a745" : "#17a2b8"};
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    font-weight: 500;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease-out;
+  `;
+
+  // Add animation styles
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    .flash-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .flash-content i {
+      font-size: 18px;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Add to page
+  document.body.appendChild(flashMessage);
+
+  // Auto remove after 3 seconds
+  setTimeout(() => {
+    if (flashMessage.parentNode) {
+      flashMessage.style.animation = "slideInRight 0.3s ease-out reverse";
+      setTimeout(() => {
+        flashMessage.remove();
+      }, 300);
+    }
+  }, 3000);
+}
+
 // Handle profile click with validation
 function handleProfileClick() {
   const userData = localStorage.getItem("userData");
 
   if (!userData) {
-    // User not logged in - show login prompt
-    if (
-      confirm(
-        "You need to sign in to view your profile. Would you like to sign in now?"
-      )
-    ) {
-      window.location.href = "login.html";
-    }
-  } else {
-    // User is logged in - show options (Profile or Logout)
-    const user = JSON.parse(userData);
-    const choice = confirm(
-      `Welcome ${user.firstName}!\n\nClick OK to go to your profile, or Cancel to logout.`
+    // User not logged in - show message and redirect to create account
+    showFlashMessage(
+      "Please create an account to access your profile.",
+      "success"
     );
-
-    if (choice) {
-      // Go to profile page
-      window.location.href = "Profile.html";
-    } else {
-      // Logout
-      logout();
-    }
+    setTimeout(() => {
+      window.location.href = "Register.html";
+    }, 2000);
+  } else {
+    // User is logged in - go directly to profile
+    window.location.href = "Profile.html";
   }
 }
 
@@ -326,9 +389,6 @@ function logout() {
   localStorage.removeItem("userData");
   localStorage.removeItem("sessionToken");
   localStorage.removeItem("user_logged_in");
-
-  // Show logout message
-  alert("You have been logged out successfully.");
 
   // Refresh the page to update the UI
   window.location.reload();

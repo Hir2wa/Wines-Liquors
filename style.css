@@ -395,7 +395,7 @@ body {
 #popular-list {
   display: flex;
   gap: 24px;
-  padding: 0 50px;
+  padding: 0 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
@@ -452,7 +452,7 @@ body {
 .spirits-container {
   display: flex;
   gap: 24px;
-  padding: 0 50px;
+  padding: 0 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
@@ -518,7 +518,7 @@ body {
 .wines-container {
   display: flex;
   gap: 24px;
-  padding: 0 50px;
+  padding: 0 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
@@ -850,7 +850,7 @@ body {
     align-items: center;
   }
   .slide-show {
-    margin: 0 10px;
+    margin: 0; /* Remove margins for full screen coverage */
   }
   .discover {
     display: grid;
@@ -1577,7 +1577,7 @@ body {
   /* Popular Categories - Large Desktop */
   #popular-list {
     gap: 30px;
-    padding: 0 50px;
+    padding: 0 40px;
   }
 
   #popular-list .items-desctiption {
@@ -1601,7 +1601,7 @@ body {
   /* Spirits Section - Large Desktop */
   .spirits-container {
     gap: 30px;
-    padding: 0 50px;
+    padding: 0 40px;
   }
 
   .spirit-card {
@@ -1627,7 +1627,7 @@ body {
   /* Wines Section - Large Desktop */
   .wines-container {
     gap: 30px;
-    padding: 0 50px;
+    padding: 0 40px;
   }
 
   .wine-card {
@@ -1806,30 +1806,9 @@ body {
 
 /* Mobile Responsive Sub-nav */
 @media (max-width: 768px) {
-  /* Prevent mobile scroll issues */
-  body {
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .sub-page-nav {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
   .sub-nav-container {
-    padding: 8px 10px;
-    gap: 8px;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: nowrap;
+    padding: 10px 15px;
+    gap: 12px;
   }
 
   .back-link span {
@@ -1837,61 +1816,14 @@ body {
   }
 
   .back-link {
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 6px;
-    flex-shrink: 0;
   }
 
-  .sub-logo {
-    flex-shrink: 0;
-  }
+  /* Sub-search styles moved to consolidated section */
 
   .sub-logo img {
-    height: 30px;
-    width: auto;
-  }
-
-  .sub-nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-
-  .sub-search {
-    display: none;
-  }
-
-  .sub-cart {
-    padding: 6px;
-    border-radius: 50%;
-  }
-
-  /* Mobile Breadcrumb Fixes */
-  .breadcrumb-container {
-    padding: 0;
-    margin: 0;
-  }
-
-  .breadcrumb-wrapper {
-    padding: 6px 10px;
-    margin: 0;
-  }
-
-  .breadcrumb-path {
-    font-size: 11px;
-    gap: 3px;
-    flex-wrap: wrap;
-  }
-
-  .breadcrumb-link {
-    font-size: 11px;
-    padding: 2px 4px;
-  }
-
-  .breadcrumb-separator {
-    font-size: 9px;
-    margin: 0 2px;
+    height: 35px;
   }
 }
 

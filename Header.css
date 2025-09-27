@@ -57,7 +57,7 @@
 @media (max-width: 768px) {
   .slide-show {
     width: 100%;
-    margin: 0 10px; /* small side gutters on mobile */
+    margin: 0; /* Remove all margins for full screen coverage */
     height: 260px;
   }
   .header,

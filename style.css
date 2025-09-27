@@ -202,19 +202,18 @@ body {
 .user-actions a {
   padding: 8px 16px;
   text-decoration: none;
-  border: 1px solid rgb(0, 123, 111);
+  border: 1px solid #dc3545;
   background-color: transparent;
   cursor: pointer;
   font-size: medium;
-  color: red;
+  color: #dc3545;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
-.user-actions button:first-child {
-  color: rgb(0, 123, 111);
-}
-
-.user-actions button:last-child {
-  color: black;
+.user-actions a:hover {
+  background-color: #dc3545;
+  color: white;
 }
 
 .mega-menu {
@@ -442,6 +441,11 @@ body {
   margin: 0;
   text-transform: capitalize;
   font-family: "Cormorant", serif;
+  text-decoration: none;
+}
+
+#popular-list .items-desctiption {
+  text-decoration: none;
 }
 
 /* Spirits Section - Desktop Version */
@@ -578,10 +582,11 @@ body {
 
 /* Footer - Clean Mobile Design */
 .site-footer {
-  background-color: #000000;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: #ffffff;
   padding: 40px 20px 20px;
   margin-top: 60px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Featured Products Section */
@@ -656,20 +661,24 @@ body {
 }
 
 .footer-section {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
+  padding: 20px 10px;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 0 10px;
 }
 
 .section-header:hover {
-  color: #d4af37;
+  background-color: rgba(220, 53, 69, 0.2);
+  transform: translateX(5px);
+  color: #ffffff;
 }
 
 .section-header h3 {
@@ -718,7 +727,8 @@ body {
 }
 
 .section-content ul li a:hover {
-  color: #d4af37;
+  color: #dc3545;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Social Media Icons */
@@ -735,17 +745,20 @@ body {
   justify-content: center;
   width: 45px;
   height: 45px;
-  background-color: #333333;
+  background-color: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   border-radius: 50%;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   font-size: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .social-icons a:hover {
-  background-color: #d4af37;
-  color: #000;
+  background-color: #dc3545;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
 }
 
 /* Brand Logo */
@@ -757,9 +770,10 @@ body {
 .footer-logo h2 {
   font-size: 32px;
   font-weight: 600;
-  color: #d4af37;
+  color: #ffffff;
   margin: 0;
   font-family: "Cormorant", serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   letter-spacing: 2px;
 }
 
@@ -771,8 +785,9 @@ body {
 
 .copyright p {
   font-size: 12px;
-  color: #999999;
+  color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Legal Disclaimer */
@@ -905,6 +920,11 @@ body {
     margin: 0;
     text-transform: capitalize;
     font-family: "Cormorant", serif;
+    text-decoration: none;
+  }
+
+  #popular-list .items-desctiption {
+    text-decoration: none;
   }
 
   /* Footer mobile adjustments */
@@ -1295,14 +1315,15 @@ body {
   }
 
   .user-actions a:first-child {
-    background-color: rgb(0, 123, 111);
+    background-color: #dc3545;
     color: white !important;
-    border-color: rgb(0, 123, 111);
+    border-color: #dc3545;
   }
 
   .user-actions a:last-child {
     background-color: transparent;
-    color: rgb(0, 123, 111) !important;
+    color: #dc3545 !important;
+    border-color: #dc3545;
   }
 
   /* Mobile mega menu styles */
@@ -1570,6 +1591,11 @@ body {
 
   #popular-list .items-desctiption p {
     font-size: 20px;
+    text-decoration: none;
+  }
+
+  #popular-list .items-desctiption {
+    text-decoration: none;
   }
 
   /* Spirits Section - Large Desktop */
@@ -1666,21 +1692,21 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #8b4513 0%, #d2691e 100%);
-  color: white;
+  padding: 8px 16px;
+  background: #f8f9fa;
+  color: #6c757d;
   text-decoration: none;
-  border-radius: 25px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
   font-weight: 500;
   font-size: 14px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
 }
 
 .back-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
-  background: linear-gradient(135deg, #d2691e 0%, #8b4513 100%);
+  background: #e9ecef;
+  color: #495057;
+  border-color: #adb5bd;
 }
 
 .back-link i {
@@ -1715,8 +1741,7 @@ body {
 
 /* Removed duplicate sub-search styles - using consolidated version below */
 
-.sub-cart,
-.sub-user {
+.sub-cart {
   position: relative;
   padding: 10px;
   border-radius: 50%;
@@ -1731,12 +1756,36 @@ body {
   justify-content: center;
 }
 
-.sub-cart:hover,
-.sub-user:hover {
+.sub-cart:hover {
   background-color: #8b4513;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+}
+
+/* Profile Icon Styling for Index Page */
+.sub-user {
+  position: relative;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.sub-user:hover {
+  background-color: #c82333;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  border-color: #a71e2a;
 }
 
 .cart-count {
@@ -1767,8 +1816,8 @@ body {
   }
 
   .back-link {
-    padding: 10px;
-    border-radius: 50%;
+    padding: 8px 12px;
+    border-radius: 6px;
   }
 
   /* Sub-search styles moved to consolidated section */
@@ -1786,7 +1835,10 @@ body {
 
   /* Sub-search styles moved to consolidated section */
 
-  .sub-cart,
+  .sub-cart {
+    padding: 8px;
+  }
+
   .sub-user {
     padding: 8px;
   }

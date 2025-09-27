@@ -130,20 +130,10 @@
 }
 
 .header-underline2::after {
-  content: "";
-  display: block;
-  width: 85px;
-  height: 2px;
-  background: black;
-  margin-top: 5px;
+  display: none;
 }
 .header-underline1::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: black;
-  margin-top: 5px;
+  display: none;
 }
 
 .category-header {

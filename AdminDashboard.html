@@ -1943,13 +1943,11 @@
       }
 
       function logout() {
-        if (confirm('Are you sure you want to logout?')) {
-          localStorage.removeItem('userData');
-          localStorage.removeItem('sessionToken');
-          localStorage.removeItem('user_logged_in');
-          localStorage.removeItem('admin_mode');
-          window.location.href = 'login.html';
-        }
+        localStorage.removeItem('userData');
+        localStorage.removeItem('sessionToken');
+        localStorage.removeItem('user_logged_in');
+        localStorage.removeItem('admin_mode');
+        window.location.href = 'login.html';
       }
 
       // Payment action functions

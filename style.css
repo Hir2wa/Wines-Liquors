@@ -4242,12 +4242,13 @@ body {
   .wine-sidebar {
     position: relative;
     top: 0;
-    order: 2;
-    margin-top: 20px;
+    order: 1; /* Move filter to top */
+    margin-top: 0; /* Remove top margin since it's now at top */
+    margin-bottom: 20px; /* Add bottom margin for spacing */
   }
 
   .wine-main-content {
-    order: 1;
+    order: 2; /* Move main content below filter */
   }
 
   .wine-category-title {
@@ -4291,7 +4292,8 @@ body {
 
   .wine-sidebar {
     padding: 20px;
-    margin-top: 15px;
+    margin-top: 0; /* Remove top margin since filter is now at top */
+    margin-bottom: 15px; /* Add bottom margin for spacing */
   }
 
   .wine-sidebar h3 {

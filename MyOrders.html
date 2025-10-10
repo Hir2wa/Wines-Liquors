@@ -550,6 +550,37 @@
         border-color: #dc3545;
       }
 
+      /* Readonly field styles */
+      .form-group input[readonly] {
+        background-color: #f8f9fa !important;
+        cursor: not-allowed !important;
+        color: #6c757d;
+        border-color: #e9ecef;
+      }
+
+      .form-group input[readonly]:focus {
+        border-color: #e9ecef;
+        box-shadow: none;
+      }
+
+      /* User info message styles */
+      .user-info-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 10px 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        border: 1px solid #c3e6cb;
+        display: flex;
+        align-items: center;
+      }
+
+      .user-info-message i {
+        margin-right: 8px;
+        color: #155724;
+      }
+
       .payment-methods {
         display: flex;
         gap: 20px;
@@ -1468,6 +1499,83 @@
         return price.toString().replace(/[^\d.]/g, "");
       }
 
+      // Auto-fill user information if logged in
+      function autoFillUserInfo() {
+        const sessionToken = localStorage.getItem("sessionToken");
+        const userEmail = localStorage.getItem("userEmail");
+        const userInfo = localStorage.getItem("userInfo");
+        
+        if (sessionToken && userEmail) {
+          try {
+            // Parse stored user info if available
+            let userData = null;
+            if (userInfo) {
+              userData = JSON.parse(userInfo);
+            }
+            
+            // Auto-fill form fields
+            const emailField = document.getElementById("email");
+            const firstNameField = document.getElementById("firstName");
+            const lastNameField = document.getElementById("lastName");
+            const phoneField = document.getElementById("phone");
+            
+            if (emailField) {
+              emailField.value = userEmail;
+              emailField.readOnly = true;
+              emailField.style.backgroundColor = "#f8f9fa";
+              emailField.style.cursor = "not-allowed";
+            }
+            
+            if (userData) {
+              if (firstNameField && userData.first_name) {
+                firstNameField.value = userData.first_name;
+                firstNameField.readOnly = true;
+                firstNameField.style.backgroundColor = "#f8f9fa";
+                firstNameField.style.cursor = "not-allowed";
+              }
+              
+              if (lastNameField && userData.last_name) {
+                lastNameField.value = userData.last_name;
+                lastNameField.readOnly = true;
+                lastNameField.style.backgroundColor = "#f8f9fa";
+                lastNameField.style.cursor = "not-allowed";
+              }
+              
+              if (phoneField && userData.phone) {
+                phoneField.value = userData.phone;
+                phoneField.readOnly = true;
+                phoneField.style.backgroundColor = "#f8f9fa";
+                phoneField.style.cursor = "not-allowed";
+              }
+            }
+            
+            // Show a message that user info is pre-filled
+            const formContainer = document.querySelector('.form-container h3');
+            if (formContainer) {
+              const infoMessage = document.createElement('div');
+              infoMessage.className = 'user-info-message';
+              infoMessage.style.cssText = `
+                background: #d4edda;
+                color: #155724;
+                padding: 10px 15px;
+                border-radius: 6px;
+                margin-bottom: 20px;
+                font-size: 14px;
+                border: 1px solid #c3e6cb;
+              `;
+              infoMessage.innerHTML = `
+                <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
+                Your account information has been pre-filled. You can still edit address and other details.
+              `;
+              formContainer.parentNode.insertBefore(infoMessage, formContainer.nextSibling);
+            }
+            
+          } catch (error) {
+            console.log('Error auto-filling user info:', error);
+          }
+        }
+      }
+
       // Handle order form submission
       document
         .getElementById("orderForm")
@@ -1627,6 +1735,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         loadCartItems();
         handlePaymentMethodChange();
+        autoFillUserInfo(); // Auto-fill user info if logged in
       });
     </script>
   </body>

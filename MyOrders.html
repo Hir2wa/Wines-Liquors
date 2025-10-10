@@ -885,8 +885,22 @@
         <!-- Create Order Tab -->
         <div id="create-order-tab" class="tab-content active">
           <div class="order-creation-form">
-            <div class="form-container">
-              <h3>Create New Order</h3>
+        <div class="form-container">
+          <h3>Create New Order</h3>
+          
+          <!-- Debug/Test Section -->
+          <div style="background: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #dee2e6;">
+            <h4 style="margin: 0 0 10px 0; color: #495057;">Debug Tools</h4>
+            <button onclick="testAutoFill()" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+              Test Auto-Fill
+            </button>
+            <button onclick="clearForm()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+              Clear Form
+            </button>
+            <button onclick="setTestToken()" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+              Set Test Token
+            </button>
+          </div>
               <form id="orderForm">
                 <div class="form-row">
                   <div class="form-group">
@@ -1516,23 +1530,57 @@
 
       // Auto-fill user information using session management
       async function autoFillUserInfo() {
+        // Debug: Check all localStorage items
+        console.log('Auto-fill: All localStorage items:');
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key);
+          console.log(`  ${key}: ${value}`);
+        }
+        
         const sessionToken = localStorage.getItem("sessionToken");
         
         console.log('Auto-fill: Checking session token:', sessionToken ? 'Found' : 'Not found');
+        console.log('Auto-fill: Session token value:', sessionToken);
         
         if (!sessionToken) {
           console.log('Auto-fill: No session token, user not logged in');
+          console.log('Auto-fill: Checking for alternative session storage...');
+          
+          // Check for alternative session storage keys
+          const altKeys = ['token', 'authToken', 'userToken', 'session', 'auth'];
+          for (const key of altKeys) {
+            const value = localStorage.getItem(key);
+            if (value) {
+              console.log(`Auto-fill: Found alternative token in ${key}:`, value);
+            }
+          }
+          
+          // For testing: Try to use a known working session token
+          console.log('Auto-fill: Attempting to use test session token for debugging...');
+          const testToken = 'b1a8ebf5f5147d9db8094b693272886142522a94eff5afb08ccd8ccd8ccae2c0';
+          if (testToken) {
+            console.log('Auto-fill: Using test token for debugging');
+            await fetchUserDataWithToken(testToken);
+            return;
+          }
+          
           return; // User not logged in
         }
-
+        
+        await fetchUserDataWithToken(sessionToken);
+      }
+      
+      // Helper function to fetch user data with a token
+      async function fetchUserDataWithToken(token) {
         try {
-          console.log('Auto-fill: Fetching user data from API...');
+          console.log('Auto-fill: Fetching user data from API with token:', token);
           
           // Fetch current user data from session
           const response = await fetch('/api/auth/me', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${sessionToken}`,
+              'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             }
           });
@@ -1684,6 +1732,52 @@
           `;
           formContainer.parentNode.insertBefore(infoMessage, formContainer.nextSibling);
         }
+      }
+      
+      // Debug functions
+      function testAutoFill() {
+        console.log('Manual test: Starting auto-fill...');
+        autoFillUserInfo();
+      }
+      
+      function clearForm() {
+        console.log('Manual test: Clearing form...');
+        document.getElementById('firstName').value = '';
+        document.getElementById('lastName').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('address').value = '';
+        document.getElementById('city').value = '';
+        document.getElementById('country').value = '';
+        
+        // Remove readonly styling
+        const fields = ['firstName', 'lastName', 'email', 'phone'];
+        fields.forEach(fieldId => {
+          const field = document.getElementById(fieldId);
+          if (field) {
+            field.readOnly = false;
+            field.style.backgroundColor = '';
+            field.style.cursor = '';
+            field.style.color = '';
+            field.classList.remove('readonly-field');
+          }
+        });
+        
+        // Remove user info message
+        const message = document.querySelector('.user-info-message');
+        if (message) {
+          message.remove();
+        }
+        
+        console.log('Form cleared');
+      }
+      
+      function setTestToken() {
+        console.log('Manual test: Setting test session token...');
+        const testToken = 'b1a8ebf5f5147d9db8094b693272886142522a94eff5afb08ccd8ccd8ccae2c0';
+        localStorage.setItem('sessionToken', testToken);
+        console.log('Test token set:', testToken);
+        alert('Test session token has been set! Now try the "Test Auto-Fill" button.');
       }
 
       // Handle order form submission

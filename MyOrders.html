@@ -551,16 +551,31 @@
       }
 
       /* Readonly field styles */
-      .form-group input[readonly] {
+      .form-group input[readonly],
+      .readonly-field {
         background-color: #f8f9fa !important;
         cursor: not-allowed !important;
-        color: #6c757d;
-        border-color: #e9ecef;
+        color: #6c757d !important;
+        border-color: #e9ecef !important;
+        opacity: 0.8;
       }
 
-      .form-group input[readonly]:focus {
-        border-color: #e9ecef;
-        box-shadow: none;
+      .form-group input[readonly]:focus,
+      .readonly-field:focus {
+        border-color: #e9ecef !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      /* Add a subtle icon to readonly fields */
+      .readonly-field::after {
+        content: "🔒";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        opacity: 0.5;
       }
 
       /* User info message styles */
@@ -1499,80 +1514,134 @@
         return price.toString().replace(/[^\d.]/g, "");
       }
 
-      // Auto-fill user information if logged in
-      function autoFillUserInfo() {
+      // Auto-fill user information using session management
+      async function autoFillUserInfo() {
         const sessionToken = localStorage.getItem("sessionToken");
+        
+        if (!sessionToken) {
+          return; // User not logged in
+        }
+
+        try {
+          // Fetch current user data from session
+          const response = await fetch('/api/auth/me', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${sessionToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            
+            if (userData.success && userData.data) {
+              const user = userData.data;
+              
+              // Auto-fill form fields with user data
+              const emailField = document.getElementById("email");
+              const firstNameField = document.getElementById("firstName");
+              const lastNameField = document.getElementById("lastName");
+              const phoneField = document.getElementById("phone");
+              
+              // Fill and make readonly
+              if (emailField && user.email) {
+                emailField.value = user.email;
+                makeFieldReadonly(emailField);
+              }
+              
+              if (firstNameField && user.first_name) {
+                firstNameField.value = user.first_name;
+                makeFieldReadonly(firstNameField);
+              }
+              
+              if (lastNameField && user.last_name) {
+                lastNameField.value = user.last_name;
+                makeFieldReadonly(lastNameField);
+              }
+              
+              if (phoneField && user.phone) {
+                phoneField.value = user.phone;
+                makeFieldReadonly(phoneField);
+              }
+              
+              // Show success message
+              showUserInfoMessage();
+            }
+          } else {
+            // Fallback to localStorage if API fails
+            fallbackToLocalStorage();
+          }
+        } catch (error) {
+          console.log('Error fetching user data from session:', error);
+          // Fallback to localStorage
+          fallbackToLocalStorage();
+        }
+      }
+
+      // Make a field readonly with proper styling
+      function makeFieldReadonly(field) {
+        field.readOnly = true;
+        field.style.backgroundColor = "#f8f9fa";
+        field.style.cursor = "not-allowed";
+        field.style.color = "#6c757d";
+        field.classList.add('readonly-field');
+      }
+
+      // Fallback to localStorage data
+      function fallbackToLocalStorage() {
         const userEmail = localStorage.getItem("userEmail");
         const userInfo = localStorage.getItem("userInfo");
         
-        if (sessionToken && userEmail) {
-          try {
-            // Parse stored user info if available
-            let userData = null;
-            if (userInfo) {
-              userData = JSON.parse(userInfo);
-            }
-            
-            // Auto-fill form fields
-            const emailField = document.getElementById("email");
-            const firstNameField = document.getElementById("firstName");
-            const lastNameField = document.getElementById("lastName");
-            const phoneField = document.getElementById("phone");
-            
-            if (emailField) {
-              emailField.value = userEmail;
-              emailField.readOnly = true;
-              emailField.style.backgroundColor = "#f8f9fa";
-              emailField.style.cursor = "not-allowed";
-            }
-            
-            if (userData) {
+        if (userEmail) {
+          const emailField = document.getElementById("email");
+          if (emailField) {
+            emailField.value = userEmail;
+            makeFieldReadonly(emailField);
+          }
+          
+          // Try to parse user info
+          if (userInfo) {
+            try {
+              const userData = JSON.parse(userInfo);
+              const firstNameField = document.getElementById("firstName");
+              const lastNameField = document.getElementById("lastName");
+              const phoneField = document.getElementById("phone");
+              
               if (firstNameField && userData.first_name) {
                 firstNameField.value = userData.first_name;
-                firstNameField.readOnly = true;
-                firstNameField.style.backgroundColor = "#f8f9fa";
-                firstNameField.style.cursor = "not-allowed";
+                makeFieldReadonly(firstNameField);
               }
               
               if (lastNameField && userData.last_name) {
                 lastNameField.value = userData.last_name;
-                lastNameField.readOnly = true;
-                lastNameField.style.backgroundColor = "#f8f9fa";
-                lastNameField.style.cursor = "not-allowed";
+                makeFieldReadonly(lastNameField);
               }
               
               if (phoneField && userData.phone) {
                 phoneField.value = userData.phone;
-                phoneField.readOnly = true;
-                phoneField.style.backgroundColor = "#f8f9fa";
-                phoneField.style.cursor = "not-allowed";
+                makeFieldReadonly(phoneField);
               }
+            } catch (e) {
+              console.log('Error parsing user info from localStorage:', e);
             }
-            
-            // Show a message that user info is pre-filled
-            const formContainer = document.querySelector('.form-container h3');
-            if (formContainer) {
-              const infoMessage = document.createElement('div');
-              infoMessage.className = 'user-info-message';
-              infoMessage.style.cssText = `
-                background: #d4edda;
-                color: #155724;
-                padding: 10px 15px;
-                border-radius: 6px;
-                margin-bottom: 20px;
-                font-size: 14px;
-                border: 1px solid #c3e6cb;
-              `;
-              infoMessage.innerHTML = `
-                <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
-                Your account information has been pre-filled. You can still edit address and other details.
-              `;
-              formContainer.parentNode.insertBefore(infoMessage, formContainer.nextSibling);
-            }
-            
-          } catch (error) {
-            console.log('Error auto-filling user info:', error);
           }
+          
+          showUserInfoMessage();
+        }
+      }
+
+      // Show user info message
+      function showUserInfoMessage() {
+        const formContainer = document.querySelector('.form-container h3');
+        if (formContainer && !document.querySelector('.user-info-message')) {
+          const infoMessage = document.createElement('div');
+          infoMessage.className = 'user-info-message';
+          infoMessage.innerHTML = `
+            <i class="fas fa-info-circle"></i>
+            Your account information has been pre-filled from your session. You can still edit address and other details.
+          `;
+          formContainer.parentNode.insertBefore(infoMessage, formContainer.nextSibling);
         }
       }
 

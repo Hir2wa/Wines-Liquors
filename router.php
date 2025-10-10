@@ -46,6 +46,10 @@ if (strpos($uri, '/api/') === 0) {
     require_once 'api/endpoints/resend_verification.php';
 } elseif ($path === 'auth/me' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     require_once 'api/endpoints/get_current_user.php';
+} elseif ($path === 'admin/notify' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once 'api/endpoints/notify_admin.php';
+} elseif ($path === 'user/orders' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    require_once 'api/endpoints/get_user_orders.php';
 } elseif ($path === 'orders/customer' && $_SERVER['REQUEST_METHOD'] === 'GET') {
         require_once 'api/endpoints/get_customer_orders.php';
     } elseif ($path === 'debug') {

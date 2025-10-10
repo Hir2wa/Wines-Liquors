@@ -29,9 +29,9 @@ class Order {
             $sql = "
                 INSERT INTO " . $this->table_name . " 
                 (id, customer_email, customer_phone, customer_first_name, customer_last_name, 
-                 customer_address, customer_city, customer_country, total_amount, 
+                 customer_address, total_amount, 
                  payment_method, status, payment_status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ";
 
             $stmt = $this->conn->prepare($sql);
@@ -41,9 +41,7 @@ class Order {
                 $orderData['customerInfo']['phone'],
                 $orderData['customerInfo']['firstName'],
                 $orderData['customerInfo']['lastName'],
-                $orderData['customerInfo']['address'],
-                $orderData['customerInfo']['city'],
-                $orderData['customerInfo']['country'],
+                $orderData['customerInfo']['location'],
                 $orderData['totalAmount'],
                 $orderData['paymentMethod'],
                 $orderData['status'],
@@ -85,6 +83,28 @@ class Order {
             $this->conn->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Get orders by customer email
+     */
+    public function getByCustomerEmail($email) {
+        $sql = "
+            SELECT o.*, 
+                   STRING_AGG(
+                       CONCAT(oi.product_name, '|', oi.product_price, '|', oi.quantity, '|', COALESCE(oi.product_image, ''))
+                       , '||'
+                   ) as items_data
+            FROM " . $this->table_name . " o
+            LEFT JOIN " . $this->items_table . " oi ON o.id = oi.order_id
+            WHERE o.customer_email = ?
+            GROUP BY o.id
+            ORDER BY o.created_at DESC
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$email]);
+        return $stmt->fetchAll();
     }
 
     /**

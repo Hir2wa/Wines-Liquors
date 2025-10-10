@@ -1755,15 +1755,16 @@
             localStorage.removeItem("cartCount");
 
             // Show success message
-            alert(`🎉 Order #${createdOrder.orderId} created successfully!`);
-
-            // Switch to orders tab to show the new order
-            switchTab("all");
-            loadOrderHistory();
+            alert(`🎉 Order #${createdOrder.orderId} created successfully! Total: ${Number(createdOrder.totalAmount).toLocaleString()} RWF`);
 
             // Reset form
             this.reset();
             loadCartItems();
+
+            // Redirect to order history page
+            setTimeout(() => {
+              window.location.href = "OrderHistory.html";
+            }, 2000);
           } catch (error) {
             console.error("Order creation failed:", error);
             alert(`Failed to create order: ${error.message}`);

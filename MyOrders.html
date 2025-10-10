@@ -1990,6 +1990,11 @@
               if (response.ok) {
                 const data = await response.json();
                 
+                // Log full location data for debugging
+                console.log('Full location data:', data);
+                console.log('Google Maps coordinates:', `${latitude},${longitude}`);
+                console.log('Google Maps link:', `https://www.google.com/maps?q=${latitude},${longitude}`);
+                
                 // Build comprehensive address with all available details
                 const addressParts = [];
                 
@@ -1997,7 +2002,7 @@
                 if (data.street) addressParts.push(data.street);
                 if (data.streetNumber) addressParts.push(data.streetNumber);
                 
-                // Add locality (neighborhood/zone)
+                // Add locality (neighborhood/zone/village)
                 if (data.locality) addressParts.push(data.locality);
                 
                 // Add city/town
@@ -2012,27 +2017,91 @@
                 // Join all parts with commas
                 const fullAddress = addressParts.join(', ');
                 
+                // Create Google Maps link for easy following
+                const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                const googleMapsString = `${latitude},${longitude}`;
+                
                 // If we have a good address, use it; otherwise use coordinates
                 if (fullAddress.trim() && fullAddress !== data.countryName) {
                   locationInput.value = fullAddress;
-                  locationStatus.innerHTML = `<i class="fas fa-check-circle"></i> Location found: ${data.locality || 'Area'} zone`;
+                  
+                  // Create detailed status message with zone/village info and Google Maps link
+                  const zoneInfo = data.locality || data.city || 'Area';
+                  const villageInfo = data.street ? ` (${data.street})` : '';
+                  
+                  locationStatus.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                      <i class="fas fa-check-circle"></i> Location found: <strong>${zoneInfo}${villageInfo}</strong>
+                    </div>
+                    <div style="font-size: 12px; color: #6c757d;">
+                      <i class="fas fa-map-marker-alt"></i> Coordinates: ${googleMapsString}
+                    </div>
+                    <div style="margin-top: 5px;">
+                      <a href="${googleMapsLink}" target="_blank" style="color: #007bff; text-decoration: none; font-size: 12px;">
+                        <i class="fas fa-external-link-alt"></i> Open in Google Maps
+                      </a>
+                    </div>
+                  `;
                   locationStatus.className = 'location-status success';
                 } else {
                   // Fallback to coordinates with zone info
                   locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-                  locationStatus.innerHTML = `<i class="fas fa-map-marker-alt"></i> Location found (${data.locality || 'Area'} zone)`;
+                  
+                  locationStatus.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                      <i class="fas fa-map-marker-alt"></i> Location found: <strong>${data.locality || 'Area'} zone</strong>
+                    </div>
+                    <div style="font-size: 12px; color: #6c757d;">
+                      <i class="fas fa-map-marker-alt"></i> Coordinates: ${googleMapsString}
+                    </div>
+                    <div style="margin-top: 5px;">
+                      <a href="${googleMapsLink}" target="_blank" style="color: #007bff; text-decoration: none; font-size: 12px;">
+                        <i class="fas fa-external-link-alt"></i> Open in Google Maps
+                      </a>
+                    </div>
+                  `;
                   locationStatus.className = 'location-status success';
                 }
               } else {
                 // Fallback to coordinates if reverse geocoding fails
+                const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                const googleMapsString = `${latitude},${longitude}`;
+                
                 locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-                locationStatus.innerHTML = '<i class="fas fa-map-marker-alt"></i> Location found (coordinates)';
+                locationStatus.innerHTML = `
+                  <div style="margin-bottom: 8px;">
+                    <i class="fas fa-map-marker-alt"></i> Location found (coordinates)
+                  </div>
+                  <div style="font-size: 12px; color: #6c757d;">
+                    <i class="fas fa-map-marker-alt"></i> Coordinates: ${googleMapsString}
+                  </div>
+                  <div style="margin-top: 5px;">
+                    <a href="${googleMapsLink}" target="_blank" style="color: #007bff; text-decoration: none; font-size: 12px;">
+                      <i class="fas fa-external-link-alt"></i> Open in Google Maps
+                    </a>
+                  </div>
+                `;
                 locationStatus.className = 'location-status success';
               }
             } catch (error) {
               // Fallback to coordinates
+              const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+              const googleMapsString = `${latitude},${longitude}`;
+              
               locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-              locationStatus.innerHTML = '<i class="fas fa-map-marker-alt"></i> Location found (coordinates)';
+              locationStatus.innerHTML = `
+                <div style="margin-bottom: 8px;">
+                  <i class="fas fa-map-marker-alt"></i> Location found (coordinates)
+                </div>
+                <div style="font-size: 12px; color: #6c757d;">
+                  <i class="fas fa-map-marker-alt"></i> Coordinates: ${googleMapsString}
+                </div>
+                <div style="margin-top: 5px;">
+                  <a href="${googleMapsLink}" target="_blank" style="color: #007bff; text-decoration: none; font-size: 12px;">
+                    <i class="fas fa-external-link-alt"></i> Open in Google Maps
+                  </a>
+                </div>
+              `;
               locationStatus.className = 'location-status success';
             }
             

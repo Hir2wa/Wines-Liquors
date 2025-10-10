@@ -589,27 +589,76 @@ document.addEventListener("DOMContentLoaded", function () {
     const megaMenuParent = menu.closest(".mega-menu");
     if (megaMenuParent) {
       megaMenuParent.addEventListener("mouseenter", function () {
-        const rect = this.getBoundingClientRect();
-        const menuRect = menu.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
+        // Small delay to ensure menu is rendered before positioning
+        setTimeout(() => {
+          const rect = this.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const menuWidth = 800; // Approximate menu width
 
-        // Check if menu would overflow on the right
-        if (rect.left + menuRect.width > viewportWidth - 20) {
-          menu.style.left = "auto";
-          menu.style.right = "0";
-          menu.style.transform = "none";
-        } else if (rect.left < 20) {
+          // Calculate ideal center position
+          const centerX = rect.left + rect.width / 2;
+          const menuLeft = centerX - menuWidth / 2;
+          const menuRight = centerX + menuWidth / 2;
+
+          // Reset styles first
+          menu.style.left = "50%";
+          menu.style.right = "auto";
+          menu.style.transform = "translateX(-50%)";
+          menu.style.marginLeft = "0";
+          menu.style.marginRight = "0";
+
+          // Check if menu would overflow on the right
+          if (menuRight > viewportWidth - 20) {
+            menu.style.left = "auto";
+            menu.style.right = "20px";
+            menu.style.transform = "none";
+          }
           // Check if menu would overflow on the left
-          menu.style.left = "0";
+          else if (menuLeft < 20) {
+            menu.style.left = "20px";
+            menu.style.transform = "none";
+          }
+          // If menu is too wide for viewport, constrain it
+          else if (menuWidth > viewportWidth - 40) {
+            menu.style.maxWidth = `${viewportWidth - 40}px`;
+            menu.style.left = "50%";
+            menu.style.transform = "translateX(-50%)";
+          }
+        }, 10);
+      });
+    }
+  });
+
+  // Handle window resize to reposition mega menus
+  window.addEventListener("resize", function () {
+    const activeMenus = document.querySelectorAll(
+      ".mega-menu:hover .mega-menu-content"
+    );
+    activeMenus.forEach((menu) => {
+      const megaMenuParent = menu.closest(".mega-menu");
+      if (megaMenuParent) {
+        const rect = megaMenuParent.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const menuWidth = 800;
+
+        const centerX = rect.left + rect.width / 2;
+        const menuLeft = centerX - menuWidth / 2;
+        const menuRight = centerX + menuWidth / 2;
+
+        if (menuRight > viewportWidth - 20) {
+          menu.style.left = "auto";
+          menu.style.right = "20px";
+          menu.style.transform = "none";
+        } else if (menuLeft < 20) {
+          menu.style.left = "20px";
           menu.style.transform = "none";
         } else {
-          // Reset to center positioning
           menu.style.left = "50%";
           menu.style.right = "auto";
           menu.style.transform = "translateX(-50%)";
         }
-      });
-    }
+      }
+    });
   });
 
   // Slideshow functionality

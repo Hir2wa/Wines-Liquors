@@ -931,15 +931,6 @@
                       <input
                         type="radio"
                         name="paymentMethod"
-                        value="momo_code"
-                        required
-                      />
-                      <span>Momo Code</span>
-                    </label>
-                    <label class="payment-option">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
                         value="cash_on_delivery"
                         required
                       />
@@ -947,20 +938,22 @@
                     </label>
                   </div>
 
-                  <!-- Momo Code Input Field -->
+                  <!-- Mobile Money Payment Info -->
                   <div
                     class="form-group"
-                    id="momoCodeGroup"
-                    style="display: none"
+                    id="mobileMoneyInfo"
+                    style="display: none; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;"
                   >
-                    <label for="momoCode">Momo Code *</label>
-                    <input
-                      type="text"
-                      id="momoCode"
-                      name="momoCode"
-                      value="*182*8*1*258655#"
-                      readonly
-                    />
+                    <h4 style="margin: 0 0 10px 0; color: #495057; font-size: 16px;">
+                      <i class="fas fa-mobile-alt" style="margin-right: 8px; color: #28a745;"></i>
+                      Mobile Money Payment
+                    </h4>
+                    <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                      Send payment to: <strong>Eric Ntabwoba - 0784850196</strong>
+                    </p>
+                    <p style="margin: 5px 0 0 0; color: #6c757d; font-size: 13px;">
+                      Please include your order reference in the payment description.
+                    </p>
                   </div>
                 </div>
 
@@ -1662,7 +1655,6 @@
               },
               items: formattedItems,
               paymentMethod: formData.get("paymentMethod"),
-              momoCode: formData.get("momoCode") || null,
               total: cleanPrice(
                 document.getElementById("orderTotal").textContent
               ),
@@ -1761,17 +1753,14 @@
         const paymentMethods = document.querySelectorAll(
           'input[name="paymentMethod"]'
         );
-        const momoCodeGroup = document.getElementById("momoCodeGroup");
-        const momoCodeInput = document.getElementById("momoCode");
+        const mobileMoneyInfo = document.getElementById("mobileMoneyInfo");
 
         paymentMethods.forEach((method) => {
           method.addEventListener("change", function () {
-            if (this.value === "momo_code") {
-              momoCodeGroup.style.display = "block";
-              momoCodeInput.required = true;
+            if (this.value === "mobile_money") {
+              mobileMoneyInfo.style.display = "block";
             } else {
-              momoCodeGroup.style.display = "none";
-              momoCodeInput.required = false;
+              mobileMoneyInfo.style.display = "none";
             }
           });
         });

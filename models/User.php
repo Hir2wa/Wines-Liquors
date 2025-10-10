@@ -4,6 +4,10 @@
  * Handles user registration, authentication, and management
  */
 
+// Note: External dependencies (libphonenumber and PHPMailer) are optional
+// The system will work with basic validation if these are not available
+
+if (!class_exists('User')) {
 class User {
     private $conn;
     private $table_name = "users";
@@ -62,9 +66,13 @@ class User {
             return ['success' => false, 'message' => 'Invalid email format'];
         }
 
-        // Validate phone format (if provided)
-        if (!empty($data['phone']) && !$this->isValidPhone($data['phone'])) {
-            return ['success' => false, 'message' => 'Invalid phone number format'];
+        // Validate and format phone number (if provided)
+        if (!empty($data['phone'])) {
+            if (!$this->isValidPhone($data['phone'])) {
+                return ['success' => false, 'message' => 'Invalid phone number format'];
+            }
+            // Format phone number to international format
+            $data['phone'] = $this->formatPhoneNumber($data['phone']);
         }
 
         // Hash password
@@ -212,6 +220,138 @@ class User {
 
         return ['success' => false, 'message' => 'Failed to generate verification code'];
     }
+    
+    /**
+     * Send email verification (using PHPMailer)
+     */
+    public function sendEmailVerification($user_id, $email, $code) {
+        try {
+            // Try to load PHPMailer autoloader
+            $autoloader_path = __DIR__ . '/../vendor/autoload.php';
+            if (file_exists($autoloader_path)) {
+                require_once $autoloader_path;
+            }
+            
+            // Check if PHPMailer is available
+            if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+                return $this->sendEmailWithPHPMailer($email, $code);
+            } else {
+                // Fallback to basic mail() function with proper error handling
+                return $this->sendEmailWithBasicMail($email, $code);
+            }
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Failed to send verification email: ' . $e->getMessage()];
+        }
+    }
+    
+    /**
+     * Send email using PHPMailer
+     */
+    private function sendEmailWithPHPMailer($email, $code) {
+        try {
+            $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+            
+            // Load email configuration
+            $emailConfig = require __DIR__ . '/../config/email.php';
+            $smtp = $emailConfig['smtp'];
+            
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host = $smtp['host'];
+            $mail->SMTPAuth = true;
+            $mail->Username = $smtp['username'];
+            $mail->Password = $smtp['password'];
+            $mail->SMTPSecure = $smtp['encryption'];
+            $mail->Port = $smtp['port'];
+            
+            // Recipients
+            $mail->setFrom($smtp['from_email'], $smtp['from_name']);
+            $mail->addAddress($email);
+            
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = $emailConfig['verification']['email_subject'];
+            $mail->Body = "
+                <html>
+                <head><title>Email Verification</title></head>
+                <body style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>
+                    <div style='background: #f8f9fa; padding: 30px; border-radius: 10px; text-align: center;'>
+                        <h2 style='color: #dc3545; margin-bottom: 20px;'>Email Verification</h2>
+                        <p style='font-size: 16px; color: #333; margin-bottom: 20px;'>Thank you for registering with Wines & Liquors!</p>
+                        <div style='background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #dc3545;'>
+                            <p style='margin: 0; font-size: 14px; color: #666;'>Your verification code is:</p>
+                            <h1 style='color: #dc3545; font-size: 32px; margin: 10px 0; letter-spacing: 5px;'>{$code}</h1>
+                        </div>
+                        <p style='font-size: 14px; color: #666; margin-bottom: 20px;'>This code will expire in 15 minutes.</p>
+                        <p style='font-size: 12px; color: #999;'>If you didn't request this verification, please ignore this email.</p>
+                        <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;'>
+                        <p style='font-size: 14px; color: #666; margin: 0;'>Best regards,<br><strong>Wines & Liquors Team</strong></p>
+                    </div>
+                </body>
+                </html>
+            ";
+            
+            $mail->send();
+            return ['success' => true, 'message' => 'Verification email sent successfully'];
+            
+        } catch (Exception $e) {
+            error_log("PHPMailer error: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Failed to send verification email via SMTP'];
+        }
+    }
+    
+    /**
+     * Send email using basic mail() function (fallback)
+     */
+    private function sendEmailWithBasicMail($email, $code) {
+        $from_email = 'alainfabricehirwa@gmail.com';
+        $from_name = 'Wines & Liquors';
+        $subject = 'Email Verification - Wines & Liquors';
+        $message = "
+            <html>
+            <head><title>Email Verification</title></head>
+            <body>
+                <h2>Email Verification</h2>
+                <p>Thank you for registering with Wines & Liquors!</p>
+                <p>Your verification code is: <strong style='color: #dc3545; font-size: 18px;'>{$code}</strong></p>
+                <p>This code will expire in 15 minutes.</p>
+                <p>If you didn't request this verification, please ignore this email.</p>
+                <br>
+                <p>Best regards,<br>Wines & Liquors Team</p>
+            </body>
+            </html>
+        ";
+        
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: {$from_name} <{$from_email}>" . "\r\n";
+        $headers .= "Reply-To: {$from_email}" . "\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion();
+        
+        // Suppress warnings and capture output to prevent breaking JSON response
+        ob_start();
+        $mail_result = @mail($email, $subject, $message, $headers);
+        $output = ob_get_clean();
+        
+        if ($mail_result) {
+            return ['success' => true, 'message' => 'Verification email sent successfully'];
+        } else {
+            // Log the error but don't output it to prevent breaking JSON
+            error_log("Email sending failed for $email: " . $output);
+            return ['success' => false, 'message' => 'Failed to send verification email - please check your email configuration'];
+        }
+    }
+    
+    /**
+     * Send SMS verification (DISABLED - using email only)
+     */
+    public function sendSMSVerification($phone, $code) {
+        // SMS verification is disabled - using email verification only
+        return [
+            'success' => false, 
+            'message' => 'SMS verification is disabled. Please use email verification.'
+        ];
+    }
 
     /**
      * Verify code
@@ -276,30 +416,112 @@ class User {
     }
 
     /**
-     * Validate phone number format
+     * Validate phone number format (basic validation for Rwandan numbers)
      */
     private function isValidPhone($phone) {
-        // Remove all non-digit characters
-        $phone = preg_replace('/[^0-9]/', '', $phone);
-        
-        // Check if it's a valid Rwandan phone number
-        // Rwandan numbers: +250XXXXXXXXX or 250XXXXXXXXX or 0XXXXXXXXX
-        if (preg_match('/^(\+?250|0)?[0-9]{9}$/', $phone)) {
-            return true;
+        if (empty($phone)) {
+            return false;
         }
         
-        return false;
+        // Remove all non-digit characters except +
+        $cleanPhone = preg_replace('/[^\d+]/', '', $phone);
+        
+        // Check various Rwandan phone number formats
+        $patterns = [
+            '/^\+250[0-9]{9}$/',           // +250XXXXXXXXX
+            '/^250[0-9]{9}$/',             // 250XXXXXXXXX
+            '/^0[0-9]{9}$/',               // 0XXXXXXXXX
+            '/^[0-9]{9}$/'                 // XXXXXXXXX (9 digits)
+        ];
+        
+        $isValid = false;
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $cleanPhone)) {
+                $isValid = true;
+                break;
+            }
+        }
+        
+        // Additional length checks
+        if ($cleanPhone[0] === '0' && strlen($cleanPhone) !== 10) {
+            return false;
+        }
+        if (strpos($cleanPhone, '+250') === 0 && strlen($cleanPhone) !== 13) {
+            return false;
+        }
+        if (strpos($cleanPhone, '250') === 0 && strlen($cleanPhone) !== 12) {
+            return false;
+        }
+        
+        // Validate Rwandan mobile prefixes (78, 79, 72, 73)
+        if ($isValid) {
+            $phoneDigits = $this->extractPhoneDigits($cleanPhone);
+            if (strlen($phoneDigits) >= 2) {
+                $prefix = substr($phoneDigits, 0, 2);
+                $validPrefixes = ['78', '79', '72', '73'];
+                if (!in_array($prefix, $validPrefixes)) {
+                    return false;
+                }
+            }
+        }
+        
+        return $isValid;
+    }
+    
+    /**
+     * Extract phone digits for validation
+     */
+    private function extractPhoneDigits($phone) {
+        // Remove all non-digit characters except +
+        $clean = preg_replace('/[^\d+]/', '', $phone);
+        
+        // Handle different formats
+        if (strpos($clean, '+250') === 0) {
+            return substr($clean, 4); // Remove +250
+        } elseif (strpos($clean, '250') === 0) {
+            return substr($clean, 3); // Remove 250
+        } elseif (strpos($clean, '0') === 0) {
+            return substr($clean, 1); // Remove leading 0
+        }
+        
+        return $clean;
+    }
+    
+    /**
+     * Format phone number to international format
+     */
+    private function formatPhoneNumber($phone) {
+        // Remove all non-digit characters except +
+        $cleanPhone = preg_replace('/[^\d+]/', '', $phone);
+        
+        // Convert to international format
+        if (preg_match('/^0([0-9]{9})$/', $cleanPhone, $matches)) {
+            return '+250' . $matches[1];
+        } elseif (preg_match('/^250([0-9]{9})$/', $cleanPhone, $matches)) {
+            return '+250' . $matches[1];
+        } elseif (preg_match('/^([0-9]{9})$/', $cleanPhone, $matches)) {
+            return '+250' . $matches[1];
+        }
+        
+        return $cleanPhone; // Return as-is if already in correct format
     }
 
     /**
      * Find user by email or phone
      */
-    private function findByEmailOrPhone($email_or_phone) {
-        $query = "SELECT * FROM " . $this->table_name . " 
-                WHERE email = :email_or_phone OR phone = :email_or_phone 
-                LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email_or_phone", $email_or_phone);
+    public function findByEmailOrPhone($email_or_phone) {
+        $isEmail = filter_var($email_or_phone, FILTER_VALIDATE_EMAIL);
+        
+        if ($isEmail) {
+            $sql = "SELECT * FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":email", $email_or_phone);
+        } else {
+            $sql = "SELECT * FROM " . $this->table_name . " WHERE phone = :phone LIMIT 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":phone", $email_or_phone);
+        }
+        
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -451,5 +673,228 @@ class User {
         $stmt->bindParam(":user_id", $user_id);
         $stmt->execute();
     }
+
+
+    /**
+     * Store password reset code
+     */
+    public function storePasswordResetCode($userId, $code, $expiresAt) {
+        try {
+            // Create password_reset_codes table if it doesn't exist
+            $this->createPasswordResetTable();
+            
+            $sql = "INSERT INTO password_reset_codes (user_id, reset_code, expires_at, created_at) 
+                    VALUES (:user_id, :reset_code, :expires_at, NOW())
+                    ON CONFLICT (user_id) DO UPDATE SET 
+                    reset_code = :reset_code, expires_at = :expires_at, created_at = NOW()";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":user_id", $userId);
+            $stmt->bindParam(":reset_code", $code);
+            $stmt->bindParam(":expires_at", $expiresAt);
+            
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error storing password reset code: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Verify password reset code
+     */
+    public function verifyPasswordResetCode($userId, $code) {
+        try {
+            $sql = "SELECT * FROM password_reset_codes 
+                    WHERE user_id = :user_id AND reset_code = :reset_code 
+                    AND expires_at > NOW() LIMIT 1";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":user_id", $userId);
+            $stmt->bindParam(":reset_code", $code);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error verifying password reset code: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Store password reset token
+     */
+    public function storePasswordResetToken($userId, $token, $expiresAt) {
+        try {
+            $sql = "INSERT INTO password_reset_tokens (user_id, reset_token, expires_at, created_at) 
+                    VALUES (:user_id, :reset_token, :expires_at, NOW())
+                    ON CONFLICT (user_id) DO UPDATE SET 
+                    reset_token = :reset_token, expires_at = :expires_at, created_at = NOW()";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":user_id", $userId);
+            $stmt->bindParam(":reset_token", $token);
+            $stmt->bindParam(":expires_at", $expiresAt);
+            
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error storing password reset token: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Verify password reset token
+     */
+    public function verifyPasswordResetToken($token) {
+        try {
+            $sql = "SELECT * FROM password_reset_tokens 
+                    WHERE reset_token = :reset_token AND expires_at > NOW() LIMIT 1";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":reset_token", $token);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error verifying password reset token: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Update user password
+     */
+    public function updatePassword($userId, $newPassword) {
+        try {
+            $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            
+            $sql = "UPDATE " . $this->table_name . " 
+                    SET password_hash = :password_hash, updated_at = NOW() 
+                    WHERE id = :user_id";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":password_hash", $passwordHash);
+            $stmt->bindParam(":user_id", $userId);
+            
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error updating password: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Clear all password reset tokens for a user
+     */
+    public function clearPasswordResetTokens($userId) {
+        try {
+            $sql = "DELETE FROM password_reset_tokens WHERE user_id = :user_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":user_id", $userId);
+            $stmt->execute();
+            
+            $sql = "DELETE FROM password_reset_codes WHERE user_id = :user_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":user_id", $userId);
+            $stmt->execute();
+            
+            return true;
+        } catch (Exception $e) {
+            error_log("Error clearing password reset tokens: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Send password reset email
+     */
+    public function sendPasswordResetEmail($email, $code) {
+        try {
+            $subject = 'Password Reset - Wines & Liquors';
+            $message = "
+                <html>
+                <head><title>Password Reset</title></head>
+                <body>
+                    <h2>Password Reset Request</h2>
+                    <p>You have requested to reset your password for your Wines & Liquors account.</p>
+                    <p>Your reset code is: <strong style='color: #dc3545; font-size: 18px;'>{$code}</strong></p>
+                    <p>This code will expire in 15 minutes.</p>
+                    <p>If you didn't request this password reset, please ignore this email.</p>
+                    <br>
+                    <p>Best regards,<br>Wines & Liquors Team</p>
+                </body>
+                </html>
+            ";
+            
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From: Wines & Liquors <alainfabricehirwa@gmail.com>" . "\r\n";
+            $headers .= "Reply-To: alainfabricehirwa@gmail.com" . "\r\n";
+            $headers .= "X-Mailer: PHP/" . phpversion();
+
+            if (mail($email, $subject, $message, $headers)) {
+                return ['success' => true, 'message' => 'Password reset email sent successfully'];
+            } else {
+                return ['success' => false, 'message' => 'Failed to send password reset email'];
+            }
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Failed to send password reset email: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Update verification code
+     */
+    public function updateVerificationCode($userId, $type, $code, $expiresAt) {
+        try {
+            $sql = "UPDATE " . $this->verification_table . " 
+                    SET {$type}_code = :code, {$type}_expires_at = :expires_at 
+                    WHERE user_id = :user_id";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":code", $code);
+            $stmt->bindParam(":expires_at", $expiresAt);
+            $stmt->bindParam(":user_id", $userId);
+            
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error updating verification code: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Create password reset tables if they don't exist
+     */
+    private function createPasswordResetTable() {
+        try {
+            // Create password_reset_codes table
+            $sql = "CREATE TABLE IF NOT EXISTS password_reset_codes (
+                user_id INTEGER PRIMARY KEY,
+                reset_code VARCHAR(6) NOT NULL,
+                expires_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            )";
+            $this->conn->exec($sql);
+            
+            // Create password_reset_tokens table
+            $sql = "CREATE TABLE IF NOT EXISTS password_reset_tokens (
+                user_id INTEGER PRIMARY KEY,
+                reset_token VARCHAR(64) NOT NULL UNIQUE,
+                expires_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            )";
+            $this->conn->exec($sql);
+            
+            return true;
+        } catch (Exception $e) {
+            error_log("Error creating password reset tables: " . $e->getMessage());
+            return false;
+        }
+    }
 }
+} // End of class_exists check
 ?>

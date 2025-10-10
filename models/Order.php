@@ -4,13 +4,14 @@
  * Handles all order-related database operations
  */
 
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Order {
     private $conn;
     private $table_name = "orders";
     private $items_table = "order_items";
     private $logs_table = "order_status_logs";
+    private $payment_codes_table = "payment_codes";
 
     public function __construct() {
         $database = new Database();
@@ -173,7 +174,10 @@ class Order {
      */
     public function updateStatus($orderId, $newStatus, $changedBy = 'system', $reason = '') {
         try {
-            $this->conn->beginTransaction();
+            // Check if we're already in a transaction
+            if (!$this->conn->inTransaction()) {
+                $this->conn->beginTransaction();
+            }
 
             // Get current status
             $current_sql = "SELECT status FROM " . $this->table_name . " WHERE id = ?";
@@ -199,7 +203,9 @@ class Order {
             // Log status change
             $this->logStatusChange($orderId, $oldStatus, $newStatus, $changedBy, $reason);
 
-            $this->conn->commit();
+            if ($this->conn->inTransaction()) {
+                $this->conn->commit();
+            }
             return true;
 
         } catch (Exception $e) {
@@ -213,7 +219,10 @@ class Order {
      */
     public function updatePaymentStatus($orderId, $newPaymentStatus, $changedBy = 'system', $reason = '') {
         try {
-            $this->conn->beginTransaction();
+            // Check if we're already in a transaction
+            if (!$this->conn->inTransaction()) {
+                $this->conn->beginTransaction();
+            }
 
             // Get current payment status
             $current_sql = "SELECT payment_status FROM " . $this->table_name . " WHERE id = ?";
@@ -241,7 +250,9 @@ class Order {
                 $this->updateStatus($orderId, 'processing', $changedBy, 'Payment approved');
             }
 
-            $this->conn->commit();
+            if ($this->conn->inTransaction()) {
+                $this->conn->commit();
+            }
             return true;
 
         } catch (Exception $e) {
@@ -287,7 +298,7 @@ class Order {
         $stmt->execute();
         $stats['total_revenue'] = $stmt->fetch()['total'] ?? 0;
 
-        // Unique customers
+        // Unique customers (excluding admin users)
         $sql = "SELECT COUNT(DISTINCT customer_email) as total FROM " . $this->table_name;
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
@@ -300,6 +311,106 @@ class Order {
         $stats['pending_payments'] = $stmt->fetch()['total'];
 
         return $stats;
+    }
+
+    /**
+     * Get detailed sales report data
+     */
+    public function getSalesReport() {
+        $report = [];
+        
+        try {
+            // Get monthly sales data for the last 12 months
+            $sql = "SELECT 
+                        DATE_FORMAT(created_at, '%Y-%m') as month,
+                        COUNT(*) as order_count,
+                        COALESCE(SUM(total_amount), 0) as total_revenue,
+                        COALESCE(AVG(total_amount), 0) as avg_order_value
+                    FROM " . $this->table_name . " 
+                    WHERE created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+                    GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+                    ORDER BY month ASC";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $report['monthly_sales'] = $stmt->fetchAll() ?: [];
+        } catch (Exception $e) {
+            $report['monthly_sales'] = [];
+        }
+        
+        try {
+            // Get sales by payment method
+            $sql = "SELECT 
+                        COALESCE(payment_method, 'unknown') as payment_method,
+                        COUNT(*) as order_count,
+                        COALESCE(SUM(total_amount), 0) as total_revenue
+                    FROM " . $this->table_name . " 
+                    GROUP BY payment_method
+                    ORDER BY total_revenue DESC";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $report['sales_by_payment_method'] = $stmt->fetchAll() ?: [];
+        } catch (Exception $e) {
+            $report['sales_by_payment_method'] = [];
+        }
+        
+        try {
+            // Get sales by status
+            $sql = "SELECT 
+                        COALESCE(status, 'unknown') as status,
+                        COUNT(*) as order_count,
+                        COALESCE(SUM(total_amount), 0) as total_revenue
+                    FROM " . $this->table_name . " 
+                    GROUP BY status
+                    ORDER BY total_revenue DESC";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $report['sales_by_status'] = $stmt->fetchAll() ?: [];
+        } catch (Exception $e) {
+            $report['sales_by_status'] = [];
+        }
+        
+        try {
+            // Get top customers (simplified query)
+            $sql = "SELECT 
+                        customer_email,
+                        customer_first_name,
+                        customer_last_name,
+                        COUNT(*) as order_count,
+                        COALESCE(SUM(total_amount), 0) as total_spent
+                    FROM " . $this->table_name . " 
+                    GROUP BY customer_email, customer_first_name, customer_last_name
+                    ORDER BY total_spent DESC
+                    LIMIT 10";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $report['top_customers'] = $stmt->fetchAll() ?: [];
+        } catch (Exception $e) {
+            $report['top_customers'] = [];
+        }
+        
+        try {
+            // Get daily sales for the last 30 days
+            $sql = "SELECT 
+                        DATE(created_at) as date,
+                        COUNT(*) as order_count,
+                        COALESCE(SUM(total_amount), 0) as daily_revenue
+                    FROM " . $this->table_name . " 
+                    WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                    GROUP BY DATE(created_at)
+                    ORDER BY date ASC";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $report['daily_sales'] = $stmt->fetchAll() ?: [];
+        } catch (Exception $e) {
+            $report['daily_sales'] = [];
+        }
+        
+        return $report;
     }
 
     /**
@@ -362,6 +473,168 @@ class Order {
         }
 
         return $formatted;
+    }
+    
+    /**
+     * Generate mobile money payment code for an order
+     */
+    public function generatePaymentCode($orderId, $amount, $phoneNumber) {
+        try {
+            // Generate a unique 6-digit code for USSD format
+            $codeNumber = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            $paymentCode = "*182*8*1*{$codeNumber}#";
+            
+            // Check if code already exists (very unlikely but good practice)
+            while ($this->paymentCodeExists($paymentCode)) {
+                $codeNumber = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+                $paymentCode = "*182*8*1*{$codeNumber}#";
+            }
+            
+            // Set expiration time (24 hours from now)
+            $expiresAt = date('Y-m-d H:i:s', strtotime('+24 hours'));
+            
+            $sql = "INSERT INTO " . $this->payment_codes_table . " 
+                    (order_id, payment_code, amount, phone_number, expires_at, status) 
+                    VALUES (?, ?, ?, ?, ?, 'pending')";
+            
+            $stmt = $this->conn->prepare($sql);
+            $result = $stmt->execute([$orderId, $paymentCode, $amount, $phoneNumber, $expiresAt]);
+            
+            if ($result) {
+                return [
+                    'success' => true,
+                    'payment_code' => $paymentCode,
+                    'amount' => $amount,
+                    'phone_number' => $phoneNumber,
+                    'expires_at' => $expiresAt,
+                    'instructions' => "Dial {$paymentCode} to pay {$amount}frw for your order"
+                ];
+            }
+            
+            return ['success' => false, 'message' => 'Failed to generate payment code'];
+            
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Error generating payment code: ' . $e->getMessage()];
+        }
+    }
+    
+    /**
+     * Check if payment code exists
+     */
+    private function paymentCodeExists($paymentCode) {
+        $sql = "SELECT id FROM " . $this->payment_codes_table . " WHERE payment_code = ? LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$paymentCode]);
+        return $stmt->rowCount() > 0;
+    }
+    
+    /**
+     * Get payment code for an order
+     */
+    public function getPaymentCode($orderId) {
+        $sql = "SELECT * FROM " . $this->payment_codes_table . " 
+                WHERE order_id = ? AND status = 'pending' AND expires_at > NOW() 
+                ORDER BY created_at DESC LIMIT 1";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$orderId]);
+        $result = $stmt->fetch();
+        
+        if ($result) {
+            return [
+                'success' => true,
+                'payment_code' => $result['payment_code'],
+                'amount' => $result['amount'],
+                'phone_number' => $result['phone_number'],
+                'expires_at' => $result['expires_at'],
+                'created_at' => $result['created_at']
+            ];
+        }
+        
+        return ['success' => false, 'message' => 'No active payment code found'];
+    }
+    
+    /**
+     * Verify payment code (admin function)
+     */
+    public function verifyPaymentCode($orderId, $paymentCode, $verifiedBy) {
+        try {
+            // Check if we're already in a transaction
+            if (!$this->conn->inTransaction()) {
+                $this->conn->beginTransaction();
+            }
+            
+            // Check if payment code exists and is valid
+            $sql = "SELECT * FROM " . $this->payment_codes_table . " 
+                    WHERE order_id = ? AND payment_code = ? AND status = 'pending'";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$orderId, $paymentCode]);
+            $paymentRecord = $stmt->fetch();
+            
+            if (!$paymentRecord) {
+                throw new Exception('Invalid or expired payment code');
+            }
+            
+            // Mark payment code as verified
+            $update_sql = "UPDATE " . $this->payment_codes_table . " 
+                          SET status = 'verified', verified_at = NOW(), verified_by = ? 
+                          WHERE id = ?";
+            
+            $update_stmt = $this->conn->prepare($update_sql);
+            $update_stmt->execute([$verifiedBy, $paymentRecord['id']]);
+            
+            // Update order payment status
+            $this->updatePaymentStatus($orderId, 'approved', $verifiedBy, 'Mobile money payment verified');
+            
+            if ($this->conn->inTransaction()) {
+                $this->conn->commit();
+            }
+            
+            return [
+                'success' => true,
+                'message' => 'Payment verified successfully',
+                'order_id' => $orderId,
+                'amount' => $paymentRecord['amount']
+            ];
+            
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+    
+    /**
+     * Get all pending payment codes (admin function)
+     */
+    public function getPendingPaymentCodes() {
+        $sql = "SELECT pc.*, o.customer_first_name, o.customer_last_name, o.customer_phone, o.customer_email
+                FROM " . $this->payment_codes_table . " pc
+                JOIN " . $this->table_name . " o ON pc.order_id = o.id
+                WHERE pc.status = 'pending' AND pc.expires_at > NOW()
+                ORDER BY pc.created_at DESC";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+        
+        $paymentCodes = [];
+        foreach ($results as $result) {
+            $paymentCodes[] = [
+                'id' => $result['id'],
+                'order_id' => $result['order_id'],
+                'payment_code' => $result['payment_code'],
+                'amount' => $result['amount'],
+                'phone_number' => $result['phone_number'],
+                'customer_name' => $result['customer_first_name'] . ' ' . $result['customer_last_name'],
+                'customer_phone' => $result['customer_phone'],
+                'customer_email' => $result['customer_email'],
+                'created_at' => $result['created_at'],
+                'expires_at' => $result['expires_at']
+            ];
+        }
+        
+        return $paymentCodes;
     }
 }
 ?>

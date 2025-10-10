@@ -4,6 +4,31 @@
  * GET /api/admin/dashboard
  */
 
+// Set headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// Include required files
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../models/Order.php';
+
+// Only allow GET requests
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['message' => 'Method not allowed']);
+    exit;
+}
+
+// Helper functions are already defined in database.php
+
 try {
     $order = new Order();
     
@@ -18,8 +43,8 @@ try {
     
     $dashboardData = [
         'stats' => $stats,
-        'recentOrders' => $recentOrders['orders'],
-        'pendingPayments' => $pendingPayments['orders']
+        'recentOrders' => $recentOrders['orders'] ?? [],
+        'pendingPayments' => $pendingPayments['orders'] ?? []
     ];
     
     sendSuccess($dashboardData, 'Dashboard data retrieved successfully');

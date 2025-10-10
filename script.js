@@ -584,6 +584,32 @@ document.addEventListener("DOMContentLoaded", function () {
     if (firstCategory && firstGrid) {
       firstGrid.classList.add("active");
     }
+
+    // Handle mega menu positioning to prevent overflow
+    const megaMenuParent = menu.closest(".mega-menu");
+    if (megaMenuParent) {
+      megaMenuParent.addEventListener("mouseenter", function () {
+        const rect = this.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+
+        // Check if menu would overflow on the right
+        if (rect.left + menuRect.width > viewportWidth - 20) {
+          menu.style.left = "auto";
+          menu.style.right = "0";
+          menu.style.transform = "none";
+        } else if (rect.left < 20) {
+          // Check if menu would overflow on the left
+          menu.style.left = "0";
+          menu.style.transform = "none";
+        } else {
+          // Reset to center positioning
+          menu.style.left = "50%";
+          menu.style.right = "auto";
+          menu.style.transform = "translateX(-50%)";
+        }
+      });
+    }
   });
 
   // Slideshow functionality
@@ -687,7 +713,8 @@ document.addEventListener("DOMContentLoaded", function () {
   bindScroller("spirits-list", ".spirits-prev", ".spirits-next", 0.8);
 
   // Mobile search functionality
-  function openSearch() {
+  window.openSearch = function () {
+    const searchBar = document.querySelector(".search-bar");
     if (searchBar) {
       searchBar.classList.add("active");
       const input = searchBar.querySelector(".input-search-field");
@@ -699,9 +726,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (navAll) {
       navAll.classList.add("search-open");
     }
-  }
+  };
 
-  function closeSearch() {
+  // Make closeSearch globally available
+  window.closeSearch = function () {
+    const searchBar = document.querySelector(".search-bar");
     if (searchBar) {
       searchBar.classList.remove("active");
     }
@@ -709,7 +738,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (navAll) {
       navAll.classList.remove("search-open");
     }
-  }
+  };
 
   // Open mobile menu function
   function openMobileMenu() {

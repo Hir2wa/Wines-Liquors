@@ -474,7 +474,11 @@
           <span>Home</span>
         </a>
         <div class="logo">
-          <img src="images/logo1.png" alt="Total Wine & More Logo" style="width: 150px;"/>
+          <img
+            src="images/logo1.png"
+            alt="Total Wine & More Logo"
+            style="width: 150px"
+          />
         </div>
       </div>
       <div class="nav-right">
@@ -584,16 +588,77 @@
               type="tel"
               id="phone"
               class="form-input"
-              placeholder="+250XXXXXXXXX"
+              placeholder="+250XXXXXXXXX or 078XXXXXXXX"
               autocomplete="off"
               data-form-type="other"
               required
             />
             <div class="error-message" id="phoneError">
-              Please enter a valid phone number
+              Please enter a valid Rwandan phone number (e.g., +250788123456 or
+              0788123456)
             </div>
             <div class="success-message" id="phoneSuccess">
               ✓ Phone number is valid
+            </div>
+            <div
+              class="help-text"
+              style="font-size: 12px; color: #6c757d; margin-top: 5px"
+            >
+              Enter your phone number in international format (+250) or local
+              format (078)
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address" class="form-label">Address</label>
+            <input
+              type="text"
+              id="address"
+              class="form-input"
+              placeholder="Enter your address"
+              required
+            />
+            <div class="error-message" id="addressError">
+              Address is required
+            </div>
+            <div class="success-message" id="addressSuccess">
+              ✓ Address is valid
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city" class="form-label">City</label>
+              <input
+                type="text"
+                id="city"
+                class="form-input"
+                placeholder="Enter your city"
+                required
+              />
+              <div class="error-message" id="cityError">City is required</div>
+              <div class="success-message" id="citySuccess">
+                ✓ City is valid
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="country" class="form-label">Country</label>
+              <select id="country" class="form-input" required>
+                <option value="">Select Country</option>
+                <option value="Rwanda" selected>Rwanda</option>
+                <option value="Uganda">Uganda</option>
+                <option value="Kenya">Kenya</option>
+                <option value="Tanzania">Tanzania</option>
+                <option value="Burundi">Burundi</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="error-message" id="countryError">
+                Country is required
+              </div>
+              <div class="success-message" id="countrySuccess">
+                ✓ Country is valid
+              </div>
             </div>
           </div>
 
@@ -684,6 +749,30 @@
           </button>
         </form>
 
+        <!-- Email Verification Only -->
+        <div id="verificationMethodSection" style="display: none">
+          <div class="divider">
+            <span>Email Verification Required</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">📧 Verify your email address</label>
+            <p style="color: #6c757d; font-size: 14px; margin-bottom: 10px">
+              We'll send a verification code to your email address to complete
+              your registration.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            id="proceedVerificationBtn"
+            class="create-button"
+            style="width: 100%; margin-top: 20px"
+          >
+            Send Email Verification
+          </button>
+        </div>
+
         <!-- Verification Section -->
         <div id="verificationSection" style="display: none">
           <div class="divider">
@@ -691,8 +780,12 @@
           </div>
 
           <!-- Email Verification -->
-          <div class="form-group">
+          <div id="emailVerification" class="form-group">
             <label class="form-label">Email Verification</label>
+            <p style="color: #6c757d; font-size: 14px; margin-bottom: 10px">
+              We've sent a 6-digit code to your email address. Please check your
+              inbox.
+            </p>
             <div style="display: flex; gap: 10px; align-items: center">
               <input
                 type="text"
@@ -717,42 +810,23 @@
                 Verify Email
               </button>
             </div>
+            <button
+              type="button"
+              id="resendEmailBtn"
+              class="resend-button"
+              style="
+                margin-top: 10px;
+                background: none;
+                color: #dc3545;
+                border: none;
+                text-decoration: underline;
+                cursor: pointer;
+              "
+            >
+              Resend Email Code
+            </button>
             <div
               id="emailStatus"
-              class="error-message"
-              style="display: none"
-            ></div>
-          </div>
-
-          <!-- Phone Verification -->
-          <div class="form-group">
-            <label class="form-label">Phone Verification</label>
-            <div style="display: flex; gap: 10px; align-items: center">
-              <input
-                type="text"
-                id="phoneCode"
-                class="form-input"
-                placeholder="Enter 6-digit code"
-                maxlength="6"
-                style="
-                  flex: 1;
-                  text-align: center;
-                  font-size: 18px;
-                  font-weight: bold;
-                  letter-spacing: 2px;
-                "
-              />
-              <button
-                type="button"
-                id="verifyPhoneBtn"
-                class="create-button"
-                style="width: auto; padding: 12px 20px"
-              >
-                Verify Phone
-              </button>
-            </div>
-            <div
-              id="phoneStatus"
               class="error-message"
               style="display: none"
             ></div>
@@ -778,7 +852,6 @@
       let passwordStrength = 0;
       let currentUserId = null;
       let emailVerified = false;
-      let phoneVerified = false;
 
       // Check if user is already logged in
       function checkLoginStatus() {
@@ -820,607 +893,725 @@
       if (checkLoginStatus()) {
         // If already logged in, the checkLoginStatus function will handle the redirect
         // and we don't need to set up the form
-        return;
-      }
-
-      const signupForm = document.getElementById("signupForm");
-      if (signupForm) {
-        console.log("Signup form found, adding submit listener");
-        signupForm.addEventListener("submit", function (e) {
-          console.log("Registration form submitted");
-          e.preventDefault();
-          handleRegister(e);
-        });
+        // Exit early from the script execution
       } else {
-        console.log("Signup form not found!");
-      }
-
-      // Also add click listener to button for debugging
-      const createButton = document.getElementById("createButton");
-      if (createButton) {
-        console.log("Create button found, adding click listener");
-        createButton.addEventListener("click", function (e) {
-          console.log("🔥 Create button clicked - Event triggered!");
-          console.log("Button disabled:", this.disabled);
-          console.log("Button type:", this.type);
-          console.log(
-            "Form validation state:",
-            this.disabled ? "DISABLED" : "ENABLED"
-          );
-
-          if (this.disabled) {
-            console.log("Button is disabled, preventing form submission");
+        const signupForm = document.getElementById("signupForm");
+        if (signupForm) {
+          console.log("Signup form found, adding submit listener");
+          signupForm.addEventListener("submit", function (e) {
+            console.log("Registration form submitted");
             e.preventDefault();
-            e.stopPropagation();
-          } else {
-            console.log(
-              "Button is enabled, manually triggering form submission"
-            );
-            e.preventDefault();
-            e.stopPropagation();
-            // Manually trigger the form submission
             handleRegister(e);
-          }
-        });
-      } else {
-        console.log("Create button not found!");
-      }
-
-      // Real-time validation
-      document
-        .getElementById("firstName")
-        .addEventListener("input", validateFirstName);
-
-      // Add debugging to phone field
-      const phoneField = document.getElementById("phone");
-      if (phoneField) {
-        phoneField.addEventListener("input", function (e) {
-          console.log("Phone field input:", e.target.value);
-        });
-        phoneField.addEventListener("change", function (e) {
-          console.log("Phone field changed:", e.target.value);
-        });
-      }
-      document
-        .getElementById("lastName")
-        .addEventListener("input", validateLastName);
-      document.getElementById("email").addEventListener("blur", validateEmail);
-      document.getElementById("phone").addEventListener("input", validatePhone);
-      document
-        .getElementById("password")
-        .addEventListener("input", validatePassword);
-      document
-        .getElementById("confirmPassword")
-        .addEventListener("input", validateConfirmPassword);
-      document
-        .getElementById("terms")
-        .addEventListener("change", updateButtonState);
-
-      // Verification event listeners
-      document
-        .getElementById("verifyEmailBtn")
-        .addEventListener("click", verifyEmail);
-      document
-        .getElementById("verifyPhoneBtn")
-        .addEventListener("click", verifyPhone);
-
-      function validateFirstName() {
-        const input = document.getElementById("firstName");
-        const error = document.getElementById("firstNameError");
-
-        if (input.value.trim().length > 0) {
-          input.classList.remove("error");
-          input.classList.add("success");
-          error.style.display = "none";
-          return true;
+          });
         } else {
-          input.classList.add("error");
-          input.classList.remove("success");
-          error.style.display = "block";
-          return false;
-        }
-      }
-
-      function validateLastName() {
-        const input = document.getElementById("lastName");
-        const error = document.getElementById("lastNameError");
-
-        if (input.value.trim().length > 0) {
-          input.classList.remove("error");
-          input.classList.add("success");
-          error.style.display = "none";
-          return true;
-        } else {
-          input.classList.add("error");
-          input.classList.remove("success");
-          error.style.display = "block";
-          return false;
-        }
-      }
-
-      function validateEmail() {
-        const input = document.getElementById("email");
-        const error = document.getElementById("emailError");
-        const success = document.getElementById("emailSuccess");
-
-        if (isValidEmail(input.value)) {
-          input.classList.remove("error");
-          input.classList.add("success");
-          error.style.display = "none";
-          success.style.display = "block";
-          return true;
-        } else {
-          input.classList.add("error");
-          input.classList.remove("success");
-          error.style.display = "block";
-          success.style.display = "none";
-          return false;
-        }
-      }
-
-      function validatePhone() {
-        const input = document.getElementById("phone");
-        const error = document.getElementById("phoneError");
-        const success = document.getElementById("phoneSuccess");
-
-        if (isValidPhone(input.value)) {
-          input.classList.remove("error");
-          input.classList.add("success");
-          error.style.display = "none";
-          success.style.display = "block";
-          return true;
-        } else {
-          input.classList.add("error");
-          input.classList.remove("success");
-          error.style.display = "block";
-          success.style.display = "none";
-          return false;
-        }
-      }
-
-      function validatePassword() {
-        const input = document.getElementById("password");
-        const password = input.value;
-        const strengthDiv = document.getElementById("passwordStrength");
-        const strengthFill = document.getElementById("strengthFill");
-        const strengthText = document.getElementById("strengthText");
-
-        // Show strength indicator
-        if (password.length > 0) {
-          strengthDiv.style.display = "block";
-        } else {
-          strengthDiv.style.display = "none";
-          return false;
+          console.log("Signup form not found!");
         }
 
-        // Check requirements
-        const hasLength = password.length >= 8;
-        const hasUpper = /[A-Z]/.test(password);
-        const hasNumber = /\d/.test(password);
+        // Also add click listener to button for debugging
+        const createButton = document.getElementById("createButton");
+        if (createButton) {
+          console.log("Create button found, adding click listener");
+          createButton.addEventListener("click", function (e) {
+            console.log("🔥 Create button clicked - Event triggered!");
+            console.log("Button disabled:", this.disabled);
+            console.log("Button type:", this.type);
+            console.log(
+              "Form validation state:",
+              this.disabled ? "DISABLED" : "ENABLED"
+            );
 
-        // Update requirement indicators
-        updateRequirement("lengthReq", hasLength);
-        updateRequirement("upperReq", hasUpper);
-        updateRequirement("numberReq", hasNumber);
-
-        // Calculate strength
-        let strength = 0;
-        if (hasLength) strength++;
-        if (hasUpper) strength++;
-        if (hasNumber) strength++;
-        if (password.length >= 12) strength++;
-
-        passwordStrength = strength;
-
-        // Update strength bar
-        strengthFill.className = "strength-fill";
-        if (strength === 1) {
-          strengthFill.classList.add("strength-weak");
-          strengthText.textContent = "Weak password";
-        } else if (strength === 2) {
-          strengthFill.classList.add("strength-fair");
-          strengthText.textContent = "Fair password";
-        } else if (strength === 3) {
-          strengthFill.classList.add("strength-good");
-          strengthText.textContent = "Good password";
-        } else if (strength >= 4) {
-          strengthFill.classList.add("strength-strong");
-          strengthText.textContent = "Strong password";
-        }
-
-        const isValid = hasLength && hasUpper && hasNumber;
-        if (isValid) {
-          input.classList.remove("error");
-          input.classList.add("success");
-        } else {
-          input.classList.add("error");
-          input.classList.remove("success");
-        }
-
-        updateButtonState();
-        return isValid;
-      }
-
-      function validateConfirmPassword() {
-        const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirmPassword");
-        const error = document.getElementById("confirmPasswordError");
-        const success = document.getElementById("confirmPasswordSuccess");
-
-        if (confirmPassword.value && password === confirmPassword.value) {
-          confirmPassword.classList.remove("error");
-          confirmPassword.classList.add("success");
-          error.style.display = "none";
-          success.style.display = "block";
-          return true;
-        } else if (confirmPassword.value) {
-          confirmPassword.classList.add("error");
-          confirmPassword.classList.remove("success");
-          error.style.display = "block";
-          success.style.display = "none";
-          return false;
-        }
-        return false;
-      }
-
-      function updateRequirement(id, met) {
-        const element = document.getElementById(id);
-        if (met) {
-          element.classList.add("met");
-          element.querySelector("span").textContent = "✓";
-        } else {
-          element.classList.remove("met");
-          element.querySelector("span").textContent = "•";
-        }
-      }
-
-      function updateButtonState() {
-        const button = document.getElementById("createButton");
-        const firstName = document.getElementById("firstName").value.trim();
-        const lastName = document.getElementById("lastName").value.trim();
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
-        const password = document.getElementById("password").value;
-        const confirmPassword =
-          document.getElementById("confirmPassword").value;
-        const terms = document.getElementById("terms").checked;
-
-        console.log("updateButtonState called");
-        console.log("Form values:", {
-          firstName,
-          lastName,
-          email,
-          phone,
-          password: password ? "***" : "",
-          confirmPassword: confirmPassword ? "***" : "",
-          terms,
-        });
-
-        const validationChecks = {
-          firstName: !!firstName,
-          lastName: !!lastName,
-          email: isValidEmail(email),
-          phone: isValidPhone(phone),
-          password: validatePasswordStrength(password),
-          confirmPassword: password === confirmPassword && password.length > 0,
-          terms: terms,
-        };
-
-        const isValid = Object.values(validationChecks).every((check) => check);
-
-        console.log("Form validation result:", isValid);
-        console.log("Validation checks:", validationChecks);
-        console.log("Button disabled:", !isValid);
-        button.disabled = !isValid;
-      }
-
-      function validatePasswordStrength(password) {
-        const hasLength = password.length >= 8;
-        const hasUpper = /[A-Z]/.test(password);
-        const hasNumber = /\d/.test(password);
-        return hasLength && hasUpper && hasNumber;
-      }
-
-      function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      }
-
-      function isValidPhone(phone) {
-        // Remove all non-digit characters
-        const cleanPhone = phone.replace(/\D/g, "");
-        // Check if it's a valid Rwandan phone number
-        const isValid =
-          /^(\+?250|0)?[0-9]{9}$/.test(phone) && cleanPhone.length >= 9;
-        console.log("Phone validation:", { phone, cleanPhone, isValid });
-        return isValid;
-      }
-
-      async function handleRegister(e) {
-        console.log("🎯 handleRegister called");
-        console.log("Event object:", e);
-
-        const button = document.getElementById("createButton");
-        const form = document.getElementById("signupForm");
-        const verificationSection = document.getElementById(
-          "verificationSection"
-        );
-
-        console.log("Button found:", !!button);
-        console.log("Form found:", !!form);
-        console.log("Verification section found:", !!verificationSection);
-
-        // Show loading state
-        button.classList.add("loading");
-        button.disabled = true;
-
-        const emailElement = document.getElementById("email");
-        const passwordElement = document.getElementById("password");
-        const firstNameElement = document.getElementById("firstName");
-        const lastNameElement = document.getElementById("lastName");
-        const phoneElement = document.getElementById("phone");
-
-        console.log("Form elements found:", {
-          email: !!emailElement,
-          password: !!passwordElement,
-          firstName: !!firstNameElement,
-          lastName: !!lastNameElement,
-          phone: !!phoneElement,
-        });
-
-        const userData = {
-          email: emailElement.value,
-          password: passwordElement.value,
-          firstName: firstNameElement.value,
-          lastName: lastNameElement.value,
-          phone: phoneElement.value,
-        };
-
-        console.log("User data:", userData);
-        console.log("Phone element value:", phoneElement.value);
-        console.log("Email element value:", emailElement.value);
-
-        try {
-          console.log("Making API call to register endpoint...");
-          const response = await fetch(
-            "http://localhost:8000/api/auth/register",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userData),
+            if (this.disabled) {
+              console.log("Button is disabled, preventing form submission");
+              e.preventDefault();
+              e.stopPropagation();
+            } else {
+              console.log(
+                "Button is enabled, manually triggering form submission"
+              );
+              e.preventDefault();
+              e.stopPropagation();
+              // Manually trigger the form submission
+              handleRegister(e);
             }
+          });
+        } else {
+          console.log("Create button not found!");
+        }
+
+        // Real-time validation
+        document
+          .getElementById("firstName")
+          .addEventListener("input", validateFirstName);
+
+        // Add debugging to phone field
+        const phoneField = document.getElementById("phone");
+        if (phoneField) {
+          phoneField.addEventListener("input", function (e) {
+            console.log("Phone field input:", e.target.value);
+          });
+          phoneField.addEventListener("change", function (e) {
+            console.log("Phone field changed:", e.target.value);
+          });
+        }
+        document
+          .getElementById("lastName")
+          .addEventListener("input", validateLastName);
+        document
+          .getElementById("email")
+          .addEventListener("blur", validateEmail);
+        document
+          .getElementById("phone")
+          .addEventListener("input", validatePhone);
+        document
+          .getElementById("address")
+          .addEventListener("input", validateAddress);
+        document.getElementById("city").addEventListener("input", validateCity);
+        document
+          .getElementById("country")
+          .addEventListener("change", validateCountry);
+        document
+          .getElementById("password")
+          .addEventListener("input", validatePassword);
+        document
+          .getElementById("confirmPassword")
+          .addEventListener("input", validateConfirmPassword);
+        document
+          .getElementById("terms")
+          .addEventListener("change", updateButtonState);
+
+        // Verification event listeners
+        document
+          .getElementById("proceedVerificationBtn")
+          .addEventListener("click", proceedWithVerification);
+        document
+          .getElementById("verifyEmailBtn")
+          .addEventListener("click", verifyEmail);
+        document
+          .getElementById("resendEmailBtn")
+          .addEventListener("click", resendEmailCode);
+
+        function validateFirstName() {
+          const input = document.getElementById("firstName");
+          const error = document.getElementById("firstNameError");
+
+          if (input.value.trim().length > 0) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            return false;
+          }
+        }
+
+        function validateLastName() {
+          const input = document.getElementById("lastName");
+          const error = document.getElementById("lastNameError");
+
+          if (input.value.trim().length > 0) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            return false;
+          }
+        }
+
+        function validateEmail() {
+          const input = document.getElementById("email");
+          const error = document.getElementById("emailError");
+          const success = document.getElementById("emailSuccess");
+
+          if (isValidEmail(input.value)) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            success.style.display = "block";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            success.style.display = "none";
+            return false;
+          }
+        }
+
+        function validatePhone() {
+          const input = document.getElementById("phone");
+          const error = document.getElementById("phoneError");
+          const success = document.getElementById("phoneSuccess");
+
+          if (isValidPhone(input.value)) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            success.style.display = "block";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            success.style.display = "none";
+            return false;
+          }
+        }
+
+        function validateAddress() {
+          const input = document.getElementById("address");
+          const error = document.getElementById("addressError");
+          const success = document.getElementById("addressSuccess");
+
+          if (input.value.trim().length > 0) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            success.style.display = "block";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            success.style.display = "none";
+            return false;
+          }
+        }
+
+        function validateCity() {
+          const input = document.getElementById("city");
+          const error = document.getElementById("cityError");
+          const success = document.getElementById("citySuccess");
+
+          if (input.value.trim().length > 0) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            success.style.display = "block";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            success.style.display = "none";
+            return false;
+          }
+        }
+
+        function validateCountry() {
+          const input = document.getElementById("country");
+          const error = document.getElementById("countryError");
+          const success = document.getElementById("countrySuccess");
+
+          if (input.value.trim().length > 0) {
+            input.classList.remove("error");
+            input.classList.add("success");
+            error.style.display = "none";
+            success.style.display = "block";
+            return true;
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            error.style.display = "block";
+            success.style.display = "none";
+            return false;
+          }
+        }
+
+        function validatePassword() {
+          const input = document.getElementById("password");
+          const password = input.value;
+          const strengthDiv = document.getElementById("passwordStrength");
+          const strengthFill = document.getElementById("strengthFill");
+          const strengthText = document.getElementById("strengthText");
+
+          // Show strength indicator
+          if (password.length > 0) {
+            strengthDiv.style.display = "block";
+          } else {
+            strengthDiv.style.display = "none";
+            return false;
+          }
+
+          // Check requirements
+          const hasLength = password.length >= 8;
+          const hasUpper = /[A-Z]/.test(password);
+          const hasNumber = /\d/.test(password);
+
+          // Update requirement indicators
+          updateRequirement("lengthReq", hasLength);
+          updateRequirement("upperReq", hasUpper);
+          updateRequirement("numberReq", hasNumber);
+
+          // Calculate strength
+          let strength = 0;
+          if (hasLength) strength++;
+          if (hasUpper) strength++;
+          if (hasNumber) strength++;
+          if (password.length >= 12) strength++;
+
+          passwordStrength = strength;
+
+          // Update strength bar
+          strengthFill.className = "strength-fill";
+          if (strength === 1) {
+            strengthFill.classList.add("strength-weak");
+            strengthText.textContent = "Weak password";
+          } else if (strength === 2) {
+            strengthFill.classList.add("strength-fair");
+            strengthText.textContent = "Fair password";
+          } else if (strength === 3) {
+            strengthFill.classList.add("strength-good");
+            strengthText.textContent = "Good password";
+          } else if (strength >= 4) {
+            strengthFill.classList.add("strength-strong");
+            strengthText.textContent = "Strong password";
+          }
+
+          const isValid = hasLength && hasUpper && hasNumber;
+          if (isValid) {
+            input.classList.remove("error");
+            input.classList.add("success");
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+          }
+
+          updateButtonState();
+          return isValid;
+        }
+
+        function validateConfirmPassword() {
+          const password = document.getElementById("password").value;
+          const confirmPassword = document.getElementById("confirmPassword");
+          const error = document.getElementById("confirmPasswordError");
+          const success = document.getElementById("confirmPasswordSuccess");
+
+          if (confirmPassword.value && password === confirmPassword.value) {
+            confirmPassword.classList.remove("error");
+            confirmPassword.classList.add("success");
+            error.style.display = "none";
+            success.style.display = "block";
+            return true;
+          } else if (confirmPassword.value) {
+            confirmPassword.classList.add("error");
+            confirmPassword.classList.remove("success");
+            error.style.display = "block";
+            success.style.display = "none";
+            return false;
+          }
+          return false;
+        }
+
+        function updateRequirement(id, met) {
+          const element = document.getElementById(id);
+          if (met) {
+            element.classList.add("met");
+            element.querySelector("span").textContent = "✓";
+          } else {
+            element.classList.remove("met");
+            element.querySelector("span").textContent = "•";
+          }
+        }
+
+        function updateButtonState() {
+          const button = document.getElementById("createButton");
+          const firstName = document.getElementById("firstName").value.trim();
+          const lastName = document.getElementById("lastName").value.trim();
+          const email = document.getElementById("email").value;
+          const phone = document.getElementById("phone").value;
+          const address = document.getElementById("address").value.trim();
+          const city = document.getElementById("city").value.trim();
+          const country = document.getElementById("country").value;
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+          const terms = document.getElementById("terms").checked;
+
+          console.log("updateButtonState called");
+          console.log("Form values:", {
+            firstName,
+            lastName,
+            email,
+            phone,
+            address,
+            city,
+            country,
+            password: password ? "***" : "",
+            confirmPassword: confirmPassword ? "***" : "",
+            terms,
+          });
+
+          const validationChecks = {
+            firstName: !!firstName,
+            lastName: !!lastName,
+            email: isValidEmail(email),
+            phone: isValidPhone(phone),
+            address: !!address,
+            city: !!city,
+            country: !!country,
+            password: validatePasswordStrength(password),
+            confirmPassword:
+              password === confirmPassword && password.length > 0,
+            terms: terms,
+          };
+
+          const isValid = Object.values(validationChecks).every(
+            (check) => check
           );
 
-          console.log("Response status:", response.status);
-          const result = await response.json();
-          console.log("Response result:", result);
+          console.log("Form validation result:", isValid);
+          console.log("Validation checks:", validationChecks);
+          console.log("Button disabled:", !isValid);
+          button.disabled = !isValid;
+        }
 
-          if (response.ok) {
-            console.log("✅ Registration successful!");
-            console.log("User ID:", result.data.user_id);
-            console.log("Verification codes:", result.data.verification);
+        function validatePasswordStrength(password) {
+          const hasLength = password.length >= 8;
+          const hasUpper = /[A-Z]/.test(password);
+          const hasNumber = /\d/.test(password);
+          return hasLength && hasUpper && hasNumber;
+        }
 
-            currentUserId = result.data.user_id;
+        function isValidEmail(email) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
 
-            // Hide form and show verification section
-            form.style.display = "none";
-            verificationSection.style.display = "block";
+        function isValidPhone(phone) {
+          if (!phone || phone.trim() === "") {
+            return false;
+          }
 
-            // Auto-fill verification codes for testing
-            document.getElementById("emailCode").value =
-              result.data.verification.email_code;
-            document.getElementById("phoneCode").value =
-              result.data.verification.phone_code;
+          // Remove all non-digit characters except +
+          const cleanPhone = phone.replace(/[^\d+]/g, "");
 
-            showFlashMessage(
-              "🎉 Account created successfully! Please verify your email and phone number to complete registration.",
-              "success"
+          // Check various Rwandan phone number formats
+          const patterns = [
+            /^\+250[0-9]{9}$/, // +250XXXXXXXXX
+            /^250[0-9]{9}$/, // 250XXXXXXXXX
+            /^0[0-9]{9}$/, // 0XXXXXXXXX
+            /^[0-9]{9}$/, // XXXXXXXXX (9 digits)
+          ];
+
+          const isValid = patterns.some((pattern) => pattern.test(cleanPhone));
+
+          // Additional check: if it starts with 0, it should be 10 digits total
+          if (cleanPhone.startsWith("0") && cleanPhone.length !== 10) {
+            return false;
+          }
+
+          // If it starts with +250 or 250, it should be 13 or 12 digits respectively
+          if (cleanPhone.startsWith("+250") && cleanPhone.length !== 13) {
+            return false;
+          }
+          if (cleanPhone.startsWith("250") && cleanPhone.length !== 12) {
+            return false;
+          }
+
+          console.log("Phone validation:", { phone, cleanPhone, isValid });
+          return isValid;
+        }
+
+        async function handleRegister(e) {
+          console.log("🎯 handleRegister called");
+          console.log("Event object:", e);
+
+          const button = document.getElementById("createButton");
+          const form = document.getElementById("signupForm");
+          const verificationSection = document.getElementById(
+            "verificationSection"
+          );
+
+          console.log("Button found:", !!button);
+          console.log("Form found:", !!form);
+          console.log("Verification section found:", !!verificationSection);
+
+          // Show loading state
+          button.classList.add("loading");
+          button.disabled = true;
+
+          const emailElement = document.getElementById("email");
+          const passwordElement = document.getElementById("password");
+          const firstNameElement = document.getElementById("firstName");
+          const lastNameElement = document.getElementById("lastName");
+          const phoneElement = document.getElementById("phone");
+          const addressElement = document.getElementById("address");
+          const cityElement = document.getElementById("city");
+          const countryElement = document.getElementById("country");
+
+          console.log("Form elements found:", {
+            email: !!emailElement,
+            password: !!passwordElement,
+            firstName: !!firstNameElement,
+            lastName: !!lastNameElement,
+            phone: !!phoneElement,
+            address: !!addressElement,
+            city: !!cityElement,
+            country: !!countryElement,
+          });
+
+          const userData = {
+            email: emailElement.value,
+            password: passwordElement.value,
+            firstName: firstNameElement.value,
+            lastName: lastNameElement.value,
+            phone: phoneElement.value,
+            address: addressElement.value,
+            city: cityElement.value,
+            country: countryElement.value,
+          };
+
+          console.log("User data:", userData);
+          console.log("Phone element value:", phoneElement.value);
+          console.log("Email element value:", emailElement.value);
+
+          try {
+            console.log("Making API call to register endpoint...");
+            const response = await fetch(
+              "http://localhost:8000/api/auth/register",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+              }
             );
-          } else {
-            console.log("❌ Registration failed!");
-            console.log("Error message:", result.message);
+
+            console.log("Response status:", response.status);
+            const result = await response.json();
+            console.log("Response result:", result);
+
+            if (response.ok) {
+              console.log("✅ Registration successful!");
+              console.log("User ID:", result.data.user_id);
+              console.log("Verification codes:", result.data.verification);
+
+              currentUserId = result.data.user_id;
+
+              // Hide form and show verification method selection
+              form.style.display = "none";
+              document.getElementById(
+                "verificationMethodSection"
+              ).style.display = "block";
+
+              // Store verification codes for later use
+              window.verificationCodes = result.data.verification;
+
+              showFlashMessage(
+                "🎉 Account created successfully! Please choose your verification method to complete registration.",
+                "success"
+              );
+            } else {
+              console.log("❌ Registration failed!");
+              console.log("Error message:", result.message);
+              showFlashMessage(
+                result.message || "Registration failed. Please try again.",
+                "error"
+              );
+              button.classList.remove("loading");
+              button.disabled = false;
+            }
+          } catch (error) {
+            console.log("❌ Network error during registration!");
+            console.log("Error details:", error);
             showFlashMessage(
-              result.message || "Registration failed. Please try again.",
+              "Network error. Please check your connection and try again.",
               "error"
             );
             button.classList.remove("loading");
             button.disabled = false;
           }
-        } catch (error) {
-          console.log("❌ Network error during registration!");
-          console.log("Error details:", error);
-          showFlashMessage(
-            "Network error. Please check your connection and try again.",
-            "error"
-          );
-          button.classList.remove("loading");
-          button.disabled = false;
-        }
-      }
-
-      // Email verification
-      async function verifyEmail() {
-        const code = document.getElementById("emailCode").value;
-        if (!code || code.length !== 6) {
-          showStatus(
-            "emailStatus",
-            "Please enter a valid 6-digit code.",
-            "error"
-          );
-          return;
         }
 
-        if (!currentUserId) {
-          showStatus(
-            "emailStatus",
-            "Please create your account first.",
-            "error"
-          );
-          return;
-        }
-
-        try {
-          const response = await fetch(
-            "http://localhost:8000/api/auth/verify",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                userId: currentUserId,
-                code: code,
-                type: "email",
-              }),
-            }
-          );
-
-          const result = await response.json();
-
-          if (response.ok) {
-            emailVerified = true;
-            showStatus(
-              "emailStatus",
-              "Email verified successfully!",
-              "success"
-            );
-            document.getElementById("verifyEmailBtn").disabled = true;
-            checkVerificationComplete();
-          } else {
-            showStatus(
-              "emailStatus",
-              result.message || "Verification failed.",
-              "error"
-            );
-          }
-        } catch (error) {
-          showStatus(
-            "emailStatus",
-            "Network error. Please try again.",
-            "error"
-          );
-        }
-      }
-
-      // Phone verification
-      async function verifyPhone() {
-        const code = document.getElementById("phoneCode").value;
-        if (!code || code.length !== 6) {
-          showStatus(
-            "phoneStatus",
-            "Please enter a valid 6-digit code.",
-            "error"
-          );
-          return;
-        }
-
-        if (!currentUserId) {
-          showStatus(
-            "phoneStatus",
-            "Please create your account first.",
-            "error"
-          );
-          return;
-        }
-
-        try {
-          const response = await fetch(
-            "http://localhost:8000/api/auth/verify",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                userId: currentUserId,
-                code: code,
-                type: "phone",
-              }),
-            }
-          );
-
-          const result = await response.json();
-
-          if (response.ok) {
-            phoneVerified = true;
-            showStatus(
-              "phoneStatus",
-              "Phone verified successfully!",
-              "success"
-            );
-            document.getElementById("verifyPhoneBtn").disabled = true;
-            checkVerificationComplete();
-          } else {
-            showStatus(
-              "phoneStatus",
-              result.message || "Verification failed.",
-              "error"
-            );
-          }
-        } catch (error) {
-          showStatus(
-            "phoneStatus",
-            "Network error. Please try again.",
-            "error"
-          );
-        }
-      }
-
-      function checkVerificationComplete() {
-        if (emailVerified && phoneVerified) {
-          document.getElementById("verificationSuccess").style.display =
+        // Proceed with verification method
+        function proceedWithVerification() {
+          // Hide method selection and show verification section
+          document.getElementById("verificationMethodSection").style.display =
+            "none";
+          document.getElementById("verificationSection").style.display =
             "block";
+
+          document.getElementById("emailVerification").style.display = "block";
+          document.getElementById("verificationTitle").textContent =
+            "Verify your email";
+
+          // Auto-fill email code for testing
+          if (window.verificationCodes && window.verificationCodes.email_code) {
+            document.getElementById("emailCode").value =
+              window.verificationCodes.email_code;
+          }
+        }
+
+        // Resend email code
+        async function resendEmailCode() {
+          try {
+            const response = await fetch(
+              "http://localhost:8000/api/auth/resend-verification",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  user_id: currentUserId,
+                  type: "email",
+                }),
+              }
+            );
+
+            const result = await response.json();
+
+            if (result.status === 200) {
+              showFlashMessage(
+                "Email verification code resent successfully!",
+                "success"
+              );
+            } else {
+              showFlashMessage(
+                result.message || "Failed to resend email code",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error resending email code:", error);
+            showFlashMessage(
+              "Failed to resend email code. Please try again.",
+              "error"
+            );
+          }
+        }
+
+        // Email verification
+        async function verifyEmail() {
+          const code = document.getElementById("emailCode").value;
+          if (!code || code.length !== 6) {
+            showStatus(
+              "emailStatus",
+              "Please enter a valid 6-digit code.",
+              "error"
+            );
+            return;
+          }
+
+          if (!currentUserId) {
+            showStatus(
+              "emailStatus",
+              "Please create your account first.",
+              "error"
+            );
+            return;
+          }
+
+          try {
+            const response = await fetch(
+              "http://localhost:8000/api/auth/verify",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: currentUserId,
+                  code: code,
+                  type: "email",
+                }),
+              }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              emailVerified = true;
+              showStatus(
+                "emailStatus",
+                "Email verified successfully!",
+                "success"
+              );
+              document.getElementById("verifyEmailBtn").disabled = true;
+              checkVerificationComplete();
+            } else {
+              showStatus(
+                "emailStatus",
+                result.message || "Verification failed.",
+                "error"
+              );
+            }
+          } catch (error) {
+            showStatus(
+              "emailStatus",
+              "Network error. Please try again.",
+              "error"
+            );
+          }
+        }
+
+        function checkVerificationComplete() {
+          if (emailVerified) {
+            document.getElementById("verificationSuccess").style.display =
+              "block";
+            showFlashMessage(
+              "🎉 Account verified successfully! You can now log in to your account.",
+              "success"
+            );
+
+            setTimeout(() => {
+              window.location.href = "login.html";
+            }, 2000);
+          }
+        }
+
+        function showStatus(elementId, message, type) {
+          const element = document.getElementById(elementId);
+          element.textContent = message;
+          element.style.display = "block";
+          element.className = `error-message ${
+            type === "success" ? "success-message" : ""
+          }`;
+        }
+
+        function socialSignup(provider) {
           showFlashMessage(
-            "🎉 Account verified successfully! You can now log in to your account.",
-            "success"
+            `${provider} signup is not yet implemented.`,
+            "error"
           );
-
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 2000);
         }
-      }
 
-      function showStatus(elementId, message, type) {
-        const element = document.getElementById(elementId);
-        element.textContent = message;
-        element.style.display = "block";
-        element.className = `error-message ${
-          type === "success" ? "success-message" : ""
-        }`;
-      }
-
-      function socialSignup(provider) {
-        showFlashMessage(`${provider} signup is not yet implemented.`, "error");
-      }
-
-      function goToLogin() {
-        window.location.href = "login.html";
-      }
-
-      // Add event listeners for real-time validation
-      document.querySelectorAll("input").forEach((input) => {
-        input.addEventListener("input", updateButtonState);
-      });
-
-      // Phone number formatting
-      document.getElementById("phone").addEventListener("input", function (e) {
-        let value = e.target.value.replace(/\D/g, "");
-        if (value.startsWith("250")) {
-          value = "+" + value;
-        } else if (value.startsWith("0")) {
-          value = "+250" + value.substring(1);
-        } else if (value && !value.startsWith("+")) {
-          value = "+250" + value;
+        function goToLogin() {
+          window.location.href = "login.html";
         }
-        e.target.value = value;
-      });
 
-      function showFlashMessage(message, type = "success") {
-        // Create flash message container
-        const flashDiv = document.createElement("div");
-        flashDiv.style.cssText = `
+        // Add event listeners for real-time validation
+        document.querySelectorAll("input, select").forEach((input) => {
+          input.addEventListener("input", updateButtonState);
+          input.addEventListener("change", updateButtonState);
+        });
+
+        // Phone number formatting
+        document
+          .getElementById("phone")
+          .addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, "");
+            if (value.startsWith("250")) {
+              value = "+" + value;
+            } else if (value.startsWith("0")) {
+              value = "+250" + value.substring(1);
+            } else if (value && !value.startsWith("+")) {
+              value = "+250" + value;
+            }
+            e.target.value = value;
+          });
+
+        function showFlashMessage(message, type = "success") {
+          // Create flash message container
+          const flashDiv = document.createElement("div");
+          flashDiv.style.cssText = `
           position: fixed;
           top: 20px;
           right: 20px;
@@ -1440,39 +1631,40 @@
           gap: 12px;
         `;
 
-        // Add icon
-        const icon = document.createElement("i");
-        icon.className =
-          type === "success"
-            ? "fas fa-check-circle"
-            : "fas fa-exclamation-circle";
-        icon.style.fontSize = "18px";
+          // Add icon
+          const icon = document.createElement("i");
+          icon.className =
+            type === "success"
+              ? "fas fa-check-circle"
+              : "fas fa-exclamation-circle";
+          icon.style.fontSize = "18px";
 
-        // Add message text
-        const messageText = document.createElement("span");
-        messageText.textContent = message;
+          // Add message text
+          const messageText = document.createElement("span");
+          messageText.textContent = message;
 
-        flashDiv.appendChild(icon);
-        flashDiv.appendChild(messageText);
+          flashDiv.appendChild(icon);
+          flashDiv.appendChild(messageText);
 
-        // Add to page
-        document.body.appendChild(flashDiv);
+          // Add to page
+          document.body.appendChild(flashDiv);
 
-        // Animate in
-        setTimeout(() => {
-          flashDiv.style.transform = "translateX(0)";
-        }, 100);
-
-        // Auto remove after 4 seconds
-        setTimeout(() => {
-          flashDiv.style.transform = "translateX(100%)";
+          // Animate in
           setTimeout(() => {
-            if (flashDiv.parentNode) {
-              flashDiv.parentNode.removeChild(flashDiv);
-            }
-          }, 300);
-        }, 4000);
-      }
+            flashDiv.style.transform = "translateX(0)";
+          }, 100);
+
+          // Auto remove after 4 seconds
+          setTimeout(() => {
+            flashDiv.style.transform = "translateX(100%)";
+            setTimeout(() => {
+              if (flashDiv.parentNode) {
+                flashDiv.parentNode.removeChild(flashDiv);
+              }
+            }, 300);
+          }, 4000);
+        }
+      } // Close the else block
     </script>
   </body>
 </html>

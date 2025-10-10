@@ -1,37 +1,36 @@
 <?php
-// Test User model directly
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Test User Model
+require_once 'config/database.php';
+require_once 'models/User.php';
 
-echo "Testing User model...\n";
+echo "Testing User Model...\n";
 
 try {
-    require_once 'config/database.php';
-    require_once 'models/User.php';
-    
     $database = new Database();
-    $db = $database->getConnection();
+    $user = new User($database->getConnection());
     
-    if (!$db) {
-        echo "❌ Database connection failed!\n";
-        exit(1);
-    }
+    echo "✅ User model loaded successfully\n";
     
-    echo "✅ Database connection successful!\n";
+    // Test phone validation
+    $testPhone = "0780146863";
+    echo "Testing phone validation for: $testPhone\n";
     
-    $user = new User($db);
-    echo "✅ User model created successfully!\n";
-    
-    // Test registration
+    // Test registration data with unique phone number
+    $uniquePhone = '078' . substr(time(), -7); // Generate unique phone number
     $userData = [
-        'email' => 'test@example.com',
-        'password' => 'password123',
+        'email' => 'test' . time() . '@example.com',
+        'password' => 'TestPass123',
         'first_name' => 'Test',
         'last_name' => 'User',
-        'phone' => '+250123456789'
+        'phone' => $uniquePhone,
+        'address' => 'Test Address',
+        'city' => 'Kigali',
+        'country' => 'Rwanda'
     ];
     
-    echo "Testing user registration...\n";
+    echo "Testing registration with data:\n";
+    print_r($userData);
+    
     $result = $user->register($userData);
     
     if ($result['success']) {
@@ -41,14 +40,17 @@ try {
         echo "Phone: " . $result['phone'] . "\n";
         
         // Test verification code generation
-        echo "\nTesting verification code generation...\n";
-        $verificationResult = $user->generateVerificationCode($result['user_id'], 'email', $result['email']);
+        $verificationResult = $user->generateVerificationCode(
+            $result['user_id'], 
+            'phone', 
+            $result['phone']
+        );
         
         if ($verificationResult['success']) {
-            echo "✅ Verification code generated: " . $verificationResult['code'] . "\n";
+            echo "✅ Phone verification code generated: " . $verificationResult['code'] . "\n";
             echo "Expires at: " . $verificationResult['expires_at'] . "\n";
         } else {
-            echo "❌ Verification code generation failed: " . $verificationResult['message'] . "\n";
+            echo "❌ Failed to generate verification code: " . $verificationResult['message'] . "\n";
         }
         
     } else {
@@ -56,9 +58,7 @@ try {
     }
     
 } catch (Exception $e) {
-    echo "❌ Exception: " . $e->getMessage() . "\n";
+    echo "❌ Error: " . $e->getMessage() . "\n";
     echo "Stack trace:\n" . $e->getTraceAsString() . "\n";
 }
 ?>
-
-

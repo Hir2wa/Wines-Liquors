@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Authentication System - Wines & Liquors</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #f6f6f7;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+      }
+
+      .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .subtitle {
+        color: #6c757d;
+        font-size: 16px;
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .test-section {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 1px solid #e1e3e5;
+        border-radius: 12px;
+      }
+
+      .test-section h3 {
+        color: #dc3545;
+        margin-bottom: 16px;
+        font-size: 18px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e1e3e5;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+
+      .test-button {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+
+      .test-button:hover:not(:disabled) {
+        background: #c82333;
+        transform: translateY(-1px);
+      }
+
+      .test-button:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .test-button.loading {
+        position: relative;
+        color: transparent;
+      }
+
+      .test-button.loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 16px;
+        border: 2px solid #ffffff;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      .result {
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .result.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .result.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .result.info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .status-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .status-indicator.success {
+        background: #28a745;
+      }
+
+      .status-indicator.error {
+        background: #dc3545;
+      }
+
+      .status-indicator.pending {
+        background: #ffc107;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">🔐 Authentication System Test</h1>
+      <p class="subtitle">
+        Test all authentication features including registration, verification,
+        and password reset
+      </p>
+
+      <div class="grid">
+        <!-- Registration Test -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="regStatus"></span>1. User
+            Registration
+          </h3>
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              class="form-input"
+              value="Test"
+              placeholder="First Name"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              class="form-input"
+              value="User"
+              placeholder="Last Name"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="test@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input
+              type="text"
+              id="phone"
+              class="form-input"
+              placeholder="+250788123456"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              value="testpass123"
+              placeholder="Password"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Address</label>
+            <input
+              type="text"
+              id="address"
+              class="form-input"
+              value="Test Address"
+              placeholder="Address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input
+              type="text"
+              id="city"
+              class="form-input"
+              value="Kigali"
+              placeholder="City"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <input
+              type="text"
+              id="country"
+              class="form-input"
+              value="Rwanda"
+              placeholder="Country"
+            />
+          </div>
+          <button class="test-button" onclick="testRegistration()">
+            Test Registration
+          </button>
+          <div id="regResult" class="result"></div>
+        </div>
+
+        <!-- Email Verification Test -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="emailVerStatus"></span>2.
+            Email Verification
+          </h3>
+          <div class="form-group">
+            <label class="form-label">User ID</label>
+            <input
+              type="text"
+              id="userId"
+              class="form-input"
+              placeholder="User ID from registration"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Code</label>
+            <input
+              type="text"
+              id="emailCode"
+              class="form-input"
+              placeholder="6-digit code"
+            />
+          </div>
+          <button class="test-button" onclick="testEmailVerification()">
+            Verify Email
+          </button>
+          <button class="test-button" onclick="resendEmailCode()">
+            Resend Email Code
+          </button>
+          <div id="emailVerResult" class="result"></div>
+        </div>
+
+        <!-- Phone Verification Test -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="phoneVerStatus"></span>3.
+            Phone Verification
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Phone Code</label>
+            <input
+              type="text"
+              id="phoneCode"
+              class="form-input"
+              placeholder="6-digit code"
+            />
+          </div>
+          <button class="test-button" onclick="testPhoneVerification()">
+            Verify Phone
+          </button>
+          <button class="test-button" onclick="resendPhoneCode()">
+            Resend Phone Code
+          </button>
+          <div id="phoneVerResult" class="result"></div>
+        </div>
+
+        <!-- Login Test -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="loginStatus"></span>4.
+            User Login
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              id="loginEmail"
+              class="form-input"
+              placeholder="Email"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input
+              type="password"
+              id="loginPassword"
+              class="form-input"
+              placeholder="Password"
+            />
+          </div>
+          <button class="test-button" onclick="testLogin()">Test Login</button>
+          <div id="loginResult" class="result"></div>
+        </div>
+
+        <!-- Forgot Password Test -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="forgotStatus"></span>5.
+            Forgot Password
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Email or Phone</label>
+            <input
+              type="text"
+              id="forgotEmailOrPhone"
+              class="form-input"
+              placeholder="Email or phone"
+            />
+          </div>
+          <button class="test-button" onclick="testForgotPassword()">
+            Send Reset Code
+          </button>
+          <div id="forgotResult" class="result"></div>
+        </div>
+
+        <!-- Reset Code Verification -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="resetCodeStatus"></span
+            >6. Verify Reset Code
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Reset Code</label>
+            <input
+              type="text"
+              id="resetCode"
+              class="form-input"
+              placeholder="6-digit code"
+            />
+          </div>
+          <button class="test-button" onclick="testVerifyResetCode()">
+            Verify Reset Code
+          </button>
+          <div id="resetCodeResult" class="result"></div>
+        </div>
+
+        <!-- Reset Password -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="resetPassStatus"></span
+            >7. Reset Password
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Reset Token</label>
+            <input
+              type="text"
+              id="resetToken"
+              class="form-input"
+              placeholder="Reset token"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input
+              type="password"
+              id="newPassword"
+              class="form-input"
+              value="newpass123"
+              placeholder="New password"
+            />
+          </div>
+          <button class="test-button" onclick="testResetPassword()">
+            Reset Password
+          </button>
+          <div id="resetPassResult" class="result"></div>
+        </div>
+
+        <!-- Complete Flow Test -->
+        <div class="test-section">
+          <h3>
+            <span class="status-indicator pending" id="completeStatus"></span>8.
+            Complete Flow Test
+          </h3>
+          <p style="color: #6c757d; font-size: 14px; margin-bottom: 16px">
+            Test the complete authentication flow from registration to login
+          </p>
+          <button class="test-button" onclick="testCompleteFlow()">
+            Run Complete Test
+          </button>
+          <div id="completeResult" class="result"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentUserId = null;
+      let resetToken = null;
+
+      // Generate unique email for testing
+      function generateUniqueEmail() {
+        return `test${Date.now()}@example.com`;
+      }
+
+      function generateUniquePhone() {
+        return `+250788${String(Date.now()).slice(-6)}`;
+      }
+
+      function showResult(elementId, message, type = "info") {
+        const element = document.getElementById(elementId);
+        element.textContent = message;
+        element.className = `result ${type}`;
+        element.style.display = "block";
+      }
+
+      function updateStatus(statusId, status) {
+        const element = document.getElementById(statusId);
+        element.className = `status-indicator ${status}`;
+      }
+
+      function setButtonLoading(button, loading) {
+        if (loading) {
+          button.disabled = true;
+          button.classList.add("loading");
+        } else {
+          button.disabled = false;
+          button.classList.remove("loading");
+        }
+      }
+
+      // Test Registration
+      async function testRegistration() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const uniqueEmail = generateUniqueEmail();
+        const uniquePhone = generateUniquePhone();
+
+        // Auto-fill unique values
+        document.getElementById("email").value = uniqueEmail;
+        document.getElementById("phone").value = uniquePhone;
+
+        const userData = {
+          firstName: document.getElementById("firstName").value,
+          lastName: document.getElementById("lastName").value,
+          email: uniqueEmail,
+          phone: uniquePhone,
+          password: document.getElementById("password").value,
+          address: document.getElementById("address").value,
+          city: document.getElementById("city").value,
+          country: document.getElementById("country").value,
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/register",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            currentUserId = result.data.user_id;
+            showResult(
+              "regResult",
+              `✅ Registration successful! User ID: ${currentUserId}\nEmail Code: ${result.data.verification.email_code}\nPhone Code: ${result.data.verification.phone_code}`,
+              "success"
+            );
+            updateStatus("regStatus", "success");
+
+            // Auto-fill user ID and codes
+            document.getElementById("userId").value = currentUserId;
+            document.getElementById("emailCode").value =
+              result.data.verification.email_code;
+            document.getElementById("phoneCode").value =
+              result.data.verification.phone_code;
+            document.getElementById("loginEmail").value = uniqueEmail;
+            document.getElementById("forgotEmailOrPhone").value = uniqueEmail;
+          } else {
+            showResult(
+              "regResult",
+              `❌ Registration failed: ${result.message}`,
+              "error"
+            );
+            updateStatus("regStatus", "error");
+          }
+        } catch (error) {
+          showResult("regResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("regStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Email Verification
+      async function testEmailVerification() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const userId = document.getElementById("userId").value;
+        const code = document.getElementById("emailCode").value;
+
+        if (!userId || !code) {
+          showResult(
+            "emailVerResult",
+            "❌ Please enter User ID and Email Code",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/verify",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userId,
+                type: "email",
+                code: code,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "emailVerResult",
+              "✅ Email verification successful!",
+              "success"
+            );
+            updateStatus("emailVerStatus", "success");
+          } else {
+            showResult(
+              "emailVerResult",
+              `❌ Email verification failed: ${result.message}`,
+              "error"
+            );
+            updateStatus("emailVerStatus", "error");
+          }
+        } catch (error) {
+          showResult("emailVerResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("emailVerStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Phone Verification
+      async function testPhoneVerification() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const userId = document.getElementById("userId").value;
+        const code = document.getElementById("phoneCode").value;
+
+        if (!userId || !code) {
+          showResult(
+            "phoneVerResult",
+            "❌ Please enter User ID and Phone Code",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/verify",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userId,
+                type: "phone",
+                code: code,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "phoneVerResult",
+              "✅ Phone verification successful!",
+              "success"
+            );
+            updateStatus("phoneVerStatus", "success");
+          } else {
+            showResult(
+              "phoneVerResult",
+              `❌ Phone verification failed: ${result.message}`,
+              "error"
+            );
+            updateStatus("phoneVerStatus", "error");
+          }
+        } catch (error) {
+          showResult("phoneVerResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("phoneVerStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Login
+      async function testLogin() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        if (!email || !password) {
+          showResult(
+            "loginResult",
+            "❌ Please enter email and password",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch("http://localhost:8000/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "loginResult",
+              `✅ Login successful! Welcome ${result.data.user.first_name}!`,
+              "success"
+            );
+            updateStatus("loginStatus", "success");
+          } else {
+            showResult(
+              "loginResult",
+              `❌ Login failed: ${result.message}`,
+              "error"
+            );
+            updateStatus("loginStatus", "error");
+          }
+        } catch (error) {
+          showResult("loginResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("loginStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Forgot Password
+      async function testForgotPassword() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const emailOrPhone =
+          document.getElementById("forgotEmailOrPhone").value;
+
+        if (!emailOrPhone) {
+          showResult("forgotResult", "❌ Please enter email or phone", "error");
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/forgot-password",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email_or_phone: emailOrPhone,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "forgotResult",
+              `✅ Reset code sent successfully via ${result.data.method}!`,
+              "success"
+            );
+            updateStatus("forgotStatus", "success");
+          } else {
+            showResult(
+              "forgotResult",
+              `❌ Failed to send reset code: ${result.message}`,
+              "error"
+            );
+            updateStatus("forgotStatus", "error");
+          }
+        } catch (error) {
+          showResult("forgotResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("forgotStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Verify Reset Code
+      async function testVerifyResetCode() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const emailOrPhone =
+          document.getElementById("forgotEmailOrPhone").value;
+        const code = document.getElementById("resetCode").value;
+
+        if (!emailOrPhone || !code) {
+          showResult(
+            "resetCodeResult",
+            "❌ Please enter email/phone and reset code",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/verify-reset-code",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email_or_phone: emailOrPhone,
+                code: code,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            resetToken = result.data.reset_token;
+            showResult(
+              "resetCodeResult",
+              `✅ Reset code verified! Token: ${resetToken}`,
+              "success"
+            );
+            updateStatus("resetCodeStatus", "success");
+
+            // Auto-fill reset token
+            document.getElementById("resetToken").value = resetToken;
+          } else {
+            showResult(
+              "resetCodeResult",
+              `❌ Reset code verification failed: ${result.message}`,
+              "error"
+            );
+            updateStatus("resetCodeStatus", "error");
+          }
+        } catch (error) {
+          showResult("resetCodeResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("resetCodeStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Reset Password
+      async function testResetPassword() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const token = document.getElementById("resetToken").value;
+        const newPassword = document.getElementById("newPassword").value;
+
+        if (!token || !newPassword) {
+          showResult(
+            "resetPassResult",
+            "❌ Please enter reset token and new password",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/reset-password",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                reset_token: token,
+                new_password: newPassword,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "resetPassResult",
+              "✅ Password reset successfully!",
+              "success"
+            );
+            updateStatus("resetPassStatus", "success");
+          } else {
+            showResult(
+              "resetPassResult",
+              `❌ Password reset failed: ${result.message}`,
+              "error"
+            );
+            updateStatus("resetPassStatus", "error");
+          }
+        } catch (error) {
+          showResult("resetPassResult", `❌ Error: ${error.message}`, "error");
+          updateStatus("resetPassStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Resend Email Code
+      async function resendEmailCode() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const userId = document.getElementById("userId").value;
+
+        if (!userId) {
+          showResult(
+            "emailVerResult",
+            "❌ Please enter User ID first",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/resend-verification",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userId,
+                type: "email",
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "emailVerResult",
+              "✅ Email verification code resent!",
+              "success"
+            );
+          } else {
+            showResult(
+              "emailVerResult",
+              `❌ Failed to resend email code: ${result.message}`,
+              "error"
+            );
+          }
+        } catch (error) {
+          showResult("emailVerResult", `❌ Error: ${error.message}`, "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Resend Phone Code
+      async function resendPhoneCode() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        const userId = document.getElementById("userId").value;
+
+        if (!userId) {
+          showResult(
+            "phoneVerResult",
+            "❌ Please enter User ID first",
+            "error"
+          );
+          setButtonLoading(button, false);
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/resend-verification",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userId,
+                type: "phone",
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            showResult(
+              "phoneVerResult",
+              "✅ Phone verification code resent!",
+              "success"
+            );
+          } else {
+            showResult(
+              "phoneVerResult",
+              `❌ Failed to resend phone code: ${result.message}`,
+              "error"
+            );
+          }
+        } catch (error) {
+          showResult("phoneVerResult", `❌ Error: ${error.message}`, "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Test Complete Flow
+      async function testCompleteFlow() {
+        const button = event.target;
+        setButtonLoading(button, true);
+
+        showResult(
+          "completeResult",
+          "🔄 Running complete authentication flow test...",
+          "info"
+        );
+
+        try {
+          // Step 1: Registration
+          const uniqueEmail = generateUniqueEmail();
+          const uniquePhone = generateUniquePhone();
+
+          const userData = {
+            firstName: "Complete",
+            lastName: "Test",
+            email: uniqueEmail,
+            phone: uniquePhone,
+            password: "testpass123",
+            address: "Test Address",
+            city: "Kigali",
+            country: "Rwanda",
+          };
+
+          const regResponse = await fetch(
+            "http://localhost:8000/api/auth/register",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(userData),
+            }
+          );
+
+          const regResult = await regResponse.json();
+
+          if (regResult.status !== 200) {
+            throw new Error(`Registration failed: ${regResult.message}`);
+          }
+
+          const userId = regResult.data.user_id;
+          const emailCode = regResult.data.verification.email_code;
+          const phoneCode = regResult.data.verification.phone_code;
+
+          // Step 2: Email Verification
+          const emailVerResponse = await fetch(
+            "http://localhost:8000/api/auth/verify",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: userId,
+                type: "email",
+                code: emailCode,
+              }),
+            }
+          );
+
+          const emailVerResult = await emailVerResponse.json();
+
+          if (emailVerResult.status !== 200) {
+            throw new Error(
+              `Email verification failed: ${emailVerResult.message}`
+            );
+          }
+
+          // Step 3: Phone Verification
+          const phoneVerResponse = await fetch(
+            "http://localhost:8000/api/auth/verify",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: userId,
+                type: "phone",
+                code: phoneCode,
+              }),
+            }
+          );
+
+          const phoneVerResult = await phoneVerResponse.json();
+
+          if (phoneVerResult.status !== 200) {
+            throw new Error(
+              `Phone verification failed: ${phoneVerResult.message}`
+            );
+          }
+
+          // Step 4: Login
+          const loginResponse = await fetch(
+            "http://localhost:8000/api/auth/login",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: uniqueEmail,
+                password: "testpass123",
+              }),
+            }
+          );
+
+          const loginResult = await loginResponse.json();
+
+          if (loginResult.status !== 200) {
+            throw new Error(`Login failed: ${loginResult.message}`);
+          }
+
+          showResult(
+            "completeResult",
+            "✅ Complete authentication flow test passed! All features working correctly.",
+            "success"
+          );
+          updateStatus("completeStatus", "success");
+        } catch (error) {
+          showResult(
+            "completeResult",
+            `❌ Complete flow test failed: ${error.message}`,
+            "error"
+          );
+          updateStatus("completeStatus", "error");
+        } finally {
+          setButtonLoading(button, false);
+        }
+      }
+
+      // Initialize with unique values
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("email").value = generateUniqueEmail();
+        document.getElementById("phone").value = generateUniquePhone();
+      });
+    </script>
+  </body>
+</html>
+
+

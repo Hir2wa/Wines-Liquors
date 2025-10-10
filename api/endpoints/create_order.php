@@ -78,6 +78,19 @@ try {
     // Get the created order with full details
     $createdOrder = $order->getById($createdOrderId);
     
+    // Generate payment code if payment method is mobile money
+    if ($input['paymentMethod'] === 'mobile_money') {
+        $paymentCodeResult = $order->generatePaymentCode(
+            $createdOrderId, 
+            $totalAmount, 
+            $input['customerInfo']['phone']
+        );
+        
+        if ($paymentCodeResult['success']) {
+            $createdOrder['paymentCode'] = $paymentCodeResult;
+        }
+    }
+    
     sendSuccess($createdOrder, 'Order created successfully');
     
 } catch (Exception $e) {

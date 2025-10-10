@@ -225,13 +225,135 @@ async function createOrder(orderData) {
     const response = await apiClient.createOrder(apiData);
 
     if (response.status === 200) {
-      return response.data;
+      const orderData = response.data;
+
+      // If it's a mobile money payment, show payment instructions
+      if (orderData.paymentMethod === "mobile_money" && orderData.paymentCode) {
+        showMobileMoneyInstructions(orderData);
+      }
+
+      return orderData;
     } else {
       throw new Error(response.message);
     }
   } catch (error) {
     console.error("Failed to create order:", error);
     throw error;
+  }
+}
+
+// Show mobile money payment instructions
+function showMobileMoneyInstructions(orderData) {
+  const paymentCode = orderData.paymentCode;
+
+  // Create modal for payment instructions
+  const modal = document.createElement("div");
+  modal.className = "payment-instructions-modal";
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  `;
+
+  modal.innerHTML = `
+    <div style="
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    ">
+      <div style="text-align: center; margin-bottom: 25px;">
+        <div style="
+          width: 60px;
+          height: 60px;
+          background: #28a745;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 15px;
+        ">
+          <i class="fas fa-mobile-alt" style="color: white; font-size: 24px;"></i>
+        </div>
+        <h3 style="margin: 0; color: #2c3e50; font-size: 24px;">Payment Instructions</h3>
+        <p style="margin: 10px 0 0; color: #6c757d;">Order #${orderData.orderId}</p>
+      </div>
+      
+      <div style="
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 25px;
+      ">
+        <h4 style="margin: 0 0 15px; color: #2c3e50;">Mobile Money Payment</h4>
+        <div style="margin-bottom: 15px;">
+          <strong>Amount:</strong> ${paymentCode.amount}frw
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Payment Code:</strong> 
+          <code style="
+            background: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #dc3545;
+            font-size: 16px;
+          ">${paymentCode.payment_code}</code>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Instructions:</strong><br>
+          ${paymentCode.instructions}
+        </div>
+        <div style="
+          background: #fff3cd;
+          border: 1px solid #ffeaa7;
+          border-radius: 6px;
+          padding: 12px;
+          margin-top: 15px;
+        ">
+          <i class="fas fa-info-circle" style="color: #856404; margin-right: 8px;"></i>
+          <span style="color: #856404; font-size: 14px;">
+            Your order will be processed once payment is verified by our admin team.
+          </span>
+        </div>
+      </div>
+      
+      <div style="text-align: center;">
+        <button onclick="closePaymentInstructions()" style="
+          background: #007bff;
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 6px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        " onmouseover="this.style.background='#0056b3'" onmouseout="this.style.background='#007bff'">
+          <i class="fas fa-check" style="margin-right: 8px;"></i>
+          I Understand
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+// Close payment instructions modal
+function closePaymentInstructions() {
+  const modal = document.querySelector(".payment-instructions-modal");
+  if (modal) {
+    modal.remove();
   }
 }
 

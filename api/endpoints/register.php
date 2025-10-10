@@ -1,6 +1,27 @@
 <?php
 // register.php
-// Required headers already set in index.php
+// Set headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// Include required files
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../models/User.php';
+
+// Only allow POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['message' => 'Method not allowed']);
+    exit;
+}
 
 // Get posted data
 $data = json_decode(file_get_contents("php://input"), true);
@@ -52,28 +73,31 @@ if ($result['success']) {
         $result['email']
     );
     
-    // Generate verification code for phone if provided
-    $phone_verification_result = null;
-    if (!empty($result['phone'])) {
-        $phone_verification_result = $user->generateVerificationCode(
+    // Send email verification
+    $email_sent = false;
+    if ($verification_result['success']) {
+        $email_result = $user->sendEmailVerification(
             $result['user_id'], 
-            'phone', 
-            $result['phone']
+            $result['email'], 
+            $verification_result['code']
         );
+        $email_sent = $email_result['success'];
     }
+    
+    // Phone verification is disabled - using email verification only
     
     http_response_code(201);
     echo json_encode(array(
         "status" => 201,
-        "message" => "User registered successfully. Please verify your email and phone number.",
+        "message" => "User registered successfully. Please verify your email address.",
         "data" => array(
             "user_id" => $result['user_id'],
             "email" => $result['email'],
             "phone" => $result['phone'],
             "verification" => array(
                 "email_code" => $verification_result['success'] ? $verification_result['code'] : null,
-                "phone_code" => $phone_verification_result && $phone_verification_result['success'] ? $phone_verification_result['code'] : null,
-                "expires_at" => $verification_result['expires_at']
+                "expires_at" => $verification_result['expires_at'],
+                "email_sent" => $email_sent
             )
         )
     ));

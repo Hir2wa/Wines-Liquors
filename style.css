@@ -240,7 +240,8 @@ body {
   display: none;
   position: absolute;
   top: 100%;
-  left: -50px;
+  left: 50%;
+  transform: translateX(-50%);
   background: white;
   min-width: 800px;
   max-width: 900px;
@@ -249,6 +250,9 @@ body {
   border-radius: 8px;
   overflow: hidden;
   max-height: 500px;
+  /* Ensure menu stays within viewport */
+  max-width: calc(100vw - 40px);
+  margin: 0 20px;
 }
 
 .mega-menu:hover .mega-menu-content {
@@ -832,8 +836,10 @@ body {
   }
 
   .mega-menu-content {
-    left: -20px;
+    left: 50%;
+    transform: translateX(-50%);
     min-width: 90vw;
+    max-width: 95vw;
     flex-direction: column;
   }
 
@@ -1500,6 +1506,9 @@ body {
   .mega-menu-content {
     min-width: 700px;
     max-width: 750px;
+    max-width: calc(100vw - 40px);
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   /* Popular Categories - Tablet */

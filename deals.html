@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Deals - Wines & Liquors</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="Header.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .deals-container {
+        min-height: 100vh;
+        background: #f8f9fa;
+        padding: 40px 20px;
+      }
+
+      .deals-header {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        margin: 0 auto 40px;
+        max-width: 800px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .deals-header h1 {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      .deals-header p {
+        color: #6c757d;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .no-deals-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 40px;
+        border-radius: 20px;
+        text-align: center;
+        margin: 0 auto;
+        max-width: 600px;
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+      }
+
+      .no-deals-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      .no-deals-message h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .no-deals-message p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .back-to-shop-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        color: #667eea;
+        padding: 15px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .back-to-shop-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        color: #5a67d8;
+      }
+
+      .features-section {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .feature-card h3 {
+        color: #2c3e50;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .feature-card p {
+        color: #6c757d;
+        line-height: 1.6;
+      }
+
+      /* Breadcrumb Categories Styling */
+      .breadcrumb-categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .breadcrumb-category {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 12px;
+        background: #f8f9fa;
+        color: #6c757d;
+        text-decoration: none;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+      }
+
+      .breadcrumb-category:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .breadcrumb-category i {
+        font-size: 0.9rem;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .deals-container {
+          padding: 20px 15px;
+        }
+
+        .deals-header {
+          padding: 30px 20px;
+          margin-bottom: 30px;
+        }
+
+        .deals-header h1 {
+          font-size: 2rem;
+        }
+
+        .no-deals-message {
+          padding: 40px 20px;
+        }
+
+        .no-deals-icon {
+          font-size: 3rem;
+        }
+
+        .no-deals-message h2 {
+          font-size: 1.5rem;
+        }
+
+        .features-section {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          margin-top: 40px;
+        }
+
+        .feature-card {
+          padding: 25px 20px;
+        }
+
+        .breadcrumb-categories {
+          gap: 6px;
+        }
+
+        .breadcrumb-category {
+          padding: 4px 8px;
+          font-size: 0.7rem;
+        }
+
+        .breadcrumb-category span {
+          display: none;
+        }
+
+        .breadcrumb-category i {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .breadcrumb-categories {
+          gap: 4px;
+        }
+
+        .breadcrumb-category {
+          padding: 3px 6px;
+          font-size: 0.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sub-page Navigation -->
+    <nav class="sub-page-nav">
+      <div class="sub-nav-container">
+        <div class="back-to-home">
+          <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+        <div class="sub-logo">
+          <a href="index.html">
+            <img
+              src="images/logo1.png"
+              alt="Total Wine & More Logo"
+              style="width: 150px"
+            />
+          </a>
+        </div>
+        <div class="sub-nav-actions">
+          <div class="sub-search">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              placeholder="Search deals..."
+              class="sub-search-input"
+            />
+          </div>
+          <a href="MyOrders.html" class="sub-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+      <div class="breadcrumb-wrapper">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <div class="breadcrumb-path">
+            <a href="index.html" class="breadcrumb-link">
+              <i class="fas fa-home"></i>
+              <span>HOME</span>
+            </a>
+            <div class="breadcrumb-separator">
+              <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="breadcrumb-categories">
+              <a href="Wine.html" class="breadcrumb-category">
+                <i class="fas fa-wine-glass"></i>
+                <span>WINE</span>
+              </a>
+              <a href="Champagne.html" class="breadcrumb-category">
+                <i class="fas fa-champagne-glasses"></i>
+                <span>CHAMPAGNE</span>
+              </a>
+              <a href="Whiskey.html" class="breadcrumb-category">
+                <i class="fas fa-glass-whiskey"></i>
+                <span>WHISKEY</span>
+              </a>
+              <a href="GinVodka.html" class="breadcrumb-category">
+                <i class="fas fa-cocktail"></i>
+                <span>GIN&VODKA</span>
+              </a>
+              <a href="Rum.html" class="breadcrumb-category">
+                <i class="fas fa-bottle-water"></i>
+                <span>RUM</span>
+              </a>
+              <a href="SingleMalt.html" class="breadcrumb-category">
+                <i class="fas fa-gem"></i>
+                <span>SINGLE MALT</span>
+              </a>
+              <a href="Beer.html" class="breadcrumb-category">
+                <i class="fas fa-beer"></i>
+                <span>BEER</span>
+              </a>
+            </div>
+            <div class="breadcrumb-separator">
+              <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="breadcrumb-current">
+              <i class="fas fa-tag"></i>
+              <span>MY DEALS</span>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="deals-container">
+      <div class="deals-header">
+        <h1><i class="fas fa-tag"></i> My Deals</h1>
+        <p>
+          Discover amazing offers and exclusive deals on premium wines and
+          spirits
+        </p>
+      </div>
+
+      <div class="no-deals-message">
+        <div class="no-deals-icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <h2>No Deals Available</h2>
+        <p>
+          We're currently working on bringing you the best deals and offers.
+          Check back soon for exclusive discounts on your favorite wines and
+          spirits!
+        </p>
+        <a href="index.html" class="back-to-shop-btn">
+          <i class="fas fa-shopping-bag"></i>
+          Continue Shopping
+        </a>
+      </div>
+
+      <div class="features-section">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-percentage"></i>
+          </div>
+          <h3>Exclusive Discounts</h3>
+          <p>
+            Get access to special pricing on premium wines and spirits when
+            deals become available.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-gift"></i>
+          </div>
+          <h3>Special Offers</h3>
+          <p>
+            Enjoy limited-time offers and bundle deals on your favorite
+            beverages.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <h3>Deal Notifications</h3>
+          <p>
+            Be the first to know about new deals and offers by staying updated
+            with our notifications.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <div class="logo">Wines & Liquors</div>
+          <p>
+            Your premier destination for premium wines, spirits, and exceptional
+            service. Discover the finest selection of beverages from around the
+            world.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <div>
+            <h3>Shop</h3>
+            <ul>
+              <li><a href="Wine.html">Wine</a></li>
+              <li><a href="Champagne.html">Champagne & Cognac</a></li>
+              <li><a href="Whiskey.html">Whiskey & Tequila</a></li>
+              <li><a href="GinVodka.html">Gin & Vodka</a></li>
+              <li><a href="Rum.html">Rum</a></li>
+              <li><a href="SingleMalt.html">Single Malt</a></li>
+              <li><a href="Beer.html">Beer</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>Account</h3>
+            <ul>
+              <li><a href="login.html">Sign In</a></li>
+              <li><a href="Register.html">Create Account</a></li>
+              <li><a href="MyOrders.html">My Orders</a></li>
+              <li><a href="Profile.html">Profile</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>Support</h3>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Shipping Info</a></li>
+              <li><a href="#">Returns</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-right">
+          <h3>Stay Connected</h3>
+          <div class="newsletter">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              class="newsletter-input"
+            />
+            <button class="newsletter-btn">Subscribe</button>
+          </div>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

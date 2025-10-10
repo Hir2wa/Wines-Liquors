@@ -1520,11 +1520,9 @@
         const sessionToken = localStorage.getItem("sessionToken");
         
         if (!sessionToken) {
-          console.log('Auto-fill: No session token found, user not logged in');
           return; // User not logged in
         }
         
-        console.log('Auto-fill: Session token found, fetching user data...');
         await fetchUserDataWithToken(sessionToken);
       }
       
@@ -1575,7 +1573,6 @@
               
               // Show success message
               showUserInfoMessage();
-              console.log('Auto-fill: User data successfully loaded and form filled');
             } else {
               // Fallback to localStorage if API response is not successful
               fallbackToLocalStorage();
@@ -1585,7 +1582,6 @@
             fallbackToLocalStorage();
           }
         } catch (error) {
-          console.log('Auto-fill: Error fetching user data, using fallback:', error);
           // Fallback to localStorage
           fallbackToLocalStorage();
         }
@@ -1635,9 +1631,8 @@
             }
             
             showUserInfoMessage();
-            console.log('Auto-fill: User data loaded from localStorage fallback');
           } catch (e) {
-            console.log('Auto-fill: Error parsing user data from localStorage:', e);
+            // Silent fallback - no logging needed
           }
         }
       }

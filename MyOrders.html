@@ -1071,18 +1071,13 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="address">Address *</label>
-                  <input type="text" id="address" name="address" required />
-                </div>
-
-                <div class="form-group">
                   <label for="location">Location *</label>
                   <div class="location-input-container">
                     <input 
                       type="text" 
                       id="location" 
                       name="location" 
-                      placeholder="Enter your address or click to get current location"
+                      placeholder="Enter your full address or click to get current location with zone details"
                       required 
                     />
                     <button type="button" id="getLocationBtn" class="location-btn">
@@ -1867,7 +1862,6 @@
                 phone: formData.get("phone"),
                 firstName: formData.get("firstName"),
                 lastName: formData.get("lastName"),
-                address: formData.get("address"),
                 location: formData.get("location"),
               },
               items: formattedItems,
@@ -1988,18 +1982,47 @@
             const longitude = position.coords.longitude;
             
             try {
-              // Use reverse geocoding to get address
+              // Use reverse geocoding to get detailed address
               const response = await fetch(
                 `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
               );
               
               if (response.ok) {
                 const data = await response.json();
-                const address = `${data.locality || ''} ${data.principalSubdivision || ''} ${data.countryName || ''}`.trim();
                 
-                locationInput.value = address;
-                locationStatus.innerHTML = '<i class="fas fa-check-circle"></i> Location found successfully!';
-                locationStatus.className = 'location-status success';
+                // Build comprehensive address with all available details
+                const addressParts = [];
+                
+                // Add street/road if available
+                if (data.street) addressParts.push(data.street);
+                if (data.streetNumber) addressParts.push(data.streetNumber);
+                
+                // Add locality (neighborhood/zone)
+                if (data.locality) addressParts.push(data.locality);
+                
+                // Add city/town
+                if (data.city) addressParts.push(data.city);
+                
+                // Add district/area
+                if (data.principalSubdivision) addressParts.push(data.principalSubdivision);
+                
+                // Add country
+                if (data.countryName) addressParts.push(data.countryName);
+                
+                // Join all parts with commas
+                const fullAddress = addressParts.join(', ');
+                
+                // If we have a good address, use it; otherwise use coordinates
+                if (fullAddress.trim() && fullAddress !== data.countryName) {
+                  locationInput.value = fullAddress;
+                  locationStatus.innerHTML = `<i class="fas fa-check-circle"></i> Location found: ${data.locality || 'Area'} zone`;
+                  locationStatus.className = 'location-status success';
+                } else {
+                  // Fallback to coordinates with zone info
+                  locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+                  locationStatus.innerHTML = `<i class="fas fa-map-marker-alt"></i> Location found (${data.locality || 'Area'} zone)`;
+                  locationStatus.className = 'location-status success';
+                }
               } else {
                 // Fallback to coordinates if reverse geocoding fails
                 locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;

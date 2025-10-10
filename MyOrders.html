@@ -578,23 +578,6 @@
         opacity: 0.5;
       }
 
-      /* User info message styles */
-      .user-info-message {
-        background: #d4edda;
-        color: #155724;
-        padding: 10px 15px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        border: 1px solid #c3e6cb;
-        display: flex;
-        align-items: center;
-      }
-
-      .user-info-message i {
-        margin-right: 8px;
-        color: #155724;
-      }
 
       .payment-methods {
         display: flex;
@@ -1571,8 +1554,7 @@
                 makeFieldReadonly(phoneField);
               }
               
-              // Show success message
-              showUserInfoMessage();
+              // User data successfully filled
             } else {
               // Fallback to localStorage if API response is not successful
               fallbackToLocalStorage();
@@ -1630,26 +1612,13 @@
               makeFieldReadonly(phoneField);
             }
             
-            showUserInfoMessage();
+            // User data loaded from localStorage
           } catch (e) {
             // Silent fallback - no logging needed
           }
         }
       }
 
-      // Show user info message
-      function showUserInfoMessage() {
-        const formContainer = document.querySelector('.form-container h3');
-        if (formContainer && !document.querySelector('.user-info-message')) {
-          const infoMessage = document.createElement('div');
-          infoMessage.className = 'user-info-message';
-          infoMessage.innerHTML = `
-            <i class="fas fa-info-circle"></i>
-            Your account information has been pre-filled from your session. You can still edit address and other details.
-          `;
-          formContainer.parentNode.insertBefore(infoMessage, formContainer.nextSibling);
-        }
-      }
       
 
       // Handle order form submission

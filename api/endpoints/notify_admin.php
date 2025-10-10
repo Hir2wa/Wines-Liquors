@@ -4,6 +4,10 @@
  * POST /api/admin/notify
  */
 
+// Suppress PHP warnings and errors to ensure clean JSON output
+error_reporting(0);
+ini_set('display_errors', 0);
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');

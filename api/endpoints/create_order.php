@@ -4,6 +4,10 @@
  * POST /api/orders
  */
 
+// Suppress PHP warnings and errors to ensure clean JSON output
+error_reporting(0);
+ini_set('display_errors', 0);
+
 // Get JSON input
 $input = json_decode(file_get_contents('php://input'), true);
 

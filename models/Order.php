@@ -29,7 +29,7 @@ class Order {
             $sql = "
                 INSERT INTO " . $this->table_name . " 
                 (id, customer_email, customer_phone, customer_first_name, customer_last_name, 
-                 customer_address, total_amount, 
+                 customer_location, total_amount, 
                  payment_method, status, payment_status) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ";
@@ -281,24 +281,6 @@ class Order {
         }
     }
 
-    /**
-     * Get orders by customer email
-     */
-    public function getByCustomerEmail($email) {
-        $sql = "
-            SELECT o.*, 
-                   COUNT(oi.id) as item_count
-            FROM " . $this->table_name . " o
-            LEFT JOIN " . $this->items_table . " oi ON o.id = oi.order_id
-            WHERE o.customer_email = ?
-            GROUP BY o.id
-            ORDER BY o.created_at DESC
-        ";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$email]);
-        return $stmt->fetchAll();
-    }
 
     /**
      * Get dashboard statistics

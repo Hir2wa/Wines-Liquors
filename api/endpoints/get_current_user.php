@@ -23,8 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 try {
     // Get authorization header
-    $headers = getallheaders();
-    $authHeader = $headers['Authorization'] ?? '';
+    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
     
     if (!$authHeader || !preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
         sendError('Authorization token required', 401);
@@ -34,13 +33,14 @@ try {
     $token = $matches[1];
     
     // Get database connection
-    $db = Database::getConnection();
+    $database = new Database();
+    $db = $database->getConnection();
     
     // Find user session
     $sql = "SELECT u.*, us.session_token, us.created_at as session_created 
             FROM users u 
             INNER JOIN user_sessions us ON u.id = us.user_id 
-            WHERE us.session_token = ? AND us.is_active = 1";
+            WHERE us.session_token = ? AND us.is_active = true";
     
     $stmt = $db->prepare($sql);
     $stmt->execute([$token]);
@@ -55,7 +55,7 @@ try {
     $sessionAge = time() - strtotime($user['session_created']);
     if ($sessionAge > 86400) { // 24 hours
         // Deactivate expired session
-        $deactivateSql = "UPDATE user_sessions SET is_active = 0 WHERE session_token = ?";
+        $deactivateSql = "UPDATE user_sessions SET is_active = false WHERE session_token = ?";
         $deactivateStmt = $db->prepare($deactivateSql);
         $deactivateStmt->execute([$token]);
         

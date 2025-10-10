@@ -1518,11 +1518,16 @@
       async function autoFillUserInfo() {
         const sessionToken = localStorage.getItem("sessionToken");
         
+        console.log('Auto-fill: Checking session token:', sessionToken ? 'Found' : 'Not found');
+        
         if (!sessionToken) {
+          console.log('Auto-fill: No session token, user not logged in');
           return; // User not logged in
         }
 
         try {
+          console.log('Auto-fill: Fetching user data from API...');
+          
           // Fetch current user data from session
           const response = await fetch('/api/auth/me', {
             method: 'GET',
@@ -1532,11 +1537,15 @@
             }
           });
 
+          console.log('Auto-fill: API response status:', response.status);
+
           if (response.ok) {
             const userData = await response.json();
+            console.log('Auto-fill: API response data:', userData);
             
             if (userData.success && userData.data) {
               const user = userData.data;
+              console.log('Auto-fill: User data received:', user);
               
               // Auto-fill form fields with user data
               const emailField = document.getElementById("email");
@@ -1544,36 +1553,52 @@
               const lastNameField = document.getElementById("lastName");
               const phoneField = document.getElementById("phone");
               
+              console.log('Auto-fill: Form fields found:', {
+                email: !!emailField,
+                firstName: !!firstNameField,
+                lastName: !!lastNameField,
+                phone: !!phoneField
+              });
+              
               // Fill and make readonly
               if (emailField && user.email) {
                 emailField.value = user.email;
                 makeFieldReadonly(emailField);
+                console.log('Auto-fill: Email field filled with:', user.email);
               }
               
               if (firstNameField && user.first_name) {
                 firstNameField.value = user.first_name;
                 makeFieldReadonly(firstNameField);
+                console.log('Auto-fill: First name field filled with:', user.first_name);
               }
               
               if (lastNameField && user.last_name) {
                 lastNameField.value = user.last_name;
                 makeFieldReadonly(lastNameField);
+                console.log('Auto-fill: Last name field filled with:', user.last_name);
               }
               
               if (phoneField && user.phone) {
                 phoneField.value = user.phone;
                 makeFieldReadonly(phoneField);
+                console.log('Auto-fill: Phone field filled with:', user.phone);
               }
               
               // Show success message
               showUserInfoMessage();
+              console.log('Auto-fill: Successfully filled form fields');
+            } else {
+              console.log('Auto-fill: API response not successful or no data');
+              fallbackToLocalStorage();
             }
           } else {
+            console.log('Auto-fill: API request failed, falling back to localStorage');
             // Fallback to localStorage if API fails
             fallbackToLocalStorage();
           }
         } catch (error) {
-          console.log('Error fetching user data from session:', error);
+          console.log('Auto-fill: Error fetching user data from session:', error);
           // Fallback to localStorage
           fallbackToLocalStorage();
         }
@@ -1590,20 +1615,30 @@
 
       // Fallback to localStorage data
       function fallbackToLocalStorage() {
+        console.log('Auto-fill: Using localStorage fallback');
+        
         const userEmail = localStorage.getItem("userEmail");
         const userInfo = localStorage.getItem("userInfo");
+        
+        console.log('Auto-fill: localStorage data:', {
+          userEmail: userEmail,
+          userInfo: userInfo
+        });
         
         if (userEmail) {
           const emailField = document.getElementById("email");
           if (emailField) {
             emailField.value = userEmail;
             makeFieldReadonly(emailField);
+            console.log('Auto-fill: Email field filled from localStorage:', userEmail);
           }
           
           // Try to parse user info
           if (userInfo) {
             try {
               const userData = JSON.parse(userInfo);
+              console.log('Auto-fill: Parsed user data from localStorage:', userData);
+              
               const firstNameField = document.getElementById("firstName");
               const lastNameField = document.getElementById("lastName");
               const phoneField = document.getElementById("phone");
@@ -1611,23 +1646,29 @@
               if (firstNameField && userData.first_name) {
                 firstNameField.value = userData.first_name;
                 makeFieldReadonly(firstNameField);
+                console.log('Auto-fill: First name filled from localStorage:', userData.first_name);
               }
               
               if (lastNameField && userData.last_name) {
                 lastNameField.value = userData.last_name;
                 makeFieldReadonly(lastNameField);
+                console.log('Auto-fill: Last name filled from localStorage:', userData.last_name);
               }
               
               if (phoneField && userData.phone) {
                 phoneField.value = userData.phone;
                 makeFieldReadonly(phoneField);
+                console.log('Auto-fill: Phone filled from localStorage:', userData.phone);
               }
             } catch (e) {
-              console.log('Error parsing user info from localStorage:', e);
+              console.log('Auto-fill: Error parsing user info from localStorage:', e);
             }
           }
           
           showUserInfoMessage();
+          console.log('Auto-fill: Fallback completed successfully');
+        } else {
+          console.log('Auto-fill: No user data found in localStorage');
         }
       }
 

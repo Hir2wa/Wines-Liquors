@@ -707,6 +707,75 @@
         font-size: 16px;
       }
 
+      /* Location Input Styles */
+      .location-input-container {
+        display: flex;
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .location-input-container input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+      }
+
+      .location-input-container input:focus {
+        outline: none;
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+
+      .location-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .location-btn:hover {
+        background: #218838;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+      }
+
+      .location-btn:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .location-status {
+        margin-top: 8px;
+        font-size: 13px;
+        min-height: 20px;
+      }
+
+      .location-status.success {
+        color: #28a745;
+      }
+
+      .location-status.error {
+        color: #dc3545;
+      }
+
+      .location-status.loading {
+        color: #007bff;
+      }
+
       /* Mobile Responsive */
       @media (max-width: 768px) {
         .location-actions {
@@ -714,6 +783,14 @@
         }
         
         .map-button {
+          justify-content: center;
+        }
+
+        .location-input-container {
+          flex-direction: column;
+        }
+
+        .location-btn {
           justify-content: center;
         }
       }
@@ -998,15 +1075,22 @@
                   <input type="text" id="address" name="address" required />
                 </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="city">City *</label>
-                    <input type="text" id="city" name="city" required />
+                <div class="form-group">
+                  <label for="location">Location *</label>
+                  <div class="location-input-container">
+                    <input 
+                      type="text" 
+                      id="location" 
+                      name="location" 
+                      placeholder="Enter your address or click to get current location"
+                      required 
+                    />
+                    <button type="button" id="getLocationBtn" class="location-btn">
+                      <i class="fas fa-map-marker-alt"></i>
+                      Get My Location
+                    </button>
                   </div>
-                  <div class="form-group">
-                    <label for="country">Country *</label>
-                    <input type="text" id="country" name="country" required />
-                  </div>
+                  <div id="locationStatus" class="location-status"></div>
                 </div>
 
                 <div class="form-group">
@@ -1784,8 +1868,7 @@
                 firstName: formData.get("firstName"),
                 lastName: formData.get("lastName"),
                 address: formData.get("address"),
-                city: formData.get("city"),
-                country: formData.get("country"),
+                location: formData.get("location"),
               },
               items: formattedItems,
               paymentMethod: formData.get("paymentMethod"),
@@ -1881,6 +1964,91 @@
         }
       }
 
+      // Get user's current location
+      function getCurrentLocation() {
+        const locationInput = document.getElementById('location');
+        const locationBtn = document.getElementById('getLocationBtn');
+        const locationStatus = document.getElementById('locationStatus');
+        
+        if (!navigator.geolocation) {
+          locationStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Geolocation is not supported by this browser.';
+          locationStatus.className = 'location-status error';
+          return;
+        }
+
+        // Show loading state
+        locationBtn.disabled = true;
+        locationBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+        locationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting your current location...';
+        locationStatus.className = 'location-status loading';
+
+        navigator.geolocation.getCurrentPosition(
+          async function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            
+            try {
+              // Use reverse geocoding to get address
+              const response = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+              );
+              
+              if (response.ok) {
+                const data = await response.json();
+                const address = `${data.locality || ''} ${data.principalSubdivision || ''} ${data.countryName || ''}`.trim();
+                
+                locationInput.value = address;
+                locationStatus.innerHTML = '<i class="fas fa-check-circle"></i> Location found successfully!';
+                locationStatus.className = 'location-status success';
+              } else {
+                // Fallback to coordinates if reverse geocoding fails
+                locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+                locationStatus.innerHTML = '<i class="fas fa-map-marker-alt"></i> Location found (coordinates)';
+                locationStatus.className = 'location-status success';
+              }
+            } catch (error) {
+              // Fallback to coordinates
+              locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+              locationStatus.innerHTML = '<i class="fas fa-map-marker-alt"></i> Location found (coordinates)';
+              locationStatus.className = 'location-status success';
+            }
+            
+            // Reset button
+            locationBtn.disabled = false;
+            locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Get My Location';
+          },
+          function(error) {
+            let errorMessage = '';
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                errorMessage = 'Location access denied. Please allow location access or enter address manually.';
+                break;
+              case error.POSITION_UNAVAILABLE:
+                errorMessage = 'Location information unavailable. Please enter address manually.';
+                break;
+              case error.TIMEOUT:
+                errorMessage = 'Location request timed out. Please try again or enter address manually.';
+                break;
+              default:
+                errorMessage = 'An unknown error occurred. Please enter address manually.';
+                break;
+            }
+            
+            locationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+            locationStatus.className = 'location-status error';
+            
+            // Reset button
+            locationBtn.disabled = false;
+            locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Get My Location';
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+          }
+        );
+      }
+
       // Initialize page
       // Handle payment method selection
       function handlePaymentMethodChange() {
@@ -1904,6 +2072,12 @@
         loadCartItems();
         handlePaymentMethodChange();
         autoFillUserInfo(); // Auto-fill user info if logged in
+        
+        // Add event listener for location button
+        const getLocationBtn = document.getElementById('getLocationBtn');
+        if (getLocationBtn) {
+          getLocationBtn.addEventListener('click', getCurrentLocation);
+        }
       });
     </script>
   </body>

@@ -286,3 +286,4 @@ function createOrdersReportHTML($allOrders) {
     return $html;
 }
 ?>
+

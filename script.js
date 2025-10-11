@@ -129,6 +129,9 @@ function initializeFilters() {
 
   // Auto-assign data attributes to product cards
   autoAssignDataAttributes();
+
+  // Apply initial filters
+  applyFilters();
 }
 
 // Auto-assign data attributes to product cards based on their content
@@ -161,21 +164,46 @@ function autoAssignDataAttributes() {
       else if (sectionTitle.includes("wine bottle")) category = "wine-bottle";
       else if (sectionTitle.includes("sparkling")) category = "sparkling-wine";
       else if (sectionTitle.includes("wine box")) category = "wine-box";
+      else if (sectionTitle.includes("beer")) {
+        // For beer page, determine category based on product name
+        if (
+          productName.includes("fanta") ||
+          productName.includes("inyage") ||
+          productName.includes("bavaria 0")
+        ) {
+          category = "non-alcoholic";
+        } else if (productName.includes("leffe")) {
+          category = "ale";
+        } else {
+          category = "lager";
+        }
+      }
     }
 
     // Determine price range
     let priceRange = "under-50k";
     const priceNum = parseInt(productPrice.replace(/[^\d]/g, ""));
-    if (priceNum >= 200000) priceRange = "over-200k";
-    else if (priceNum >= 100000) priceRange = "100k-200k";
-    else if (priceNum >= 50000) priceRange = "50k-100k";
-    else if (priceNum >= 100000) priceRange = "over-100k";
+
+    // Special handling for beer products (lower prices)
+    if (sectionTitle && sectionTitle.includes("beer")) {
+      if (priceNum >= 5000) priceRange = "5k-10k";
+      else priceRange = "under-5k";
+    } else {
+      // Original logic for wine/spirits
+      if (priceNum >= 200000) priceRange = "over-200k";
+      else if (priceNum >= 100000) priceRange = "100k-200k";
+      else if (priceNum >= 50000) priceRange = "50k-100k";
+      else if (priceNum >= 100000) priceRange = "over-100k";
+    }
 
     // Determine size
     let size = "750ml";
     if (productSize.includes("700ml")) size = "700ml";
     else if (productSize.includes("1.5l")) size = "1.5l";
     else if (productSize.includes("3l")) size = "3l";
+    else if (productSize.includes("330ml")) size = "330ml";
+    else if (productSize.includes("500ml")) size = "500ml";
+    else if (productSize.includes("variable")) size = "variable";
 
     // Set data attributes
     card.setAttribute("data-category", category);
@@ -1628,4 +1656,74 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+});
+
+// Function to handle size selection and price updates
+function addToCartWithSize(productName, defaultPrice, defaultSize) {
+  // Find the product card
+  const productCard = event.target.closest(".wine-product-card");
+  const sizeOptions = productCard.querySelectorAll('input[type="radio"]');
+  const priceElement = productCard.querySelector(".wine-price");
+  const addToCartButton = productCard.querySelector(".wine-add-to-cart");
+
+  // Find selected size
+  let selectedSize = defaultSize;
+  let selectedPrice = defaultPrice;
+
+  sizeOptions.forEach((option) => {
+    if (option.checked) {
+      selectedSize = option.value;
+      // Extract price from the label text
+      const labelText = option.nextElementSibling.textContent;
+      const priceMatch = labelText.match(/(\d{1,3}(?:,\d{3})*)frw/);
+      if (priceMatch) {
+        selectedPrice = priceMatch[1] + "frw";
+      }
+    }
+  });
+
+  // Update the displayed price
+  priceElement.textContent = selectedPrice;
+
+  // Update the onclick function with new price
+  addToCartButton.setAttribute(
+    "onclick",
+    `addToCartWithSize('${productName}', '${selectedPrice}', '${selectedSize}'); return false;`
+  );
+
+  // Add to cart with size information
+  addToCart(`${productName} (${selectedSize})`, selectedPrice);
+}
+
+// Add event listeners for size selection
+document.addEventListener("DOMContentLoaded", function () {
+  // Add event listeners to all size radio buttons
+  const sizeRadios = document.querySelectorAll(
+    '.size-options input[type="radio"]'
+  );
+  sizeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      const productCard = this.closest(".wine-product-card");
+      const priceElement = productCard.querySelector(".wine-price");
+      const addToCartButton = productCard.querySelector(".wine-add-to-cart");
+      const productName = productCard.querySelector("h4").textContent;
+
+      // Extract price from the selected option
+      const labelText = this.nextElementSibling.textContent;
+      const priceMatch = labelText.match(/(\d{1,3}(?:,\d{3})*)frw/);
+      if (priceMatch) {
+        const newPrice = priceMatch[1] + "frw";
+        const newSize = this.value;
+
+        // Update displayed price
+        priceElement.textContent = newPrice;
+
+        // Update onclick function
+        addToCartButton.setAttribute(
+          "onclick",
+          `addToCartWithSize('${productName}', '${newPrice}', '${newSize}'); return false;`
+        );
+      }
+    });
+  });
 });

@@ -48,6 +48,7 @@ function extractOrderId($path) {
 
 try {
     // Debug: Log the path for troubleshooting
+    error_log("API Debug - Path: '$path', Method: '$method'");
     
     // Handle static routes first
     if ($path === 'orders/customer' && $method === 'GET') {

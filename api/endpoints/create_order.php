@@ -64,12 +64,6 @@ foreach ($input['items'] as $item) {
     $totalAmount += floatval($price) * intval($item['quantity']);
 }
 
-// Debug: Log what coordinates are received
-error_log("DEBUG - Raw input coordinates:");
-error_log("Input latitude: " . ($input['latitude'] ?? 'NOT SET') . " (type: " . gettype($input['latitude'] ?? null) . ")");
-error_log("Input longitude: " . ($input['longitude'] ?? 'NOT SET') . " (type: " . gettype($input['longitude'] ?? null) . ")");
-error_log("Full input data: " . json_encode($input));
-
 // Prepare order data
 $orderData = [
     'orderId' => $orderId,
@@ -82,12 +76,6 @@ $orderData = [
     'latitude' => isset($input['latitude']) ? floatval($input['latitude']) : null,
     'longitude' => isset($input['longitude']) ? floatval($input['longitude']) : null
 ];
-
-// Debug: Log processed coordinates
-error_log("DEBUG - Processed coordinates:");
-error_log("Processed latitude: " . ($orderData['latitude'] ?? 'NULL') . " (type: " . gettype($orderData['latitude']) . ")");
-error_log("Processed longitude: " . ($orderData['longitude'] ?? 'NULL') . " (type: " . gettype($orderData['longitude']) . ")");
-
 
 try {
     $order = new Order();

@@ -1,0 +1,18 @@
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-213086874 - NELVINTO Liquors store
+Order ID: ORD-213086874
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 215,000frw
+Payment Method: mobile_money
+GPS Coordinates: -1.95064304, 30.10332360
+Items:
+- Glenlivet 18Yrs x1 = 215,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------

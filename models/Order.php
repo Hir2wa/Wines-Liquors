@@ -166,7 +166,9 @@ class Order {
             FROM " . $this->table_name . " o
             LEFT JOIN " . $this->items_table . " oi ON o.id = oi.order_id
             " . $where_clause . "
-            GROUP BY o.id
+            GROUP BY o.id, o.customer_email, o.customer_phone, o.customer_first_name, o.customer_last_name, 
+                     o.customer_location, o.total_amount, o.status, o.payment_status, o.payment_method, 
+                     o.created_at, o.updated_at, o.customer_latitude, o.customer_longitude
             ORDER BY o.created_at DESC
             LIMIT ? OFFSET ?
         ";

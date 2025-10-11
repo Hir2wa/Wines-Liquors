@@ -51,8 +51,8 @@ try {
             'updated_at' => $orderData['updated_at'],
             'item_count' => $orderData['item_count'] ?? 0,
             'coordinates' => [
-                'latitude' => $orderData['customer_latitude'] ?? null,
-                'longitude' => $orderData['customer_longitude'] ?? null
+                'latitude' => $orderData['customer_latitude'] ? floatval($orderData['customer_latitude']) : null,
+                'longitude' => $orderData['customer_longitude'] ? floatval($orderData['customer_longitude']) : null
             ]
         ];
         

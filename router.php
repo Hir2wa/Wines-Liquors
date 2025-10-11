@@ -12,6 +12,8 @@ $uri = strtok($uri, '?');
 
 // Handle API requests
 if (strpos($uri, '/api/') === 0) {
+    // Debug: Log API requests
+    error_log("Router: API request to $uri");
     // Include the API router
     require_once 'api/index.php';
     return;

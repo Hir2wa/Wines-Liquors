@@ -1,0 +1,20 @@
+66c06e6 - BAJIJI1, 28 minutes ago : resolved conficts
+56550f7 - BAJIJI1, 33 minutes ago : added new cost
+c29c617 - BAJIJI1, 2 hours ago : First commit
+7c3bff4 - Hir2wa, 2 hours ago : added latest changes
+e692cde - Hir2wa, 21 hours ago : fix: Resolve order creation JSON error and database structure issues
+af638db - Hir2wa, 21 hours ago : feat: Complete order system with admin notifications and user order history
+6a50021 - Hir2wa, 21 hours ago : clean: Remove store directions section since user location detection is available
+1ed2b4e - Hir2wa, 21 hours ago : feat: Enhance location detection with full zone/village details and Google Maps integration
+1e8f9dc - Hir2wa, 21 hours ago : feat: Remove address field and enhance location detection with full details
+db5399a - Hir2wa, 21 hours ago : feat: Implement user location detection and remove city/country fields
+edb4ffe - Hir2wa, 22 hours ago : feat: Add Google Maps integration for store location
+ba29adc - Hir2wa, 22 hours ago : feat: Update payment options to Mobile Money and Cash on Delivery
+53f2375 - Hir2wa, 22 hours ago : clean: Remove info message since data is already being displayed
+790b1b2 - Hir2wa, 22 hours ago : clean: Remove all debug console.log statements from auto-fill functionality
+a605912 - Hir2wa, 22 hours ago : feat: Implement seamless auto-fill on page load for logged-in users
+8509855 - Hir2wa, 22 hours ago : debug: Add comprehensive debugging tools for auto-fill functionality
+0ffb489 - Hir2wa, 22 hours ago : fix: Resolve auto-fill issues and improve session management
+6c28c1e - Hir2wa, 22 hours ago : feat: Implement proper session management for user data auto-fill
+73c00a4 - Hir2wa, 22 hours ago : feat: Auto-fill user information in MyOrders.html when logged in
+891ed08 - Hir2wa, 22 hours ago : style: Further reduce mega menu padding for optimal proportions

@@ -1,7 +1,7 @@
 <?php
 /**
  * Database Configuration
- * Total Wine & More - Order Management System
+ * NELVINTO Liquors store - Order Management System
  */
 
 class Database {

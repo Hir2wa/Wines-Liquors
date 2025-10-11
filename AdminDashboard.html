@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard - Total Wine & More</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Admin Dashboard - NELVINTO Liquors store</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="Header.css" />
     <link
@@ -1097,7 +1100,7 @@
         color: #856404;
       }
 
-      .status-processing {
+      .status-on_route {
         background: #d1ecf1;
         color: #0c5460;
       }
@@ -1115,6 +1118,33 @@
       .status-cancelled {
         background: #f8d7da;
         color: #721c24;
+      }
+
+      /* Location Link */
+      .location-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #dc3545;
+        text-decoration: none;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .location-link:hover {
+        background: #dc3545;
+        color: white;
+        text-decoration: none;
+      }
+
+      .location-link i {
+        font-size: 0.9rem;
       }
 
       /* Action Buttons */
@@ -1274,6 +1304,23 @@
           gap: 10px;
         }
       }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 0 20px;
+      }
+
+      .dashboard-header h2 {
+        margin: 0;
+        color: #333;
+      }
+
+      .btn i {
+        margin-right: 5px;
+      }
     </style>
   </head>
   <body>
@@ -1288,7 +1335,7 @@
               <span>Back to Website</span>
             </a>
             <div class="admin-logo">
-              <img src="images/logo1.png" alt="Total Wine & More Logo" style="width: 120px;"/>
+              <img src="images/logo1.png" alt="NELVINTO Liquors store Logo" style="width: 120px;"/>
               <h1>Admin Dashboard</h1>
             </div>
           </div>
@@ -1360,6 +1407,12 @@
         <div class="content-wrapper">
         <!-- Dashboard Overview -->
         <section id="dashboard" class="content-section active">
+          <div class="dashboard-header">
+            <h2>Dashboard Overview</h2>
+            <button class="btn btn-primary" onclick="refreshDashboardData()" title="Refresh Dashboard">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
           <div class="dashboard-overview">
           <div class="stats-grid">
             <div class="stat-card">
@@ -1368,8 +1421,8 @@
               </div>
               <div class="stat-content">
                 <h3>Total Orders</h3>
-                <p class="stat-number">1,247</p>
-                <span class="stat-change positive">+12%</span>
+                <p class="stat-number">Loading...</p>
+                <span class="stat-change positive">+0%</span>
               </div>
             </div>
             <div class="stat-card">
@@ -1378,8 +1431,8 @@
               </div>
               <div class="stat-content">
                 <h3>Revenue</h3>
-                <p class="stat-number">$45,230</p>
-                <span class="stat-change positive">+8%</span>
+                <p class="stat-number">Loading...</p>
+                <span class="stat-change positive">+0%</span>
               </div>
             </div>
             <div class="stat-card">
@@ -1388,8 +1441,8 @@
               </div>
               <div class="stat-content">
                 <h3>Customers</h3>
-                <p class="stat-number">892</p>
-                <span class="stat-change positive">+5%</span>
+                <p class="stat-number">Loading...</p>
+                <span class="stat-change positive">+0%</span>
               </div>
             </div>
             <div class="stat-card">
@@ -1398,7 +1451,7 @@
               </div>
               <div class="stat-content">
                 <h3>Products</h3>
-                <p class="stat-number">156</p>
+                <p class="stat-number">Loading...</p>
                 <span class="stat-change neutral">0%</span>
               </div>
             </div>
@@ -1425,42 +1478,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#ORD-001</td>
-                  <td>John Doe</td>
-                  <td>3 items</td>
-                  <td>$125.00</td>
-                  <td><span class="status pending">Pending</span></td>
-                  <td>2024-01-15</td>
-                  <td>
-                    <button class="btn-sm btn-primary">View</button>
-                    <button class="btn-sm btn-success">Approve</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#ORD-002</td>
-                  <td>Jane Smith</td>
-                  <td>2 items</td>
-                  <td>$89.50</td>
-                  <td><span class="status processing">Processing</span></td>
-                  <td>2024-01-15</td>
-                  <td>
-                    <button class="btn-sm btn-primary">View</button>
-                    <button class="btn-sm btn-warning">Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#ORD-003</td>
-                  <td>Mike Johnson</td>
-                  <td>5 items</td>
-                  <td>$234.75</td>
-                  <td><span class="status shipped">Shipped</span></td>
-                  <td>2024-01-14</td>
-                  <td>
-                    <button class="btn-sm btn-primary">View</button>
-                    <button class="btn-sm btn-info">Track</button>
-                  </td>
-                </tr>
+                <!-- Recent orders will be loaded here by JavaScript -->
               </tbody>
             </table>
           </div>
@@ -1472,48 +1490,7 @@
             <h2>Payment Notifications</h2>
           </div>
           <div class="notifications-list">
-            <div class="notification-item new">
-              <div class="notification-icon">
-                <i class="fas fa-credit-card"></i>
-              </div>
-              <div class="notification-content">
-                <h4>Payment Received</h4>
-                <p>Order #ORD-001 - $125.00 from John Doe</p>
-                <span class="notification-time">2 minutes ago</span>
-              </div>
-              <div class="notification-actions">
-                <button class="btn-sm btn-success">Approve</button>
-                <button class="btn-sm btn-danger">Reject</button>
-              </div>
-            </div>
-            <div class="notification-item new">
-              <div class="notification-icon">
-                <i class="fas fa-credit-card"></i>
-              </div>
-              <div class="notification-content">
-                <h4>Payment Received</h4>
-                <p>Order #ORD-002 - $89.50 from Jane Smith</p>
-                <span class="notification-time">15 minutes ago</span>
-              </div>
-              <div class="notification-actions">
-                <button class="btn-sm btn-success">Approve</button>
-                <button class="btn-sm btn-danger">Reject</button>
-              </div>
-            </div>
-            <div class="notification-item">
-              <div class="notification-icon">
-                <i class="fas fa-credit-card"></i>
-              </div>
-              <div class="notification-content">
-                <h4>Payment Received</h4>
-                <p>Order #ORD-003 - $234.75 from Mike Johnson</p>
-                <span class="notification-time">1 hour ago</span>
-              </div>
-              <div class="notification-actions">
-                <button class="btn-sm btn-success">Approve</button>
-                <button class="btn-sm btn-danger">Reject</button>
-              </div>
-            </div>
+            <!-- Payment notifications will be loaded here by JavaScript -->
           </div>
           
           <!-- Admin Welcome Section -->
@@ -1586,6 +1563,7 @@
                     <th>Status</th>
                     <th>Payment Status</th>
                     <th>Payment Method</th>
+                    <th>Location</th>
                     <th>Date</th>
                     <th>Actions</th>
                   </tr>
@@ -1747,7 +1725,7 @@
                 <form class="settings-form">
                   <div class="form-group">
                     <label>Store Name</label>
-                    <input type="text" value="Total Wine & More">
+                    <input type="text" value="NELVINTO Liquors store">
                   </div>
                   <div class="form-group">
                     <label>Store Email</label>
@@ -1943,6 +1921,9 @@
             // Load payment notifications
             loadPaymentNotifications(data.pendingPayments);
             
+            // Load orders table data
+            loadOrdersData();
+            
             // Hide loading state
             hideLoadingState();
             console.log('Dashboard data loading completed successfully');
@@ -2039,26 +2020,37 @@
       }
 
       function updateStats(stats) {
-        document.querySelector(
-          ".stat-card:nth-child(1) .stat-number"
-        ).textContent = stats.total_orders.toLocaleString();
-        document.querySelector(
-          ".stat-card:nth-child(2) .stat-number"
-        ).textContent = `${stats.total_revenue.toLocaleString()}frw`;
-        document.querySelector(
-          ".stat-card:nth-child(3) .stat-number"
-        ).textContent = stats.unique_customers.toLocaleString();
-        document.querySelector(
-          ".stat-card:nth-child(4) .stat-number"
-        ).textContent = stats.pending_payments.toLocaleString();
+        // Update stats cards in the dashboard section
+        const statNumbers = document.querySelectorAll("#dashboard .stat-card .stat-number");
+        
+        console.log('Updating stats:', stats);
+        console.log('Found stat numbers:', statNumbers.length);
+        
+        if (statNumbers.length >= 4) {
+          statNumbers[0].textContent = stats.total_orders.toLocaleString();
+          statNumbers[1].textContent = `${stats.total_revenue.toLocaleString()}frw`;
+          statNumbers[2].textContent = stats.unique_customers.toLocaleString();
+          statNumbers[3].textContent = stats.pending_payments.toLocaleString();
+          
+          console.log('Stats updated successfully');
+        } else {
+          console.error('Not enough stat number elements found:', statNumbers.length);
+        }
       }
 
       function loadRecentOrders(orders) {
-        const ordersTable = document.querySelector(".orders-table tbody");
+        console.log('Loading recent orders:', orders);
+        const ordersTable = document.querySelector("#dashboard .orders-table tbody");
+
+        if (!ordersTable) {
+          console.error("Recent orders table not found");
+          return;
+        }
 
         ordersTable.innerHTML = "";
         
         if (!orders || orders.length === 0) {
+          console.log('No recent orders found');
           ordersTable.innerHTML = `
             <tr>
               <td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">
@@ -2111,7 +2103,12 @@
       }
 
       function loadPaymentNotifications(orders) {
-        const notificationsList = document.querySelector(".notifications-list");
+        const notificationsList = document.querySelector("#dashboard .notifications-list");
+
+        if (!notificationsList) {
+          console.error("Payment notifications list not found");
+          return;
+        }
 
         notificationsList.innerHTML = "";
         
@@ -2148,9 +2145,12 @@
                 )}</span>
               </div>
               <div class="notification-actions">
-                <button class="btn-sm btn-success" onclick="approvePayment('${
+                <button class="btn-sm btn-success" onclick="confirmPayment('${
                   order.id
-                }')">Approve</button>
+                }')">Confirm Payment</button>
+                <button class="btn-sm btn-warning" onclick="requestPaymentProof('${
+                  order.id
+                }')">Request Proof</button>
                 <button class="btn-sm btn-danger" onclick="rejectPayment('${
                   order.id
                 }')">Reject</button>
@@ -2196,6 +2196,40 @@
         setInterval(() => {
           loadDashboardData();
         }, 30000); // Update every 30 seconds
+      }
+
+      function confirmPayment(orderId) {
+        if (confirm(`Confirm payment for order ${orderId}? This will move the order to processing.`)) {
+          fetch('/api/orders/confirm-payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              orderId: orderId,
+              notes: 'Payment confirmed by admin'
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 200) {
+              showNotification(
+                `Payment confirmed for order ${orderId}! Order moved to processing.`,
+                "success"
+              );
+              loadDashboardData();
+            } else {
+              throw new Error(data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to confirm payment:", error);
+            showNotification(
+              `Failed to confirm payment: ${error.message}`,
+              "error"
+            );
+          });
+        }
       }
 
       function approvePayment(orderId) {
@@ -2353,16 +2387,23 @@
 
       // Section-specific data loading functions
       function loadOrdersData() {
+        console.log('Loading orders data...');
         // Load orders from API
         getOrdersData()
           .then(data => {
+            console.log('Orders data received:', data);
             const tbody = document.getElementById('ordersTableBody');
+            console.log('Table body element:', tbody);
+            if (!tbody) {
+              console.error('ordersTableBody element not found!');
+              return;
+            }
             tbody.innerHTML = '';
             
             if (!data.orders || data.orders.length === 0) {
               tbody.innerHTML = `
                 <tr>
-                  <td colspan="8" style="text-align: center; padding: 40px; color: #6c757d;">
+                  <td colspan="9" style="text-align: center; padding: 40px; color: #6c757d;">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                       <i class="fas fa-shopping-cart" style="font-size: 48px; color: #dee2e6;"></i>
                       <h4 style="margin: 0; color: #6c757d;">No Orders Found</h4>
@@ -2375,8 +2416,26 @@
               return;
             }
             
-            data.orders.forEach(order => {
+            console.log('Rendering orders:', data.orders.length);
+            data.orders.forEach((order, index) => {
+              console.log(`Rendering order ${index + 1}:`, order.order_id);
               const row = document.createElement('tr');
+              
+              // Use coordinates if available, otherwise fall back to location string
+              let googleMapsUrl, locationDisplay, locationTitle;
+              if (order.coordinates && order.coordinates.latitude && order.coordinates.longitude && 
+                  !isNaN(parseFloat(order.coordinates.latitude)) && !isNaN(parseFloat(order.coordinates.longitude))) {
+                const lat = parseFloat(order.coordinates.latitude);
+                const lng = parseFloat(order.coordinates.longitude);
+                googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+                locationDisplay = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                locationTitle = `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+              } else {
+                googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.customer_location)}`;
+                locationDisplay = order.customer_location;
+                locationTitle = `Address: ${order.customer_location}`;
+              }
+              
               row.innerHTML = `
                 <td>${order.order_id}</td>
                 <td>${order.customer_name}</td>
@@ -2389,17 +2448,30 @@
                     ${getPaymentMethodLabel(order.payment_method || 'mobile_money')}
                   </span>
                 </td>
+                <td>
+                  <a href="${googleMapsUrl}" target="_blank" class="location-link" title="${locationTitle}">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${locationDisplay}</span>
+                    ${order.coordinates && order.coordinates.latitude && order.coordinates.longitude && 
+                      !isNaN(parseFloat(order.coordinates.latitude)) && !isNaN(parseFloat(order.coordinates.longitude)) ? 
+                      '<i class="fas fa-crosshairs" style="margin-left: 4px; color: #28a745;" title="GPS Coordinates"></i>' : 
+                      '<i class="fas fa-map" style="margin-left: 4px; color: #6c757d;" title="Address"></i>'
+                    }
+                  </a>
+                </td>
                 <td>${new Date(order.created_at).toLocaleDateString()}</td>
                 <td>
                   <div class="action-buttons">
                     <button class="btn-sm btn-info" onclick="viewOrderDetails('${order.order_id}')">Details</button>
-                    <button class="btn-sm btn-warning" onclick="updateOrder('${order.order_id}')">Update</button>
+                    ${getOrderActionButtons(order.status, order.payment_status, order.order_id, order.payment_method)}
                     <button class="btn-sm btn-success" onclick="generateOrderPDF('${order.order_id}')">PDF</button>
                   </div>
                 </td>
               `;
+              console.log(`Appending row for order ${order.order_id}`);
               tbody.appendChild(row);
             });
+            console.log('Orders table updated successfully. Total rows:', tbody.children.length);
           })
           .catch(error => {
             console.error('Error loading orders:', error);
@@ -3130,7 +3202,7 @@
       function generateReport() {
         console.log('Generating comprehensive report...');
         
-        const apiUrl = window.location.protocol === 'file:' ? 'http://localhost:8000/api/admin/generate-pdf' : '/api/admin/generate-pdf';
+        const apiUrl = window.location.protocol === 'file:' ? 'http://localhost:8000/api/admin/generate-simple-pdf' : '/api/admin/generate-simple-pdf';
         
         fetch(apiUrl, {
           method: 'POST',
@@ -3143,16 +3215,17 @@
         })
         .then(response => {
           if (response.ok) {
-            return response.blob();
+            return response.text();
           }
           throw new Error('Failed to generate comprehensive report');
         })
-        .then(blob => {
-          // Create download link
+        .then(html => {
+          // Create download link for HTML report
+          const blob = new Blob([html], { type: 'text/html' });
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'comprehensive_report_' + new Date().toISOString().split('T')[0] + '.pdf';
+          a.download = 'comprehensive_report_' + new Date().toISOString().split('T')[0] + '.html';
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
@@ -3342,8 +3415,8 @@
       }
 
       function contactCustomer(email) {
-        const subject = 'Total Wine & More - Customer Support';
-        const body = 'Hello, we hope you are enjoying your recent purchase from Total Wine & More.';
+        const subject = 'NELVINTO Liquors store - Customer Support';
+        const body = 'Hello, we hope you are enjoying your recent purchase from NELVINTO Liquors store.';
         window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
       }
 
@@ -3365,18 +3438,47 @@
         }
       }
 
-      function updateOrderStatus(orderId, status) {
-        return fetch(`/api/orders/${orderId}/status`, {
+      function updateOrderStatus(orderId, status, updatedBy = 'admin', notes = '') {
+        const statusMessages = {
+          'processing': 'Order moved to processing',
+          'shipped': 'Order marked as shipped - on route to customer',
+          'delivered': 'Order delivered successfully',
+          'cancelled': 'Order cancelled'
+        };
+        
+        const message = notes || statusMessages[status] || `Status updated to ${status}`;
+        
+        return fetch('/api/orders/update-status', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            orderId: orderId,
             status: status,
-            updated_by: 'admin'
+            changedBy: updatedBy,
+            reason: message
           })
         })
-        .then(response => response.json());
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 200) {
+            showNotification(
+              `Order ${orderId} status updated to ${status}!`,
+              "success"
+            );
+            loadDashboardData();
+          } else {
+            throw new Error(data.message);
+          }
+        })
+        .catch(error => {
+          console.error("Failed to update order status:", error);
+          showNotification(
+            `Failed to update order status: ${error.message}`,
+            "error"
+          );
+        });
       }
 
       function markAsPaid(orderId) {
@@ -3407,11 +3509,22 @@
 
       // Order and Payment Details Functions
       function viewOrderDetails(orderId) {
-        // Fetch order details and show in modal
-        fetch(`/api/orders/${orderId}`)
-          .then(response => response.json())
+        console.log('Fetching order details for:', orderId);
+        // Fetch order details and show in modal (with cache busting)
+        fetch(`/api/orders/${orderId}?t=${Date.now()}`)
+          .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+          })
           .then(data => {
-            showOrderModal(data);
+            console.log('API Response:', data);
+            if (data.status === 200 && data.data) {
+              console.log('Order data:', data.data);
+              showOrderModal(data.data);
+            } else {
+              console.error('API Error:', data);
+              showNotification('Failed to load order details: ' + (data.message || 'Unknown error'), 'error');
+            }
           })
           .catch(error => {
             console.error('Error fetching order details:', error);
@@ -3433,6 +3546,14 @@
       }
 
       function showOrderModal(order) {
+        console.log('showOrderModal called with:', order);
+        console.log('Order ID:', order.order_id);
+        console.log('Customer Name:', order.customer_name);
+        console.log('Customer Email:', order.customer_email);
+        console.log('Total:', order.total);
+        console.log('Status:', order.status);
+        console.log('Items:', order.items);
+        
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
         modal.innerHTML = `
@@ -3448,12 +3569,44 @@
                   <p><strong>Name:</strong> ${order.customer_name}</p>
                   <p><strong>Email:</strong> ${order.customer_email}</p>
                   <p><strong>Phone:</strong> ${order.customer_phone}</p>
-                  <p><strong>Address:</strong> ${order.customer_address}</p>
+                  <p><strong>Address:</strong> ${order.customer_location}</p>
+                  ${order.coordinates && order.coordinates.latitude && order.coordinates.longitude ? `
+                    <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #dc3545;">
+                      <h5 style="margin: 0 0 8px 0; color: #dc3545; font-size: 14px;">
+                        <i class="fas fa-map-marker-alt"></i> GPS Coordinates
+                      </h5>
+                      <p style="margin: 4px 0; font-size: 13px;">
+                        <strong>Latitude:</strong> ${order.coordinates.latitude.toFixed(6)}
+                      </p>
+                      <p style="margin: 4px 0; font-size: 13px;">
+                        <strong>Longitude:</strong> ${order.coordinates.longitude.toFixed(6)}
+                      </p>
+                      <div style="margin-top: 8px;">
+                        <a href="https://www.google.com/maps?q=${order.coordinates.latitude},${order.coordinates.longitude}" 
+                           target="_blank" 
+                           style="color: #dc3545; text-decoration: none; font-size: 12px; font-weight: 500;">
+                          <i class="fas fa-external-link-alt"></i> Open in Google Maps
+                        </a>
+                        <span style="margin: 0 8px; color: #ccc;">|</span>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=${order.coordinates.latitude},${order.coordinates.longitude}" 
+                           target="_blank" 
+                           style="color: #dc3545; text-decoration: none; font-size: 12px; font-weight: 500;">
+                          <i class="fas fa-route"></i> Get Directions
+                        </a>
+                      </div>
+                    </div>
+                  ` : `
+                    <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 6px; border-left: 4px solid #ffc107;">
+                      <p style="margin: 0; font-size: 13px; color: #856404;">
+                        <i class="fas fa-exclamation-triangle"></i> No GPS coordinates available for this order
+                      </p>
+                    </div>
+                  `}
                 </div>
                 <div class="detail-section">
                   <h4>Order Information</h4>
                   <p><strong>Order ID:</strong> ${order.order_id}</p>
-                  <p><strong>Total Amount:</strong> ${order.total}frw</p>
+                  <p><strong>Total Amount:</strong> ${order.total}</p>
                   <p><strong>Status:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
                   <p><strong>Payment Status:</strong> <span class="status-badge status-${order.payment_status}">${order.payment_status}</span></p>
                   <p><strong>Payment Method:</strong> ${order.payment_method}</p>
@@ -3462,11 +3615,11 @@
                 <div class="detail-section">
                   <h4>Order Items</h4>
                   <div class="items-list">
-                    ${order.items ? order.items.map(item => `
+                    ${order.items && order.items.length > 0 ? order.items.map(item => `
                       <div class="item-detail">
                         <span class="item-name">${item.name}</span>
                         <span class="item-quantity">Qty: ${item.quantity}</span>
-                        <span class="item-price">${item.price}frw</span>
+                        <span class="item-price">${item.price}</span>
                       </div>
                     `).join('') : 'No items found'}
                   </div>
@@ -3547,6 +3700,29 @@
         }
       }
 
+      // Order action buttons based on status
+      function getOrderActionButtons(status, paymentStatus, orderId, paymentMethod) {
+          if (paymentStatus === 'pending') {
+            if (paymentMethod === 'cash_on_delivery') {
+              return `<button class="btn-sm btn-warning" onclick="updateOrderStatus('${orderId}', 'on_route')">Start Delivery</button>`;
+            } else {
+              return `<button class="btn-sm btn-primary" onclick="confirmPayment('${orderId}')">Confirm Payment</button>`;
+            }
+          } else if (status === 'on_route') {
+            if (paymentMethod === 'cash_on_delivery') {
+              return `<button class="btn-sm btn-success" onclick="updateOrderStatus('${orderId}', 'delivered')">Mark as Delivered</button>`;
+            } else {
+              return `<button class="btn-sm btn-success" onclick="updateOrderStatus('${orderId}', 'delivered')">Mark as Delivered</button>`;
+            }
+          } else if (status === 'delivered') {
+            return `<span class="text-success">✓ Delivered</span>`;
+          } else if (status === 'cancelled') {
+            return `<span class="text-danger">✗ Cancelled</span>`;
+          } else {
+            return `<button class="btn-sm btn-warning" onclick="updateOrder('${orderId}')">Update</button>`;
+          }
+        }
+
       // Payment method helper functions
       function getPaymentMethodLabel(method) {
         const labels = {
@@ -3568,6 +3744,18 @@
           'momo': 'fas fa-mobile-alt'
         };
         return icons[method] || 'fas fa-money-bill';
+      }
+
+      // Comprehensive refresh function
+      function refreshDashboardData() {
+        console.log('Refreshing all dashboard data...');
+        showNotification('🔄 Refreshing dashboard data...', 'info');
+        loadDashboardData();
+        
+        // Show success notification after a delay
+        setTimeout(() => {
+          showNotification('✅ Dashboard data refreshed successfully!', 'success');
+        }, 2000);
       }
     </script>
   </body>

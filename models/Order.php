@@ -30,11 +30,12 @@ class Order {
                 INSERT INTO " . $this->table_name . " 
                 (id, customer_email, customer_phone, customer_first_name, customer_last_name, 
                  customer_location, total_amount, 
-                 payment_method, status, payment_status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                 payment_method, status, payment_status, customer_latitude, customer_longitude) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ";
 
             $stmt = $this->conn->prepare($sql);
+            
             $result = $stmt->execute([
                 $orderData['orderId'],
                 $orderData['customerInfo']['email'],
@@ -45,7 +46,9 @@ class Order {
                 $orderData['totalAmount'],
                 $orderData['paymentMethod'],
                 $orderData['status'],
-                $orderData['paymentStatus']
+                $orderData['paymentStatus'],
+                $orderData['latitude'] ?? null,
+                $orderData['longitude'] ?? null
             ]);
 
             if (!$result) {
@@ -120,7 +123,9 @@ class Order {
             FROM " . $this->table_name . " o
             LEFT JOIN " . $this->items_table . " oi ON o.id = oi.order_id
             WHERE o.id = ?
-            GROUP BY o.id
+            GROUP BY o.id, o.customer_email, o.customer_phone, o.customer_first_name, o.customer_last_name, 
+                     o.customer_location, o.total_amount, o.status, o.payment_status, o.payment_method, 
+                     o.created_at, o.updated_at, o.customer_latitude, o.customer_longitude
         ";
 
         $stmt = $this->conn->prepare($sql);
@@ -199,8 +204,8 @@ class Order {
                 $this->conn->beginTransaction();
             }
 
-            // Get current status
-            $current_sql = "SELECT status FROM " . $this->table_name . " WHERE id = ?";
+            // Get current order details
+            $current_sql = "SELECT status, payment_method, payment_status FROM " . $this->table_name . " WHERE id = ?";
             $current_stmt = $this->conn->prepare($current_sql);
             $current_stmt->execute([$orderId]);
             $current_order = $current_stmt->fetch();
@@ -218,6 +223,16 @@ class Order {
 
             if (!$result) {
                 throw new Exception("Failed to update order status");
+            }
+
+            // If cash on delivery order is being delivered, automatically approve payment
+            if ($newStatus === 'delivered' && $current_order['payment_method'] === 'cash_on_delivery' && $current_order['payment_status'] === 'pending') {
+                $payment_sql = "UPDATE " . $this->table_name . " SET payment_status = 'approved', updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+                $payment_stmt = $this->conn->prepare($payment_sql);
+                $payment_stmt->execute([$orderId]);
+                
+                // Log payment status change
+                $this->logStatusChange($orderId, 'pending', 'approved', $changedBy, 'Payment received upon delivery');
             }
 
             // Log status change
@@ -265,9 +280,13 @@ class Order {
                 throw new Exception("Failed to update payment status");
             }
 
-            // If payment is approved, automatically move to processing
+            // If payment is approved, automatically move to on_route (only for non-cash orders)
             if ($newPaymentStatus === 'approved' && $oldPaymentStatus === 'pending') {
-                $this->updateStatus($orderId, 'processing', $changedBy, 'Payment approved');
+                // Get the order to check payment method
+                $orderData = $this->getById($orderId);
+                if ($orderData && $orderData['paymentMethod'] !== 'cash_on_delivery') {
+                    $this->updateStatus($orderId, 'on_route', $changedBy, 'Payment approved, order is now on route');
+                }
             }
 
             if ($this->conn->inTransaction()) {
@@ -294,8 +313,8 @@ class Order {
         $stmt->execute();
         $stats['total_orders'] = $stmt->fetch()['total'];
 
-        // Total revenue
-        $sql = "SELECT SUM(total_amount) as total FROM " . $this->table_name . " WHERE payment_status = 'approved'";
+        // Total revenue (only count delivered orders)
+        $sql = "SELECT SUM(total_amount) as total FROM " . $this->table_name . " WHERE status = 'delivered' AND payment_status = 'approved'";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stats['total_revenue'] = $stmt->fetch()['total'] ?? 0;
@@ -440,9 +459,7 @@ class Order {
                 'phone' => $order['customer_phone'],
                 'firstName' => $order['customer_first_name'],
                 'lastName' => $order['customer_last_name'],
-                'address' => $order['customer_address'],
-                'city' => $order['customer_city'],
-                'country' => $order['customer_country']
+                'location' => $order['customer_location']
             ],
             'total' => number_format($order['total_amount']) . 'frw',
             'totalAmount' => $order['total_amount'],
@@ -450,7 +467,11 @@ class Order {
             'paymentStatus' => $order['payment_status'],
             'paymentMethod' => $order['payment_method'],
             'date' => $order['created_at'],
-            'updatedAt' => $order['updated_at']
+            'updatedAt' => $order['updated_at'],
+            'coordinates' => [
+                'latitude' => $order['customer_latitude'] ?? null,
+                'longitude' => $order['customer_longitude'] ?? null
+            ]
         ];
 
         // Parse items if they exist
@@ -464,7 +485,7 @@ class Order {
                     if (count($item_parts) >= 3) {
                         $items[] = [
                             'name' => $item_parts[0],
-                            'price' => number_format($item_parts[1]) . 'frw',
+                            'price' => number_format((float)$item_parts[1]) . 'frw',
                             'quantity' => (int)$item_parts[2],
                             'image' => $item_parts[3] ?? null
                         ];

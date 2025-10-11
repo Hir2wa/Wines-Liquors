@@ -36,15 +36,42 @@ try {
     $stats = $order->getDashboardStats();
     
     // Get recent orders (last 10)
-    $recentOrders = $order->getAll(1, 10);
+    $recentOrdersResult = $order->getAll(1, 10);
+    $recentOrders = [];
+    foreach ($recentOrdersResult['orders'] ?? [] as $orderData) {
+        $recentOrders[] = [
+            'id' => $orderData['id'],
+            'customer_first_name' => $orderData['customer_first_name'],
+            'customer_last_name' => $orderData['customer_last_name'],
+            'customer_email' => $orderData['customer_email'],
+            'total_amount' => $orderData['total_amount'],
+            'status' => $orderData['status'],
+            'created_at' => $orderData['created_at'],
+            'item_count' => $orderData['item_count'] ?? 0
+        ];
+    }
     
     // Get pending payment orders
-    $pendingPayments = $order->getAll(1, 20, null, 'pending');
+    $pendingPaymentsResult = $order->getAll(1, 20, null, 'pending');
+    $pendingPayments = [];
+    foreach ($pendingPaymentsResult['orders'] ?? [] as $orderData) {
+        $pendingPayments[] = [
+            'id' => $orderData['id'],
+            'customer_first_name' => $orderData['customer_first_name'],
+            'customer_last_name' => $orderData['customer_last_name'],
+            'customer_email' => $orderData['customer_email'],
+            'total_amount' => $orderData['total_amount'],
+            'status' => $orderData['status'],
+            'payment_status' => $orderData['payment_status'],
+            'created_at' => $orderData['created_at'],
+            'item_count' => $orderData['item_count'] ?? 0
+        ];
+    }
     
     $dashboardData = [
         'stats' => $stats,
-        'recentOrders' => $recentOrders['orders'] ?? [],
-        'pendingPayments' => $pendingPayments['orders'] ?? []
+        'recentOrders' => $recentOrders,
+        'pendingPayments' => $pendingPayments
     ];
     
     sendSuccess($dashboardData, 'Dashboard data retrieved successfully');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Get Orders Endpoint
- * GET /api/orders?page=1&limit=10&status=pending&paymentStatus=approved
+ * Get Orders Endpoint for Admin Dashboard
+ * GET /api/orders
  */
 
 // Set headers
@@ -27,33 +27,47 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// Get query parameters
-$page = intval($_GET['page'] ?? 1);
-$limit = intval($_GET['limit'] ?? 10);
-$status = $_GET['status'] ?? null;
-$paymentStatus = $_GET['paymentStatus'] ?? null;
-
-// Validate parameters
-if ($page < 1) $page = 1;
-if ($limit < 1 || $limit > 100) $limit = 10;
-
-// Validate status values
-$validStatuses = ['pending', 'processing', 'shipped', 'completed', 'cancelled'];
-$validPaymentStatuses = ['pending', 'approved', 'rejected'];
-
-if ($status && !in_array($status, $validStatuses)) {
-    sendError('Invalid status value', 400);
-}
-
-if ($paymentStatus && !in_array($paymentStatus, $validPaymentStatuses)) {
-    sendError('Invalid payment status value', 400);
-}
-
 try {
     $order = new Order();
-    $result = $order->getAll($page, $limit, $status, $paymentStatus);
     
-    sendSuccess($result, 'Orders retrieved successfully');
+    // Get all orders with proper formatting
+    $result = $order->getAll(1, 100); // Get first 100 orders
+    
+    // Format orders for admin dashboard
+    $formattedOrders = [];
+    foreach ($result['orders'] as $orderData) {
+        $formattedOrder = [
+            'order_id' => $orderData['id'],
+            'customer_name' => $orderData['customer_first_name'] . ' ' . $orderData['customer_last_name'],
+            'customer_email' => $orderData['customer_email'],
+            'customer_phone' => $orderData['customer_phone'],
+            'customer_location' => $orderData['customer_location'],
+            'total' => number_format($orderData['total_amount']) . 'frw',
+            'total_amount' => $orderData['total_amount'],
+            'status' => $orderData['status'],
+            'payment_status' => $orderData['payment_status'],
+            'payment_method' => $orderData['payment_method'],
+            'created_at' => $orderData['created_at'],
+            'updated_at' => $orderData['updated_at'],
+            'item_count' => $orderData['item_count'] ?? 0,
+            'coordinates' => [
+                'latitude' => $orderData['customer_latitude'] ?? null,
+                'longitude' => $orderData['customer_longitude'] ?? null
+            ]
+        ];
+        
+        $formattedOrders[] = $formattedOrder;
+    }
+    
+    $response = [
+        'orders' => $formattedOrders,
+        'total' => $result['total'],
+        'page' => $result['page'],
+        'limit' => $result['limit'],
+        'total_pages' => $result['total_pages']
+    ];
+    
+    sendSuccess($response, 'Orders retrieved successfully');
     
 } catch (Exception $e) {
     sendError('Failed to retrieve orders: ' . $e->getMessage(), 500);

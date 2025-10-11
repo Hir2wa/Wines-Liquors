@@ -1,0 +1,174 @@
+EMAIL NOTIFICATION:
+To: alainfabriceh@gmail.com
+Subject: New Order Received: #ORD-194402579 - NELVINTO Liquors store
+Order ID: ORD-194402579
+Customer: Test User
+Email: test@example.com
+Phone: +250799123456
+Location: Kigali, Rwanda
+Total: 5,000frw
+Payment Method: mobile_money
+GPS Coordinates: -1.94410000, 30.06190000
+Items:
+- Test Wine x1 = 5,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-194614447 - NELVINTO Liquors store
+Order ID: ORD-194614447
+Customer: Test User
+Email: test@example.com
+Phone: +250799123456
+Location: Kigali, Rwanda
+Total: 5,000frw
+Payment Method: mobile_money
+GPS Coordinates: -1.94410000, 30.06190000
+Items:
+- Test Wine x1 = 5,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-194694125 - NELVINTO Liquors store
+Order ID: ORD-194694125
+Customer: John Doe
+Email: customer@example.com
+Phone: +250799999999
+Location: Gasabo, Kigali, Rwanda
+Total: 30,000frw
+Payment Method: mobile_money
+GPS Coordinates: -1.95740000, 30.06190000
+Items:
+- Premium Wine x2 = 15,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-197699536 - NELVINTO Liquors store
+Order ID: ORD-197699536
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 240,000frw
+Payment Method: mobile_money
+Items:
+- Glenlivet 18Yrs x1 = 240,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-198029640 - NELVINTO Liquors store
+Order ID: ORD-198029640
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 180,000frw
+Payment Method: mobile_money
+Items:
+- Glenfiddich 15Yrs x1 = 180,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-198182420 - NELVINTO Liquors store
+Order ID: ORD-198182420
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 180,000frw
+Payment Method: mobile_money
+Items:
+- Glenfiddich 15Yrs x1 = 180,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-198255199 - NELVINTO Liquors store
+Order ID: ORD-198255199
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 2,500frw
+Payment Method: mobile_money
+Items:
+- Bavaria 0% Alcohol x1 = 2,500frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-198646171 - NELVINTO Liquors store
+Order ID: ORD-198646171
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 180,000frw
+Payment Method: mobile_money
+Items:
+- Glenfiddich 15Yrs x1 = 180,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-199356919 - NELVINTO Liquors store
+Order ID: ORD-199356919
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 3,200frw
+Payment Method: mobile_money
+Items:
+- Carlsberg x1 = 3,200frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------
+EMAIL NOTIFICATION:
+To: alainfabricehirwa@gmail.com
+Subject: New Order Received: #ORD-202261820 - NELVINTO Liquors store
+Order ID: ORD-202261820
+Customer: Hirwa Alain
+Email: alainfabriceh@gmail.com
+Phone: +250799999999
+Location: Gasabo, Kigali, City of Kigali, Rwanda
+Total: 80,000frw
+Payment Method: mobile_money
+GPS Coordinates: -1.95059300, 30.10352200
+Items:
+- Red Label x1 = 80,000frw
+
+Admin Dashboard: http://localhost:8000/AdminDashboard.html
+Google Maps: https://www.google.com/maps/search/?api=1&query=Gasabo%2C+Kigali%2C+City+of+Kigali%2C+Rwanda
+
+--------------------------------------------------

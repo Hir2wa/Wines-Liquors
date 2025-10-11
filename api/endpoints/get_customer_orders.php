@@ -1,6 +1,20 @@
 <?php
-// get_customer_orders.php
-// Required headers already set in index.php
+/**
+ * Get Customer Orders Endpoint
+ * GET /api/orders/customer
+ */
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+require_once __DIR__ . '/../../config/database.php';
 
 // Get user ID from session or request
 $user_id = null;
@@ -9,12 +23,13 @@ $user_id = null;
 $database = new Database();
 $db = $database->getConnection();
 
-// Check if user is logged in via session token
+// Get user email - try multiple methods
+$user_email = null;
+
+// Method 1: Check if user is logged in via session token
 if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     $auth_header = $_SERVER['HTTP_AUTHORIZATION'];
     $token = str_replace('Bearer ', '', $auth_header);
-    
-    // Get user ID from session token
     
     $query = "SELECT user_id FROM user_sessions WHERE session_token = :token AND expires_at > CURRENT_TIMESTAMP";
     $stmt = $db->prepare($query);
@@ -24,34 +39,48 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     $session = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($session) {
         $user_id = $session['user_id'];
+        
+        // Get user email from user ID
+        $query = "SELECT email FROM users WHERE id = :user_id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(":user_id", $user_id);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($user) {
+            $user_email = $user['email'];
+        }
     }
 }
 
-// If no session token, try to get from request body
-if (!$user_id) {
+// Method 2: Get email from query parameter (for direct access)
+if (!$user_email && isset($_GET['email'])) {
+    $user_email = $_GET['email'];
+}
+
+// Method 3: Try to get from request body
+if (!$user_email) {
     $data = json_decode(file_get_contents("php://input"), true);
-    if (isset($data['user_id'])) {
+    if (isset($data['email'])) {
+        $user_email = $data['email'];
+    } elseif (isset($data['user_id'])) {
         $user_id = $data['user_id'];
+        
+        $query = "SELECT email FROM users WHERE id = :user_id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(":user_id", $user_id);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($user) {
+            $user_email = $user['email'];
+        }
     }
 }
 
-if (!$user_id) {
+if (!$user_email) {
     http_response_code(401);
-    echo json_encode(array("message" => "User not authenticated"));
-    exit();
-}
-
-// Get user email for order lookup
-
-$query = "SELECT email FROM users WHERE id = :user_id";
-$stmt = $db->prepare($query);
-$stmt->bindParam(":user_id", $user_id);
-$stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$user) {
-    http_response_code(404);
-    echo json_encode(array("message" => "User not found"));
+    echo json_encode(array("message" => "User email required"));
     exit();
 }
 
@@ -66,7 +95,7 @@ if ($page < 1) $page = 1;
 if ($limit < 1 || $limit > 100) $limit = 10;
 
 // Validate status values
-$validStatuses = ['pending', 'processing', 'shipped', 'completed', 'cancelled'];
+$validStatuses = ['pending', 'on_route', 'shipped', 'delivered', 'cancelled'];
 $validPaymentStatuses = ['pending', 'approved', 'rejected'];
 
 if ($status && !in_array($status, $validStatuses)) {
@@ -86,7 +115,7 @@ try {
     $offset = ($page - 1) * $limit;
     
     $where_conditions = ["o.customer_email = :email"];
-    $params = [':email' => $user['email']];
+    $params = [':email' => $user_email];
 
     if ($status) {
         $where_conditions[] = "o.status = :status";
@@ -144,9 +173,7 @@ try {
                 'phone' => $order_data['customer_phone'],
                 'firstName' => $order_data['customer_first_name'],
                 'lastName' => $order_data['customer_last_name'],
-                'address' => $order_data['customer_address'],
-                'city' => $order_data['customer_city'],
-                'country' => $order_data['customer_country']
+                'location' => $order_data['customer_location']
             ],
             'total' => number_format($order_data['total_amount']) . 'frw',
             'totalAmount' => $order_data['total_amount'],
@@ -154,7 +181,11 @@ try {
             'paymentStatus' => $order_data['payment_status'],
             'paymentMethod' => $order_data['payment_method'],
             'date' => $order_data['created_at'],
-            'updatedAt' => $order_data['updated_at']
+            'updatedAt' => $order_data['updated_at'],
+            'coordinates' => [
+                'latitude' => $order_data['customer_latitude'] ?? null,
+                'longitude' => $order_data['customer_longitude'] ?? null
+            ]
         ];
 
         // Parse items if they exist

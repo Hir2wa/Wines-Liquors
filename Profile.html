@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile - Total Wine & More</title>
+    <title>Profile - NELVINTO Liquors store</title>
     <link rel="stylesheet" href="css/all.min.css" />
     <style>
       * {
@@ -537,7 +537,7 @@
         <div class="logo">
           <img
             src="images/logo1.png"
-            alt="Total Wine & More Logo"
+            alt="NELVINTO Liquors store Logo"
             style="width: 150px"
           />
         </div>
@@ -590,7 +590,7 @@
               <div class="profile-avatar">
                 <i class="fas fa-user"></i>
               </div>
-              <h2>Welcome to Total Wine & More</h2>
+              <h2>Welcome to NELVINTO Liquors store</h2>
               <p>Please sign in to view your profile and manage your account.</p>
               <div class="login-actions">
                 <a href="login.html" class="btn btn-primary">
@@ -697,6 +697,21 @@
         const state = user.state || "";
         const zipCode = user.zipCode || "";
 
+        // Debug admin status
+        console.log("User data:", user);
+        console.log("isAdmin property:", user.isAdmin);
+        console.log("isAdmin type:", typeof user.isAdmin);
+
+        // Check if user is admin - add fallback for common admin emails
+        const isAdmin =
+          user.isAdmin === true ||
+          user.isAdmin === "true" ||
+          email === "alainfabriceh@gmail.com" ||
+          email === "admin@nelvinto.com" ||
+          email.includes("admin");
+
+        console.log("Final isAdmin value:", isAdmin);
+
         profileContent.innerHTML = `
             <div class="profile-header">
               <div class="profile-avatar">
@@ -705,7 +720,7 @@
           .toUpperCase()}
               </div>
               <h1 class="profile-title">${firstName} ${lastName}</h1>
-              <p class="profile-subtitle">Welcome back to Total Wine & More</p>
+              <p class="profile-subtitle">Welcome back to NELVINTO Liquors store</p>
             </div>
 
             <div class="profile-info">
@@ -835,7 +850,7 @@
             </div>
 
             ${
-              user.isAdmin
+              isAdmin
                 ? `
             <div class="admin-mode-switch">
               <h3>Admin Mode</h3>

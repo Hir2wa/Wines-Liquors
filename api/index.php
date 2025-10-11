@@ -1,7 +1,7 @@
 <?php
 /**
  * API Router
- * Total Wine & More - Order Management API
+ * NELVINTO Liquors store - Order Management API
  */
 
 // Suppress PHP warnings/notices to prevent breaking JSON response
@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once '../config/database.php';
-require_once '../models/Order.php';
-require_once '../models/User.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Order.php';
+require_once __DIR__ . '/../models/User.php';
 
 // Get request method and path
 $method = $_SERVER['REQUEST_METHOD'];
@@ -30,6 +30,7 @@ $path = str_replace('/api/', '', $path);
 
 // Remove query string from path
 $path = strtok($path, '?');
+
 
 // Function to match dynamic routes
 function matchRoute($pattern, $path) {
@@ -47,53 +48,74 @@ function extractOrderId($path) {
 
 try {
     // Debug: Log the path for troubleshooting
-    error_log("API Debug - Path: '$path', Method: '$method'");
     
-    // Handle dynamic routes first - check for orders/{orderId}/payment-code pattern
-    if (preg_match('#^orders/([^/]+)/payment-code$#', $path, $matches) && $method === 'GET') {
-        error_log("API Debug - Matched dynamic route for payment code");
-        $orderId = $matches[1];
-        require_once 'endpoints/get_payment_code.php';
-    } elseif ($path === 'orders' && $method === 'POST') {
-        require_once 'endpoints/create_order.php';
-    } elseif ($path === 'orders' && $method === 'GET') {
-        require_once 'endpoints/get_orders.php';
+    // Handle static routes first
+    if ($path === 'orders/customer' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/get_customer_orders.php';
     } elseif ($path === 'orders/track' && $method === 'GET') {
-        require_once 'endpoints/track_order.php';
+        require_once __DIR__ . '/endpoints/track_order.php';
     } elseif ($path === 'orders/update-status' && $method === 'PUT') {
-        require_once 'endpoints/update_order_status.php';
+        require_once __DIR__ . '/endpoints/update_order_status.php';
     } elseif ($path === 'orders/update-payment' && $method === 'PUT') {
-        require_once 'endpoints/update_payment_status.php';
-    } elseif ($path === 'orders/customer' && $method === 'GET') {
-        require_once 'endpoints/get_customer_orders.php';
+        require_once __DIR__ . '/endpoints/update_payment_status.php';
     } elseif ($path === 'orders/notify' && $method === 'POST') {
-        require_once 'endpoints/send_order_notification.php';
+        require_once __DIR__ . '/endpoints/send_order_notification.php';
     } elseif ($path === 'orders/payment-code' && $method === 'GET') {
-        require_once 'endpoints/get_payment_code.php';
+        require_once __DIR__ . '/endpoints/get_payment_code.php';
     } elseif ($path === 'orders/verify-payment' && $method === 'POST') {
-        require_once 'endpoints/verify_payment_code.php';
+        require_once __DIR__ . '/endpoints/verify_payment.php';
+    } elseif ($path === 'orders/confirm-payment' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/confirm_payment.php';
+    } elseif ($path === 'orders' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/get_orders.php';
+    } elseif ($path === 'orders' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/create_order.php';
+    } elseif ($path === 'orders' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/get_orders.php';
+    } elseif ($path === 'orders/track' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/track_order.php';
+    } elseif ($path === 'orders/update-status' && $method === 'PUT') {
+        require_once __DIR__ . '/endpoints/update_order_status.php';
+    } elseif ($path === 'orders/update-payment' && $method === 'PUT') {
+        require_once __DIR__ . '/endpoints/update_payment_status.php';
+    } elseif ($path === 'orders/customer' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/get_customer_orders.php';
+    } elseif ($path === 'orders/notify' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/send_order_notification.php';
+    } elseif ($path === 'orders/payment-code' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/get_payment_code.php';
+    } elseif ($path === 'orders/verify-payment' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/verify_payment_code.php';
+    } elseif ($path === 'orders/confirm-payment' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/confirm_payment.php';
     } elseif ($path === 'orders/pending-payments' && $method === 'GET') {
-        require_once 'endpoints/get_pending_payments.php';
+        require_once __DIR__ . '/endpoints/get_pending_payments.php';
     } elseif ($path === 'admin/pending-payments' && $method === 'GET') {
-        require_once 'endpoints/get_pending_payments.php';
+        require_once __DIR__ . '/endpoints/get_pending_payments.php';
     } elseif ($path === 'admin/dashboard' && $method === 'GET') {
-        require_once 'endpoints/admin_dashboard.php';
+        require_once __DIR__ . '/endpoints/admin_dashboard.php';
     } elseif ($path === 'admin/login' && $method === 'POST') {
-        require_once 'endpoints/admin_login.php';
+        require_once __DIR__ . '/endpoints/admin_login.php';
     } elseif ($path === 'admin/verify-payment-code' && $method === 'POST') {
-        require_once 'endpoints/verify_payment_code.php';
+        require_once __DIR__ . '/endpoints/verify_payment_code.php';
+    } elseif ($path === 'admin/generate-pdf' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/generate_pdf.php';
+    } elseif ($path === 'admin/generate-simple-pdf' && $method === 'POST') {
+        require_once __DIR__ . '/endpoints/generate_simple_pdf.php';
+    } elseif ($path === 'admin/sales-report' && $method === 'GET') {
+        require_once __DIR__ . '/endpoints/get_sales_report.php';
     } elseif ($path === 'auth/register' && $method === 'POST') {
-        require_once 'endpoints/register.php';
+        require_once __DIR__ . '/endpoints/register.php';
     } elseif ($path === 'auth/login' && $method === 'POST') {
-        require_once 'endpoints/user_login.php';
+        require_once __DIR__ . '/endpoints/user_login.php';
     } elseif ($path === 'auth/verify' && $method === 'POST') {
-        require_once 'endpoints/verify_code.php';
+        require_once __DIR__ . '/endpoints/verify_code.php';
     } elseif ($path === 'auth/resend-verification' && $method === 'POST') {
-        require_once 'endpoints/resend_verification.php';
+        require_once __DIR__ . '/endpoints/resend_verification.php';
     } elseif ($path === 'profile' && $method === 'GET') {
-        require_once 'endpoints/get_profile.php';
+        require_once __DIR__ . '/endpoints/get_profile.php';
     } elseif ($path === 'profile' && $method === 'PUT') {
-        require_once 'endpoints/update_profile.php';
+        require_once __DIR__ . '/endpoints/update_profile.php';
     } elseif ($path === 'health') {
         sendSuccess(['status' => 'OK', 'timestamp' => date('Y-m-d H:i:s')], 'API is running');
     } elseif ($path === 'debug') {

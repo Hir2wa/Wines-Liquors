@@ -220,6 +220,8 @@ async function createOrder(orderData) {
       items: orderData.items,
       paymentMethod: orderData.paymentMethod,
       total: totalAmount.toFixed(2),
+      latitude: orderData.latitude,
+      longitude: orderData.longitude,
     };
 
     const response = await apiClient.createOrder(apiData);
@@ -227,10 +229,7 @@ async function createOrder(orderData) {
     if (response.status === 200) {
       const orderData = response.data;
 
-      // If it's a mobile money payment, show payment instructions
-      if (orderData.paymentMethod === "mobile_money" && orderData.paymentCode) {
-        showMobileMoneyInstructions(orderData);
-      }
+      // Payment instructions are now handled in the success message
 
       return orderData;
     } else {

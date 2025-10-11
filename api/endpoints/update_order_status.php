@@ -23,7 +23,7 @@ if (!preg_match('/^ORD-\d{9}$/', $orderId)) {
 }
 
 // Validate status
-$validStatuses = ['pending', 'processing', 'shipped', 'completed', 'cancelled'];
+$validStatuses = ['pending', 'on_route', 'shipped', 'delivered', 'cancelled'];
 if (!in_array($newStatus, $validStatuses)) {
     sendError('Invalid status value', 400);
 }

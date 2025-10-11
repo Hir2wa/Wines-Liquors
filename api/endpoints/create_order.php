@@ -64,6 +64,12 @@ foreach ($input['items'] as $item) {
     $totalAmount += floatval($price) * intval($item['quantity']);
 }
 
+// Debug: Log what coordinates are received
+error_log("DEBUG - Raw input coordinates:");
+error_log("Input latitude: " . ($input['latitude'] ?? 'NOT SET') . " (type: " . gettype($input['latitude'] ?? null) . ")");
+error_log("Input longitude: " . ($input['longitude'] ?? 'NOT SET') . " (type: " . gettype($input['longitude'] ?? null) . ")");
+error_log("Full input data: " . json_encode($input));
+
 // Prepare order data
 $orderData = [
     'orderId' => $orderId,
@@ -72,8 +78,16 @@ $orderData = [
     'paymentMethod' => $input['paymentMethod'],
     'totalAmount' => $totalAmount,
     'status' => 'pending',
-    'paymentStatus' => 'pending'
+    'paymentStatus' => 'pending',
+    'latitude' => isset($input['latitude']) ? floatval($input['latitude']) : null,
+    'longitude' => isset($input['longitude']) ? floatval($input['longitude']) : null
 ];
+
+// Debug: Log processed coordinates
+error_log("DEBUG - Processed coordinates:");
+error_log("Processed latitude: " . ($orderData['latitude'] ?? 'NULL') . " (type: " . gettype($orderData['latitude']) . ")");
+error_log("Processed longitude: " . ($orderData['longitude'] ?? 'NULL') . " (type: " . gettype($orderData['longitude']) . ")");
+
 
 try {
     $order = new Order();
@@ -82,46 +96,36 @@ try {
     // Get the created order with full details
     $createdOrder = $order->getById($createdOrderId);
     
-    // Generate payment code if payment method is mobile money
+    // For mobile money, just store the phone number for contact
     if ($input['paymentMethod'] === 'mobile_money') {
-        $paymentCodeResult = $order->generatePaymentCode(
-            $createdOrderId, 
-            $totalAmount, 
-            $input['customerInfo']['phone']
-        );
-        
-        if ($paymentCodeResult['success']) {
-            $createdOrder['paymentCode'] = $paymentCodeResult;
-        }
+        $createdOrder['paymentInfo'] = [
+            'method' => 'mobile_money',
+            'phone' => $input['customerInfo']['phone'],
+            'message' => 'We will contact you shortly to confirm your order and provide payment instructions.'
+        ];
     }
     
-    // Notify admins of new order
+    // Send email notification to admin
     try {
-        $notificationData = json_encode(['orderId' => $createdOrderId]);
-        $notificationUrl = 'http://localhost:8000/api/admin/notify';
+        // Include the email service
+        require_once __DIR__ . '/../../email_service.php';
         
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $notificationUrl);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $notificationData);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($notificationData)
-        ]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        // Send notification using our email service
+        $emailSent = sendOrderNotificationEmail($createdOrder);
         
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        
-        if ($httpCode === 200) {
-            $createdOrder['adminNotified'] = true;
+        if ($emailSent) {
+            $createdOrder['emailNotified'] = true;
+            $createdOrder['notificationMessage'] = 'Admin has been notified via email (logged to file)';
+        } else {
+            $createdOrder['emailNotified'] = false;
+            $createdOrder['notificationMessage'] = 'Failed to send email notification';
         }
+        
     } catch (Exception $e) {
         // Don't fail the order creation if notification fails
-        error_log('Failed to notify admin: ' . $e->getMessage());
+        error_log('Failed to send email notification: ' . $e->getMessage());
+        $createdOrder['emailNotified'] = false;
+        $createdOrder['notificationMessage'] = 'Email notification failed: ' . $e->getMessage();
     }
     
     sendSuccess($createdOrder, 'Order created successfully');

@@ -12,12 +12,12 @@ return [
         'username' => 'alainfabricehirwa@gmail.com',
         'password' => 'uhpr zzwy dmrl canu',
         'from_email' => 'alainfabricehirwa@gmail.com',
-        'from_name' => 'Wines & Liquors'
+        'from_name' => 'NELVINTO Liquors store'
     ],
     
     'verification' => [
-        'email_subject' => 'Email Verification - Wines & Liquors',
-        'phone_subject' => 'Phone Verification - Wines & Liquors',
+        'email_subject' => 'Email Verification - NELVINTO Liquors store',
+        'phone_subject' => 'Phone Verification - NELVINTO Liquors store',
         'code_expiry_minutes' => 15
     ],
     

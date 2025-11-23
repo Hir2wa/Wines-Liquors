@@ -8,66 +8,168 @@ function toggleWineFilter(button) {
 
 // Filter Functionality
 function applyFilters() {
+  // First, ensure all products have data attributes
+  autoAssignDataAttributes();
+
   const checkboxes = document.querySelectorAll(
     '.wine-filter-content input[type="checkbox"]'
   );
   const products = document.querySelectorAll(".wine-product-card");
   const categories = document.querySelectorAll(".wine-category-section");
 
+  // Debug: Log if no products or checkboxes found
+  if (products.length === 0) {
+    console.warn("applyFilters: No products found");
+    return;
+  }
+  if (checkboxes.length === 0) {
+    console.warn("applyFilters: No filter checkboxes found");
+    return;
+  }
+
   // Get selected filters
   const selectedFilters = {
     category: [],
     price: [],
     size: [],
+    age: [], // For SingleMalt page
   };
 
   checkboxes.forEach((checkbox) => {
     if (checkbox.checked) {
       const filterType = checkbox.getAttribute("data-filter");
       const filterValue = checkbox.getAttribute("data-value");
-      if (filterType && filterValue) {
-        selectedFilters[filterType].push(filterValue);
+      if (filterType && filterValue && selectedFilters[filterType]) {
+        selectedFilters[filterType].push(filterValue.toLowerCase().trim());
       }
     }
   });
 
+  // Debug: Log selected filters
+  console.log("Selected filters:", selectedFilters);
+  console.log("Products found:", products.length);
+
+  // Check if any filter groups have checkboxes (to determine if filtering should apply)
+  const categoryCheckboxes = document.querySelectorAll(
+    'input[data-filter="category"]'
+  );
+  const priceCheckboxes = document.querySelectorAll(
+    'input[data-filter="price"]'
+  );
+  const sizeCheckboxes = document.querySelectorAll('input[data-filter="size"]');
+  const ageCheckboxes = document.querySelectorAll('input[data-filter="age"]');
+
+  const hasCategoryFilters = categoryCheckboxes.length > 0;
+  const hasPriceFilters = priceCheckboxes.length > 0;
+  const hasSizeFilters = sizeCheckboxes.length > 0;
+  const hasAgeFilters = ageCheckboxes.length > 0;
+
+  // Check if ANY filter group has selections
+  const hasAnySelection =
+    selectedFilters.category.length > 0 ||
+    selectedFilters.price.length > 0 ||
+    selectedFilters.size.length > 0 ||
+    selectedFilters.age.length > 0;
+
   // Filter products
+  let visibleCount = 0;
   products.forEach((product) => {
-    let showProduct = true;
+    let showProduct = true; // Start by showing product
 
-    // Check category filter
-    if (selectedFilters.category.length > 0) {
-      const productCategory = product.getAttribute("data-category");
-      if (!selectedFilters.category.includes(productCategory)) {
-        showProduct = false;
-      }
+    // If no filters are selected at all, show all products (default state)
+    if (!hasAnySelection) {
+      product.style.display = "block";
+      product.classList.remove("filtered-out");
+      visibleCount++;
+      return;
     }
 
-    // Check price filter
-    if (selectedFilters.price.length > 0 && showProduct) {
-      const productPrice = product.getAttribute("data-price");
-      if (!selectedFilters.price.includes(productPrice)) {
-        showProduct = false;
+    // Check category filter - if filter group exists, apply filtering
+    if (hasCategoryFilters) {
+      if (selectedFilters.category.length > 0) {
+        // Some categories selected - show only matching products
+        const productCategory = (product.getAttribute("data-category") || "")
+          .toLowerCase()
+          .trim();
+        if (
+          !productCategory ||
+          !selectedFilters.category.includes(productCategory)
+        ) {
+          showProduct = false;
+        }
       }
+      // If category filter exists but none selected, don't filter by category
+      // (let other filters handle it)
     }
 
-    // Check size filter
-    if (selectedFilters.size.length > 0 && showProduct) {
-      const productSize = product.getAttribute("data-size");
-      if (!selectedFilters.size.includes(productSize)) {
-        showProduct = false;
+    // Check price filter - if filter group exists and has selections, apply filtering
+    if (hasPriceFilters && showProduct) {
+      if (selectedFilters.price.length > 0) {
+        // Some prices selected - show only matching products
+        const productPrice = (product.getAttribute("data-price") || "")
+          .toLowerCase()
+          .trim();
+        if (!productPrice || !selectedFilters.price.includes(productPrice)) {
+          showProduct = false;
+        }
       }
+      // If price filter exists but none selected, don't filter by price
+    }
+
+    // Check size filter - if filter group exists and has selections, apply filtering
+    if (hasSizeFilters && showProduct) {
+      if (selectedFilters.size.length > 0) {
+        // Some sizes selected - show only matching products
+        const productSize = (product.getAttribute("data-size") || "")
+          .toLowerCase()
+          .trim();
+        if (!productSize || !selectedFilters.size.includes(productSize)) {
+          showProduct = false;
+        }
+      }
+      // If size filter exists but none selected, don't filter by size
+    }
+
+    // Check age filter (for SingleMalt page) - if filter group exists and has selections, apply filtering
+    if (hasAgeFilters && showProduct) {
+      if (selectedFilters.age.length > 0) {
+        // Some ages selected - show only matching products
+        const productAge = (product.getAttribute("data-age") || "")
+          .toLowerCase()
+          .trim();
+        if (!productAge || !selectedFilters.age.includes(productAge)) {
+          showProduct = false;
+        }
+      }
+      // If age filter exists but none selected, don't filter by age
     }
 
     // Show/hide product
     if (showProduct) {
       product.style.display = "block";
       product.classList.remove("filtered-out");
+      visibleCount++;
     } else {
       product.style.display = "none";
       product.classList.add("filtered-out");
     }
   });
+
+  // Debug logging
+  console.log(
+    `[Filters] Applied: ${visibleCount}/${products.length} products visible`,
+    {
+      hasAnySelection,
+      category: selectedFilters.category,
+      price: selectedFilters.price,
+      size: selectedFilters.size,
+      age: selectedFilters.age,
+      hasCategoryFilters,
+      hasPriceFilters,
+      hasSizeFilters,
+      hasAgeFilters,
+    }
+  );
 
   // Hide empty category sections
   categories.forEach((category) => {
@@ -102,18 +204,27 @@ function updateFilterCounts() {
 
   filterGroups.forEach((group) => {
     const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    if (checkboxes.length === 0) return; // Skip if no checkboxes (like Clear Filters button)
+
     const checkedCount = Array.from(checkboxes).filter(
       (cb) => cb.checked
     ).length;
     const totalCount = checkboxes.length;
 
     const title = group.querySelector(".wine-filter-title span");
-    if (title && checkedCount < totalCount) {
-      title.textContent =
-        title.textContent.replace(/ \(\d+\/\d+\)/, "") +
-        ` (${checkedCount}/${totalCount})`;
-    } else if (title) {
-      title.textContent = title.textContent.replace(/ \(\d+\/\d+\)/, "");
+    if (title) {
+      // Get the base title text (remove any existing count)
+      let baseTitle = title.textContent.replace(/ \(\d+\/\d+\)/, "").trim();
+
+      // Update with new count
+      if (checkedCount > 0 && checkedCount < totalCount) {
+        title.textContent = `${baseTitle} (${checkedCount}/${totalCount})`;
+      } else if (checkedCount === 0) {
+        title.textContent = `${baseTitle} (0/${totalCount})`;
+      } else {
+        // All checked, show without count or with (all)
+        title.textContent = baseTitle;
+      }
     }
   });
 }
@@ -123,20 +234,76 @@ function initializeFilters() {
   const checkboxes = document.querySelectorAll(
     '.wine-filter-content input[type="checkbox"]'
   );
+
+  // Add event listeners to all checkboxes
+  // Use a wrapper function to avoid duplicate listeners
   checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", applyFilters);
+    // Remove existing listener if any (by cloning)
+    // Preserve the checked state from HTML or current state
+    const wasChecked = checkbox.checked || checkbox.hasAttribute("checked");
+    const parent = checkbox.parentNode;
+    const newCheckbox = checkbox.cloneNode(true);
+    // Ensure checked state is preserved - cloneNode should preserve it, but force it
+    if (wasChecked) {
+      newCheckbox.checked = true;
+      newCheckbox.setAttribute("checked", "checked");
+    } else {
+      newCheckbox.checked = false;
+      newCheckbox.removeAttribute("checked");
+    }
+    parent.replaceChild(newCheckbox, checkbox);
+
+    // Debug: Log checkbox state
+    console.log(
+      `[Filter Init] Checkbox: ${newCheckbox.getAttribute(
+        "data-filter"
+      )} = ${newCheckbox.getAttribute("data-value")}, Checked: ${
+        newCheckbox.checked
+      }`
+    );
+
+    // Add event listener
+    newCheckbox.addEventListener("change", function (e) {
+      e.stopPropagation();
+      applyFilters();
+    });
+
+    // Also add click listener for better compatibility
+    newCheckbox.addEventListener("click", function (e) {
+      // Let the change event handle it, but ensure it fires
+      setTimeout(() => applyFilters(), 10);
+    });
   });
 
-  // Auto-assign data attributes to product cards
+  // Auto-assign data attributes to product cards FIRST
   autoAssignDataAttributes();
 
-  // Apply initial filters
-  applyFilters();
+  // Update filter counts on initialization
+  updateFilterCounts();
+
+  // Apply initial filters - delay slightly to ensure DOM is ready
+  setTimeout(() => {
+    applyFilters();
+  }, 100);
 }
 
 // Auto-assign data attributes to product cards based on their content
 function autoAssignDataAttributes() {
   const productCards = document.querySelectorAll(".wine-product-card");
+
+  if (productCards.length === 0) {
+    console.warn("No product cards found for filtering");
+    return;
+  }
+
+  // Detect page type once for all products
+  const currentPage = (
+    window.location.pathname ||
+    window.location.href ||
+    ""
+  ).toLowerCase();
+  const isSingleMaltPageGlobal =
+    currentPage.includes("singlemalt") || currentPage.includes("single-malt");
 
   productCards.forEach((card) => {
     // Get product info
@@ -149,18 +316,53 @@ function autoAssignDataAttributes() {
     // Determine category based on section or product name
     const categorySection = card.closest(".wine-category-section");
     let category = "wine";
+    let sectionTitle = "";
 
     if (categorySection) {
-      const sectionTitle =
+      sectionTitle =
         categorySection
           .querySelector(".wine-category-title")
           ?.textContent?.toLowerCase() || "";
+
+      // Detect page type for better category assignment
+      const isRumPage = currentPage.includes("rum");
+      const isSingleMaltPage =
+        currentPage.includes("singlemalt") ||
+        currentPage.includes("single-malt") ||
+        sectionTitle.includes("single malt");
+
       if (sectionTitle.includes("champagne")) category = "champagne";
       else if (sectionTitle.includes("cognac")) category = "cognac";
       else if (sectionTitle.includes("whiskey")) category = "whiskey";
       else if (sectionTitle.includes("tequila")) category = "tequila";
       else if (sectionTitle.includes("gin")) category = "gin";
       else if (sectionTitle.includes("vodka")) category = "vodka";
+      else if (sectionTitle.includes("rum") && isRumPage) {
+        // For rum page, determine specific rum type
+        if (
+          productName.includes("bacardi") &&
+          (productName.includes("blanca") || productName.includes("white"))
+        ) {
+          category = "white-rum";
+        } else if (
+          productName.includes("bacardi") &&
+          (productName.includes("dark") || productName.includes("oro"))
+        ) {
+          category = "dark-rum";
+        } else if (
+          productName.includes("captain morgan") ||
+          productName.includes("spiced")
+        ) {
+          category = "spiced-rum";
+        } else if (
+          productName.includes("havana") ||
+          productName.includes("white")
+        ) {
+          category = "white-rum";
+        } else {
+          category = "dark-rum"; // Default for rum page
+        }
+      } else if (sectionTitle.includes("rum")) category = "rum";
       else if (sectionTitle.includes("wine bottle")) category = "wine-bottle";
       else if (sectionTitle.includes("sparkling")) category = "sparkling-wine";
       else if (sectionTitle.includes("wine box")) category = "wine-box";
@@ -177,38 +379,147 @@ function autoAssignDataAttributes() {
         } else {
           category = "lager";
         }
+      } else if (isSingleMaltPage) {
+        // For SingleMalt page, determine category based on product name
+        // Check for glenlivet first (since it might contain "glenfiddich" as substring)
+        if (productName.includes("glenlivet")) {
+          category = "glenlivet";
+        } else if (productName.includes("glenfiddich")) {
+          category = "glenfiddich";
+        } else {
+          // Default fallback - try to infer from section or use glenfiddich
+          category = "glenfiddich";
+        }
       }
     }
 
-    // Determine price range
+    // Determine price range based on available filters on the page
     let priceRange = "under-50k";
-    const priceNum = parseInt(productPrice.replace(/[^\d]/g, ""));
+    const priceNum = parseInt(productPrice.replace(/[^\d]/g, "")) || 0;
 
-    // Special handling for beer products (lower prices)
-    if (sectionTitle && sectionTitle.includes("beer")) {
-      if (priceNum >= 5000) priceRange = "5k-10k";
+    // Check what price filter values are available on this page
+    const priceFilters = Array.from(
+      document.querySelectorAll('input[data-filter="price"]')
+    )
+      .map((cb) => cb.getAttribute("data-value"))
+      .filter((v) => v);
+
+    // Determine price range based on available filters
+    if (
+      priceFilters.includes("under-5k") &&
+      priceFilters.includes("over-10k")
+    ) {
+      // Beer page
+      if (priceNum >= 10000) priceRange = "over-10k";
+      else if (priceNum >= 5000) priceRange = "5k-10k";
       else priceRange = "under-5k";
-    } else {
-      // Original logic for wine/spirits
+    } else if (
+      priceFilters.includes("under-100k") &&
+      priceFilters.includes("over-200k")
+    ) {
+      // Champagne or SingleMalt page
       if (priceNum >= 200000) priceRange = "over-200k";
       else if (priceNum >= 100000) priceRange = "100k-200k";
+      else priceRange = "under-100k";
+    } else {
+      // Default: GinVodka, Wine, Whiskey, Rum pages (under-50k, 50k-100k, over-100k)
+      if (priceNum >= 100000) priceRange = "over-100k";
       else if (priceNum >= 50000) priceRange = "50k-100k";
-      else if (priceNum >= 100000) priceRange = "over-100k";
+      else priceRange = "under-50k";
     }
 
-    // Determine size
+    // Determine size - handle various formats
     let size = "750ml";
-    if (productSize.includes("700ml")) size = "700ml";
-    else if (productSize.includes("1.5l")) size = "1.5l";
-    else if (productSize.includes("3l")) size = "3l";
-    else if (productSize.includes("330ml")) size = "330ml";
-    else if (productSize.includes("500ml")) size = "500ml";
-    else if (productSize.includes("variable")) size = "variable";
+    const sizeLower = productSize.toLowerCase().trim();
+
+    // Handle different size formats
+    if (sizeLower.includes("700ml") || sizeLower.includes("700 ml"))
+      size = "700ml";
+    else if (
+      sizeLower.includes("750ml") ||
+      sizeLower.includes("750 ml") ||
+      sizeLower.includes("75cl")
+    )
+      size = "750ml";
+    else if (
+      sizeLower.includes("1l") ||
+      sizeLower.includes("1 l") ||
+      sizeLower === "1l"
+    )
+      size = "1l";
+    else if (sizeLower.includes("1.5l") || sizeLower.includes("1.5 l"))
+      size = "1.5l";
+    else if (sizeLower.includes("3l") || sizeLower.includes("3 l")) size = "3l";
+    else if (sizeLower.includes("5l") || sizeLower.includes("5 l")) size = "5l";
+    else if (sizeLower.includes("330ml") || sizeLower.includes("330 ml"))
+      size = "330ml";
+    else if (sizeLower.includes("500ml") || sizeLower.includes("500 ml"))
+      size = "500ml";
+    else if (sizeLower.includes("variable")) size = "variable";
+    else {
+      // Default fallback - try to extract number and unit
+      const sizeMatch = sizeLower.match(/(\d+)\s*(ml|cl|l)/);
+      if (sizeMatch) {
+        const num = parseInt(sizeMatch[1]);
+        const unit = sizeMatch[2];
+        if (unit === "l") {
+          size = num + "l";
+        } else if (unit === "cl") {
+          // Convert cl to ml for consistency
+          if (num === 75) size = "750ml";
+          else size = num * 10 + "ml";
+        } else {
+          size = num + "ml";
+        }
+      }
+    }
+
+    // Determine age for SingleMalt products
+    let age = "";
+    const isSingleMaltPage =
+      isSingleMaltPageGlobal ||
+      (sectionTitle && sectionTitle.includes("single malt"));
+
+    if (isSingleMaltPage) {
+      // Extract age from product name (e.g., "Glenfiddich 12Yrs" -> "12yrs")
+      const ageMatch = productName.match(/(\d+)\s*yrs?/i);
+      if (ageMatch) {
+        age = ageMatch[1] + "yrs";
+      } else {
+        // Try to extract from alt text or image filename
+        const img = card.querySelector("img");
+        if (img) {
+          const altText = (img.getAttribute("alt") || "").toLowerCase();
+          const altAgeMatch = altText.match(/(\d+)\s*yrs?/i);
+          if (altAgeMatch) {
+            age = altAgeMatch[1] + "yrs";
+          }
+        }
+      }
+    }
 
     // Set data attributes
     card.setAttribute("data-category", category);
     card.setAttribute("data-price", priceRange);
     card.setAttribute("data-size", size);
+    if (age) {
+      card.setAttribute("data-age", age);
+    }
+
+    // Debug logging for SingleMalt page
+    if (isSingleMaltPageGlobal) {
+      const productTitle = card.querySelector("h4")?.textContent || "Unknown";
+      console.log(`[SingleMalt] Product: ${productTitle}`, {
+        category,
+        price: priceRange,
+        size,
+        age: age || "none",
+        hasCategory: !!card.getAttribute("data-category"),
+        hasPrice: !!card.getAttribute("data-price"),
+        hasSize: !!card.getAttribute("data-size"),
+        hasAge: !!card.getAttribute("data-age"),
+      });
+    }
   });
 }
 
@@ -430,6 +741,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize filters
   initializeFilters();
+
+  // Also initialize filters on window load as fallback
+  if (document.readyState === "loading") {
+    window.addEventListener("load", function () {
+      initializeFilters();
+    });
+  }
 
   // Get elements
   const hamburgerBtn = document.querySelector(".mobile-menu-toggle");
